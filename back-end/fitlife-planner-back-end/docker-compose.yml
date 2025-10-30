@@ -1,0 +1,12 @@
+services:
+  fitlife-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fitlife-backend
+    ports:
+      - "7000:7000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:7000
+    restart: always
