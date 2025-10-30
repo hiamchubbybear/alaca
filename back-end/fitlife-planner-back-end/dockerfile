@@ -9,7 +9,7 @@ RUN dotnet publish ./fitlife-planner-back-end.csproj -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
-EXPOSE 7000
+EXPOSE 8000
 ENV ASPNETCORE_ENVIRONMENT=Development
-ENV ASPNETCORE_URLS=http://+:7000
+ENV ASPNETCORE_URLS=http://+:8000
 ENTRYPOINT ["dotnet", "fitlife-planner-back-end.dll"]
