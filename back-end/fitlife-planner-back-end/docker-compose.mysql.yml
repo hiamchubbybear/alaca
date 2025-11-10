@@ -1,26 +1,26 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15
-    container_name: postgres_db
+  mysql:
+    image: mysql:8
+    container_name: mysql_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: 123456789
-      POSTGRES_DB: alaca
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: alaca
+      MYSQL_USER: root123
+      MYSQL_PASSWORD: 12345678
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-db:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
 
 volumes:
-  postgres_data:
+  mysql_data:
     driver: local
