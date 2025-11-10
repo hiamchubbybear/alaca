@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Security.Cryptography;
+using fitlife_planner_back_end.Application.DTOs;
 using JWT;
 using JWT.Algorithms;
 using JWT.Serializers;
@@ -14,14 +15,42 @@ public class JwtSigner
     private static readonly string SIGNER_KEY =
         "1/3pvho0/tHL9NElGz4OcrSdsbC10OB5iMHAmn3hOH+YnhFgpNsmbl/8i5REO3DTd6zsiwLu2pjr7UukdVA5Tw==";
 
-    private readonly ILogger _logger;
+    private readonly ILogger<JwtSigner> _logger;
 
     public JwtSigner(ILogger<JwtSigner> logger)
     {
         _logger = logger;
     }
 
-    public string GenerateToken(AuthenticationDTO authenticationDto)
+    public string GenerateToken(AuthenticationDto authenticationDto)
+    {
+        try
+        {
+            long tokenExp = DateTimeOffset.UtcNow.AddSeconds(TOKEN_TIME_LIVE).ToUnixTimeMilliseconds();
+            var payload = new Dictionary<String, Object>
+            {
+                { "iiss", authenticationDto.id },
+                { "iss", authenticationDto.username },
+                { "email", authenticationDto.email },
+                { "exp", tokenExp },
+            };
+            IJwtAlgorithm algorithm = new HMACSHA256Algorithm();
+            IJsonSerializer serializer = new JsonNetSerializer();
+            IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+            IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
+
+            String key = SIGNER_KEY;
+            var token = encoder.Encode(payload, key);
+            return token;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("[JwtSigner_Error] {}", e.Message);
+            throw;
+        }
+    }
+
+    public string RefreshToken(AuthenticationDto authenticationDto)
     {
         try
         {
@@ -42,32 +71,4 @@ public class JwtSigner
             throw;
         }
     }
-
-    public string RefreshToken(AuthenticationDTO authenticationDto)
-    {
-        try
-        {
-            var payload = new Dictionary<String, Object>(
-            );
-            RSA certificate = RSA.Create();
-            IJwtAlgorithm algorithm = new RS512Algorithm(certificate);
-            IJsonSerializer serializer = new JsonNetSerializer();
-            IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
-            IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
-            String key = SIGNER_KEY;
-            var token = encoder.Encode(payload, key);
-            return token;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError("[JwtSigner_Error] {}", e.Message);
-            throw;
-        }
-    }s
-}
-
-public record class AuthenticationDTO
-{
-    private string username;
-    private string email;
 }
