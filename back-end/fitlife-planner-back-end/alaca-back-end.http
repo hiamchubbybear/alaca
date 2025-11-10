@@ -1,0 +1,30 @@
+# Base URL
+@fitlife_planner_back_end_HostAddress = http://localhost:5000
+
+### Get user by userId
+GET {{fitlife_planner_back_end_HostAddress}}/account?userId=00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+### Create a new user
+POST {{fitlife_planner_back_end_HostAddress}}/account
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "test@example.com",
+  "password": "123456",
+  "username": "chessy1603"
+}
+
+
+
+### AuthenticationController
+### Login user
+POST {{fitlife_planner_back_end_HostAddress}}/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "hello@gmail.com",
+  "password": "password123"
+}
