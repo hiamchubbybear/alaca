@@ -1,30 +1,47 @@
-using System.Collections.Generic;
+using fitlife_planner_back_end.Api.Configurations;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using fitlife_planner_back_end.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddCors();
+
+
+builder.Services.AddControllers()
+    .AddJsonOptions(opt =>
+        opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    );
+
+builder.Services.AddSingleton<JwtSigner>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+var connString = "Server=127.0.0.1;Port=3306;Database=alaca;User=root;Password=12345678;";
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(connString, ServerVersion.AutoDetect(connString))
+);
+
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+}
+
+
+app.UseCors(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
 }
 
-app.UseCors(policy =>
-    policy.AllowAnyOrigin()
-          .AllowAnyHeader()
-          .AllowAnyMethod()
-);
-
-app.MapGet("/", () => Results.Ok(new { message = "API is running" }));
-
-app.MapGet("/hello", () =>
-    APIResponseWrapper.ApiResponse<Dictionary<string, string>>
-        .CreateSuccessResponse(data: new() { { "Hello", "Hello" } })
-);
+app.MapControllers();
 
 app.Run();
