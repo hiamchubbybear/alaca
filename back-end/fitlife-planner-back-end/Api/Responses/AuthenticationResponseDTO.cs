@@ -1,6 +1,3 @@
 namespace fitlife_planner_back_end.Api.Responses;
 
-public class AuthenticationResponseDTO
-{
-    
-}
+public record AuthenticationResponseDto(string Token, string RefreshToken);
