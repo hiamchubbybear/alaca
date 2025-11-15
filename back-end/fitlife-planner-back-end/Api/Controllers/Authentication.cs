@@ -1,11 +1,12 @@
 using System.Net;
-using APIResponseWrapper;
 using fitlife_planner_back_end.Api.Configurations;
 using fitlife_planner_back_end.Api.Middlewares;
-using fitlife_planner_back_end.Api.Util;
 using fitlife_planner_back_end.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using APIResponseWrapper;
+using fitlife_planner_back_end.Api.Responses;
+using fitlife_planner_back_end.Application.Services;
 
 namespace fitlife_planner_back_end.Api.Controllers;
 
@@ -13,57 +14,78 @@ namespace fitlife_planner_back_end.Api.Controllers;
 [Route("auth")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly AppDbContext _db;
-    private readonly JwtSigner _jwtSigner;
+    private readonly AuthenticationService _authService;
+    private readonly ILogger<AuthenticationController> _logger;
 
-    public AuthenticationController(AppDbContext db, JwtSigner signer)
+    public AuthenticationController(AuthenticationService authService, ILogger<AuthenticationController> logger)
     {
-        _db = db;
-        _jwtSigner = signer;
+        _authService = authService;
+        _logger = logger;
     }
 
-    // Vay thi im me mom
     [HttpPost("login")]
-    public ApiResponse<string> Login([FromBody] LoginRequestDto loginRequest)
+    public async Task<ApiResponse<AuthenticationResponseDto>> Login([FromBody] LoginRequestDto loginRequest)
     {
-        if (string.IsNullOrWhiteSpace(loginRequest.Email) ||
-            string.IsNullOrWhiteSpace(loginRequest.Password))
+        if (!ModelState.IsValid)
         {
-            return new ApiResponse<string>(
+            return new ApiResponse<AuthenticationResponseDto>(
                 success: false,
                 statusCode: HttpStatusCode.BadRequest,
                 message: "Email and password are required"
             );
         }
 
-        var email = loginRequest.Email.Trim().ToLower();
-        var user = _db.Users.AsNoTracking().FirstOrDefault(u => u.Email.ToLower() == email);
-
-        if (user == null)
+        try
         {
-            return new ApiResponse<string>(
-                success: false,
-                statusCode: HttpStatusCode.Unauthorized,
-                message: "Email not found"
+            var token = await _authService.Authenticate(loginRequest);
+            return new ApiResponse<AuthenticationResponseDto>(
+                success: true,
+                statusCode: HttpStatusCode.OK,
+                data: token,
+                message: "Login successful"
             );
         }
-
-        if (!PasswordEncoder.DecodePassword(user.Password, loginRequest.Password))
+        catch (UnauthorizedAccessException ex)
         {
-            return new ApiResponse<string>(
+            return new ApiResponse<AuthenticationResponseDto>(
                 success: false,
                 statusCode: HttpStatusCode.Unauthorized,
-                message: "Password incorrect"
+                message: ex.Message
             );
         }
+        catch (Exception e)
+        {
+            return new ApiResponse<AuthenticationResponseDto>(
+                success: false,
+                statusCode: HttpStatusCode.InternalServerError,
+                message: "Unknown error " + e.Message
+            );
+        }
+    }
 
-        AuthenticationDto authDto = new AuthenticationDto(user.Username, user.Email, id: user.Id);
-        String token = _jwtSigner.GenerateToken(authDto);
-        return new ApiResponse<string>(
-            success: true,
-            statusCode: HttpStatusCode.OK,
-            data: token,
-            message: "Login successful"
-        );
+    [HttpPost("refresh")]
+    public async Task<ApiResponse<AuthenticationResponseDto>> Refresh(
+        [FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
+    {
+        try
+        {
+            _logger.LogInformation("Refreshing token");
+            var refreshToken = await _authService.RefreshToken(refreshTokenRequestDto);
+            return new ApiResponse<AuthenticationResponseDto>(
+                success: true,
+                statusCode: HttpStatusCode.Created,
+                message: "Successfully refreshed the token"
+                , data: refreshToken
+            );
+        }
+        catch (Exception e)
+        {
+            _logger.LogInformation(e.StackTrace);
+            return new ApiResponse<AuthenticationResponseDto>(
+                success: false,
+                statusCode: HttpStatusCode.InternalServerError,
+                message: e.Message
+            );
+        }
     }
 }

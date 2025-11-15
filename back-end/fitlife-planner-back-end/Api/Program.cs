@@ -1,7 +1,9 @@
 using fitlife_planner_back_end.Api.Configurations;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using fitlife_planner_back_end.Api.Mapper;
 using fitlife_planner_back_end.Api.Middlewares;
+using fitlife_planner_back_end.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +16,9 @@ builder.Services.AddControllers()
         opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     );
 
-builder.Services.AddSingleton<JwtSigner>();
 
+
+builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<AuthenticationService>().AddScoped<Mapping>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

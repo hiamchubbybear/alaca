@@ -2,7 +2,7 @@
 @fitlife_planner_back_end_HostAddress = http://localhost:5000
 
 ### Get user by userId
-GET {{fitlife_planner_back_end_HostAddress}}/account?userId=00000000-0000-0000-0000-000000000000
+GET {{fitlife_planner_back_end_HostAddress}}/account?userId=dba363cb-1a5b-402c-99cf-90cb7e05d438
 Accept: application/json
 
 ### Create a new user
@@ -11,8 +11,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "test@example.com",
-  "password": "123456",
+  "email": "test21111@example.com",
+  "password": "0123456",
   "username": "chessy1603"
 }
 
@@ -25,6 +25,21 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "hello@gmail.com",
-  "password": "password123"
+  "email": "test2@example.com",
+  "password": "0123456"
 }
+
+### AuthenticationController
+### Refresh token
+POST {{fitlife_planner_back_end_HostAddress}}/auth/refresh
+Content-Type: application/json
+Accept: application/json
+
+{
+  "refreshToken" : "7c53657e-2113-4262-baa1-9fd15de0e851",
+  "userId" : "2ce23af5-996f-48a7-9414-2775225f7550",
+  "userName": "chessy1603"
+} 
+
+
+
