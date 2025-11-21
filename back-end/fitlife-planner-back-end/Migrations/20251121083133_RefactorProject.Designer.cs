@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fitlife_planner_back_end.Api.Configurations;
 
@@ -11,9 +12,11 @@ using fitlife_planner_back_end.Api.Configurations;
 namespace fitlife_planner_back_end.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251121083133_RefactorProject")]
+    partial class RefactorProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,16 +31,13 @@ namespace fitlife_planner_back_end.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<double>("ActivityFactor")
-                        .HasColumnType("double");
-
                     b.Property<string>("Assessment")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.Property<double>("BMI")
-                        .HasColumnType("double");
+                    b.Property<float>("BMI")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -47,8 +47,8 @@ namespace fitlife_planner_back_end.Migrations
                     b.Property<string>("Goal")
                         .HasColumnType("text");
 
-                    b.Property<double>("HeightCm")
-                        .HasColumnType("double");
+                    b.Property<float>("HeightCm")
+                        .HasColumnType("float");
 
                     b.Property<bool>("IsComplete")
                         .ValueGeneratedOnAdd()
@@ -65,14 +65,11 @@ namespace fitlife_planner_back_end.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                    b.Property<int>("PraticeLevel")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
-                    b.Property<double>("WeightKg")
-                        .HasColumnType("double");
+                    b.Property<float>("WeightKg")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

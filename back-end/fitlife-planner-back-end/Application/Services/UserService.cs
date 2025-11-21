@@ -1,5 +1,4 @@
 using fitlife_planner_back_end.Api.Configurations;
-using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Mapper;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Responses;
@@ -38,7 +37,16 @@ public class UserService
             throw new Exception("Username already exists");
         User saveUser = new User(username: _username, email: _email, rawPassword: _rawPassword);
         saveUser.Role = Role.User;
+        var profile = new Profile
+        {
+            UserId = saveUser.Id,
+            DisplayName = _username,
+            CreateAt = DateTime.UtcNow,
+            UpdateAt = DateTime.UtcNow,
+            Version = 1
+        };
         var savedUser = _db.Users.Add(saveUser);
+        _db.Profiles.Add(profile);
         _db.SaveChanges();
         return _mapping.CreateAccountMapper(saveUser);
     }

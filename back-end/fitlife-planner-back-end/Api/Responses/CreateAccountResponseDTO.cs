@@ -1,4 +1,4 @@
-using fitlife_planner_back_end.Api.Enums;
+using fitlife_planner_back_end.Api.Models;
 
 namespace fitlife_planner_back_end.Api.Responses;
 
@@ -11,4 +11,3 @@ public record CreateAccountResponseDto(
     string? PhoneNumber,
     int Version,
     Role Role);
-    

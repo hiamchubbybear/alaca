@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Util;
 
 namespace fitlife_planner_back_end.Api.Models;
@@ -21,7 +20,8 @@ public class User
     {
         Username = username;
         Email = email;
-        Password = PasswordEncoder.EncodePassword(hashPassword);;
+        Password = PasswordEncoder.EncodePassword(hashPassword);
+        ;
         Role = role;
     }
 
@@ -35,4 +35,10 @@ public class User
     public string? PhoneNumber { get; set; }
     public int Version { get; set; }
     public Role Role { get; set; }
+}
+
+public enum Role
+{
+    Admin,
+    User
 }

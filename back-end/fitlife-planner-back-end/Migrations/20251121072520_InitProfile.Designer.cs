@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using fitlife_planner_back_end.Api.Configurations;
 
@@ -11,9 +12,11 @@ using fitlife_planner_back_end.Api.Configurations;
 namespace fitlife_planner_back_end.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251121072520_InitProfile")]
+    partial class InitProfile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,65 +25,6 @@ namespace fitlife_planner_back_end.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.BMIRecord", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<double>("ActivityFactor")
-                        .HasColumnType("double");
-
-                    b.Property<string>("Assessment")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<double>("BMI")
-                        .HasColumnType("double");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<string>("Goal")
-                        .HasColumnType("text");
-
-                    b.Property<double>("HeightCm")
-                        .HasColumnType("double");
-
-                    b.Property<bool>("IsComplete")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
-                        .HasDefaultValue(false);
-
-                    b.Property<bool>("IsCurrent")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
-                        .HasDefaultValue(true);
-
-                    b.Property<DateTime>("MeasuredAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-                    b.Property<int>("PraticeLevel")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<double>("WeightKg")
-                        .HasColumnType("double");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("BmiRecords");
-                });
-
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Profile", b =>
                 {
                     b.Property<Guid>("Id")
@@ -88,12 +32,7 @@ namespace fitlife_planner_back_end.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("AvatarUrl")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Bio")
-                        .HasMaxLength(500)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("CreateAt")
                         .ValueGeneratedOnAdd()
@@ -101,14 +40,19 @@ namespace fitlife_planner_back_end.Migrations
                         .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<string>("DisplayName")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<string>("Goal")
+                        .IsRequired()
+                        .HasColumnType("json");
+
                     b.Property<DateTime>("UpdateAt")
-                        .ValueGeneratedOnAdd()
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlComputedColumn(b.Property<DateTime>("UpdateAt"));
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
@@ -118,7 +62,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profile");
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Token", b =>
@@ -205,15 +149,6 @@ namespace fitlife_planner_back_end.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.BMIRecord", b =>
-                {
-                    b.HasOne("fitlife_planner_back_end.Api.Models.Profile", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Profile", b =>
