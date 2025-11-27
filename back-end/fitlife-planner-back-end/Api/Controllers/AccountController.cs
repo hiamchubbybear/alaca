@@ -1,10 +1,12 @@
 using System.Net;
 using APIResponseWrapper;
 using fitlife_planner_back_end.Api.Configurations;
+using fitlife_planner_back_end.Api.DTOs;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Util;
 using fitlife_planner_back_end.Application.DTOs;
 using fitlife_planner_back_end.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fitlife_planner_back_end.Api.Controllers;
@@ -22,12 +24,14 @@ public class AccountController : ControllerBase
         _userService = userService;
     }
 
+    [Authorize]
     [HttpGet]
-    public ApiResponse<User> GetUser(Guid userId)
+    public ApiResponse<User> GetUser()
     {
         try
         {
-            var userResponse = _userService.GetUser(userId);
+            
+            var userResponse = _userService.GetUser();
             return new ApiResponse<User>(success: true, message: "Successfully retrieved user",
                 statusCode: HttpStatusCode.Found, data: userResponse);
         }
