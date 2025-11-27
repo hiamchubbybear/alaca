@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Util;
 
 namespace fitlife_planner_back_end.Api.Models;
@@ -37,8 +38,3 @@ public class User
     public Role Role { get; set; }
 }
 
-public enum Role
-{
-    Admin,
-    User
-}

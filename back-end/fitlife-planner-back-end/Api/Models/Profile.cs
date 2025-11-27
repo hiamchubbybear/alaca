@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using fitlife_planner_back_end.Api.Enums;
 
 namespace fitlife_planner_back_end.Api.Models;
 
@@ -13,13 +14,6 @@ public class Profile
     public string Bio;
     public DateTime CreateAt;
     public DateTime UpdateAt;
-    
     public int Version;
 }
 
-public enum Gender
-{
-    MALE,
-    FEMALE,
-    OTHER
-}
