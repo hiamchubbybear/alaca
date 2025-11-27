@@ -1,4 +1,5 @@
 using fitlife_planner_back_end.Api.Configurations;
+using fitlife_planner_back_end.Api.Interface;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Responses;
 using fitlife_planner_back_end.Api.Util;
@@ -6,10 +7,11 @@ using fitlife_planner_back_end.Application.DTOs;
 
 namespace fitlife_planner_back_end.Application.Services;
 
-public class ProfileService
+public class BMIService
 {
     private readonly AppDbContext _dbContext;
-    private readonly ILogger<ProfileService> _logger;
+    private readonly ILogger<BMIService> _logger;
+    private readonly IUserContext _userContext;
 
     private static readonly List<BmiPlanRange> _plans = new()
     {
@@ -92,7 +94,7 @@ public class ProfileService
         },
     };
 
-    public ProfileService(AppDbContext dbContext, ILogger<ProfileService> logger)
+    public BMIService(AppDbContext dbContext, ILogger<BMIService> logger)
     {
         _dbContext = dbContext;
         _logger = logger;
@@ -100,7 +102,7 @@ public class ProfileService
 
     public CreateBMIResponseDto CreateBMIRecord(CreateBMIRecordRequestDto requestDto)
     {
-        Guid _userId = requestDto.UserId;
+        Guid _userId = _userContext.User.userId;
         double height = requestDto.HeightCm;
         double weight = requestDto.WeightKg;
         if (weight <= 0 || height <= 0)
@@ -120,9 +122,71 @@ public class ProfileService
         return response;
     }
 
-    public ChoosePlanResponseDto chooseBMI(ChoosePlanRequestDto choosePlanRequestDto)
+    public ChoosePlanResponseDto ChoosePlan(ChoosePlanRequestDto request)
     {
-        return null;
+        Guid userId = _userContext.User.userId;
+        var record = _dbContext.BmiRecords.FirstOrDefault(r => r.UserId == userId && r.IsCurrent == true);
+        if (record == null) throw new KeyNotFoundException("BMI record not found");
+        record.PraticeLevel = request.PracticeLevel;
+        record.ActivityFactor = request.ActivityFactor;
+        var goalPlan = GetGoalPlanByBmi(record.BMI);
+        double tdee = CalculateDailyCalories(record.WeightKg, record.HeightCm, record.ActivityFactor,
+            goalPlan.WeeklyTargetKg);
+        var nutrition = MapCaloriesToMacros(tdee, record.BMI);
+        record.Goal = new Dictionary<string, object>
+        {
+            { "plan", goalPlan },
+            { "nutrition", nutrition },
+            { "tdee", tdee }
+        };
+        _dbContext.SaveChanges();
+        return new ChoosePlanResponseDto
+        {
+            BmiRecordId = record.Id,
+            DailyCalories = tdee,
+            GoalPlan = goalPlan,
+            Nutrition = nutrition,
+            PracticeLevel = request.PracticeLevel,
+            ActivityFactor = request.ActivityFactor
+        };
+    }
+
+    private MacroNutrition MapCaloriesToMacros(double calories, double bmi)
+    {
+        (double c, double p, double f) macro = bmi switch
+        {
+            < 16f => (0.65, 0.20, 0.15),
+            >= 16f and < 17f => (0.62, 0.20, 0.18),
+            >= 17f and < 18f => (0.60, 0.20, 0.20),
+            >= 18f and < 18.5f => (0.58, 0.20, 0.22),
+            >= 18.5f and < 19.5f => (0.55, 0.20, 0.25),
+            >= 19.5f and < 21f => (0.53, 0.20, 0.27),
+            >= 21f and < 23f => (0.50, 0.22, 0.28),
+            >= 23f and < 25f => (0.47, 0.23, 0.30),
+            >= 25f and < 27f => (0.45, 0.25, 0.30),
+            >= 27f and < 29f => (0.42, 0.26, 0.32),
+            >= 29f and < 30f => (0.40, 0.28, 0.32),
+            >= 30f and < 32f => (0.38, 0.30, 0.32),
+            >= 32f and < 35f => (0.35, 0.30, 0.35),
+            _ => (0.32, 0.33, 0.35),
+        };
+
+        return new MacroNutrition
+        {
+            Calories = calories,
+            Carbs = (calories * macro.c) / 4,
+            Protein = (calories * macro.p) / 4,
+            Fat = (calories * macro.f) / 9
+        };
+    }
+
+
+    public double CalculateDailyCalories(double weightKg, double heightCm, double activityFactor, double weeklyTargetKg)
+    {
+        double bmr = 10 * weightKg + 6.25 * heightCm - 5 * 25 + 5;
+        double tdee = bmr * activityFactor;
+        double dailyCalorieAdjustment = (weeklyTargetKg * 7700) / 7;
+        return tdee + dailyCalorieAdjustment;
     }
 
     public double CalculateBMI(double height, double weight)
@@ -134,14 +198,4 @@ public class ProfileService
     {
         return _plans.First(p => bmi >= p.Min && bmi < p.Max).Plan;
     }
-}
-
-public class ChoosePlanRequestDto
-{
-    public PracticeLevel PracticeLevel { get; }
-    public double ActivityFactor { get; }
-}
-
-public class ChoosePlanResponseDto
-{
 }

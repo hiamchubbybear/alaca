@@ -36,7 +36,7 @@ public class AuthenticationService
         if (!PasswordEncoder.DecodePassword(user.Password, loginRequestDto.Password))
             throw new UnauthorizedAccessException("Password incorrect");
 
-        var authRequestDto = new AuthenticationRequestDto(user.Username, user.Email, user.Id);
+        var authRequestDto = new AuthenticationRequestDto(user.Username, user.Email, user.Id, user.Role);
         AuthenticationResponseDto tokenResponse = await GenerateToken(authRequestDto);
         _logger.LogInformation("[JwtSigner_Authenticate] {}", tokenResponse);
         return tokenResponse;
@@ -52,7 +52,8 @@ public class AuthenticationService
         AuthenticationRequestDto authenticationRequestDto = new AuthenticationRequestDto(
             userResponse.Username,
             userResponse.Email,
-            userResponse.Id
+            userResponse.Id,
+            userResponse.Role
         );
         AuthenticationResponseDto authenticationResponseDto = await GenerateToken(authenticationRequestDto);
         return authenticationResponseDto;

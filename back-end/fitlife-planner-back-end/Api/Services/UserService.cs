@@ -1,4 +1,6 @@
 using fitlife_planner_back_end.Api.Configurations;
+using fitlife_planner_back_end.Api.Enums;
+using fitlife_planner_back_end.Api.Interface;
 using fitlife_planner_back_end.Api.Mapper;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Responses;
@@ -13,12 +15,14 @@ public class UserService
     private readonly AppDbContext _db;
     private readonly Mapping _mapping;
     private readonly ILogger<UserService> _logger;
+    private readonly IUserContext _userContext;
 
-    public UserService(AppDbContext db, Mapping mapping, ILogger<UserService> logger)
+    public UserService(AppDbContext db, Mapping mapping, ILogger<UserService> logger, IUserContext userContext)
     {
         _db = db;
         _mapping = mapping;
         _logger = logger;
+        _userContext = userContext;
     }
 
     public CreateAccountResponseDto CreateUser(CreateAccountRequestDto user)
@@ -51,8 +55,10 @@ public class UserService
         return _mapping.CreateAccountMapper(saveUser);
     }
 
-    public User GetUser(Guid userId)
+    public User GetUser()
     {
+        Guid userId = _userContext.User.userId;
+
         if (userId == Guid.Empty)
         {
             throw new InputFormatterException("Invalid user id");
