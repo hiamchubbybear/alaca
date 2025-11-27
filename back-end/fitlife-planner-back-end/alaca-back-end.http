@@ -1,8 +1,9 @@
 # Base URL
 @fitlife_planner_back_end_HostAddress = http://localhost:5000
-
+@access_token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpaXNzIjoiZDA3ZWJmNjQtZmMzOS00NmFjLWE1MzAtMGIwNTIyYTczYmI0IiwiaXNzIjoiY2hlc3N5eSIsImVtYWlsIjoiaHV5dHJhbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2NDMyMzM3MzM1OH0.zp87NZJkfc69IS0WG3jPEjTmY0UvTNpQugC20osNut8
 ### Get user by userId
-GET {{fitlife_planner_back_end_HostAddress}}/account?userId=dba363cb-1a5b-402c-99cf-90cb7e05d438
+GET {{fitlife_planner_back_end_HostAddress}}/account
+Authorization: Bearer {{access_token}}
 Accept: application/json
 
 ### Create a new user
@@ -11,9 +12,9 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "test21111@example.com",
+  "email": "huytran@example.com",
   "password": "0123456",
-  "username": "chessy1603"
+  "username": "chessyy"
 }
 
 
@@ -25,7 +26,7 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "test2@example.com",
+  "email": "huytran@example.com",
   "password": "0123456"
 }
 
