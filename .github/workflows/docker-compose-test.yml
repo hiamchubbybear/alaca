@@ -1,0 +1,50 @@
+name: Docker Compose Test
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  docker-compose-test:
+    name: Test Docker Compose Setup
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Create .env file
+      run: |
+        cd back-end/fitlife-planner-back-end
+        cat > .env << EOF
+        MYSQL_ROOT_PASSWORD=12345678
+        MYSQL_DATABASE=alaca
+        MYSQL_USER=root123
+        MYSQL_PASSWORD=12345678
+        EOF
+
+    - name: Start services
+      run: |
+        cd back-end/fitlife-planner-back-end
+        docker-compose up -d
+
+    - name: Wait for MySQL to be ready
+      run: |
+        timeout 60 bash -c 'until docker exec mysql_db mysqladmin ping -h localhost --silent; do sleep 2; done'
+
+    - name: Check MySQL connection
+      run: |
+        docker exec mysql_db mysql -uroot -p12345678 -e "SHOW DATABASES;"
+
+    - name: Show logs
+      if: always()
+      run: |
+        cd back-end/fitlife-planner-back-end
+        docker-compose logs
+
+    - name: Stop services
+      if: always()
+      run: |
+        cd back-end/fitlife-planner-back-end
+        docker-compose down -v
