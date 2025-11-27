@@ -35,12 +35,13 @@ public class JwtSigner
     {
         try
         {
-            long tokenExp = DateTimeOffset.UtcNow.AddSeconds(TOKEN_TIME_LIVE).ToUnixTimeMilliseconds();
+            long tokenExp = DateTimeOffset.UtcNow.AddHours(TOKEN_TIME_LIVE).ToUnixTimeMilliseconds();
             var payload = new Dictionary<String, Object>
             {
                 { "iiss", authenticationRequestDto.id },
                 { "iss", authenticationRequestDto.username },
                 { "email", authenticationRequestDto.email },
+                { "role", authenticationRequestDto.role.ToString() },
                 { "exp", tokenExp },
             };
             IJwtAlgorithm algorithm = new HMACSHA256Algorithm();
