@@ -1,10 +1,10 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Security.Cryptography;
 using fitlife_planner_back_end.Api.Configurations;
+using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Models;
-using fitlife_planner_back_end.Api.Responses;
+using fitlife_planner_back_end.Api.DTOs.Responses;
 using fitlife_planner_back_end.Api.Util;
-using fitlife_planner_back_end.Application.DTOs;
 using JWT;
 using JWT.Algorithms;
 using JWT.Serializers;

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
-namespace fitlife_planner_back_end.Application.DTOs;
+namespace fitlife_planner_back_end.Api.DTOs.Resquests;
 
 public class RefreshTokenRequestDto
 {

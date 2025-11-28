@@ -26,7 +26,10 @@ public class UserContext : IUserContext
                 _logger.LogInformation($"Claim: {c.Type}={c.Value}");
             var userId = Guid.Parse(claims.FindFirst("iiss")?.Value
                                     ?? throw new AuthenticationException("User ID not found"));
-
+            if (String.IsNullOrWhiteSpace(userId.ToString()))
+            {
+                throw new Exception("Invalid UserId");
+            }
             var username = claims.FindFirst("iss")?.Value
                            ?? throw new AuthenticationException("Username not found");
 

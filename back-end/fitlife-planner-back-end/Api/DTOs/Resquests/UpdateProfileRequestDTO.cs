@@ -1,7 +1,7 @@
 using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Models;
 
-namespace fitlife_planner_back_end.Application.DTOs;
+namespace fitlife_planner_back_end.Api.DTOs.Resquests;
 
 public class UpdateProfileRequestDto
 {

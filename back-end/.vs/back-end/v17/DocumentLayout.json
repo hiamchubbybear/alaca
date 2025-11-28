@@ -1,0 +1,378 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\services\\profileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\services\\profileservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\middlewares\\jwtsigner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\middlewares\\jwtsigner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\mapper\\mapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\mapper\\mapping.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\dtos\\responses\\createprofileresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\dtos\\responses\\createprofileresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\models\\profile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\models\\profile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\models\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\models\\token.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\models\\userjwtinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\models\\userjwtinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\models\\bmirecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\models\\bmirecord.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\models\\goalplan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\models\\goalplan.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\dtos\\resquests\\createprofilerequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\dtos\\resquests\\createprofilerequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\configurations\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\configurations\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\interface\\iusercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\interface\\iusercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\services\\userservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\util\\usercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\util\\usercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\dtos\\resquests\\authenticationrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\dtos\\resquests\\authenticationrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\dtos\\resquests\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\dtos\\resquests\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\dtos\\responses\\getprofileresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\dtos\\responses\\getprofileresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\dtos\\responses\\createaccountresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\dtos\\responses\\createaccountresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|e:\\vs\u0027s repo\\alaca\\alaca\\back-end\\fitlife-planner-back-end\\api\\services\\bmiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{020BF09D-B913-496C-B7E3-94D54AC7162F}|fitlife-planner-back-end\\fitlife-planner-back-end.csproj|solutionrelative:fitlife-planner-back-end\\api\\services\\bmiservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "User.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\User.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Models\\User.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\User.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Models\\User.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA1wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T07:50:22.022Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CreateProfileResponseDto.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Responses\\CreateProfileResponseDto.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\DTOs\\Responses\\CreateProfileResponseDto.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Responses\\CreateProfileResponseDto.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\DTOs\\Responses\\CreateProfileResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBEAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T09:36:24.283Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Mapping.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Mapper\\Mapping.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Mapper\\Mapping.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Mapper\\Mapping.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Mapper\\Mapping.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAADgvzIAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:13:26.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Profile.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\Profile.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Models\\Profile.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\Profile.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Models\\Profile.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAADgvxIAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:01:13.505Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ProfileService.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Services\\ProfileService.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Services\\ProfileService.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Services\\ProfileService.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Services\\ProfileService.cs",
+              "ViewState": "AgIAADMAAAAAAAAAAAAgwEYAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:02:10.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Token.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\Token.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Models\\Token.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\Token.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Models\\Token.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwBgAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:37:12.999Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UserJwtInfo.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\UserJwtInfo.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Models\\UserJwtInfo.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\UserJwtInfo.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Models\\UserJwtInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T09:32:49.57Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "JwtSigner.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Middlewares\\JwtSigner.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Middlewares\\JwtSigner.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Middlewares\\JwtSigner.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Middlewares\\JwtSigner.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:34:24.604Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "BMIRecord.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\BMIRecord.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Models\\BMIRecord.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\BMIRecord.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Models\\BMIRecord.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAqwDAAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T09:24:15.598Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "GoalPlan.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\GoalPlan.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Models\\GoalPlan.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Models\\GoalPlan.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Models\\GoalPlan.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T09:32:37.513Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CreateProfileRequestDTO.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Resquests\\CreateProfileRequestDTO.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\DTOs\\Resquests\\CreateProfileRequestDTO.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Resquests\\CreateProfileRequestDTO.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\DTOs\\Resquests\\CreateProfileRequestDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwBEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T09:06:24.811Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AppDBContext.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Configurations\\AppDBContext.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Configurations\\AppDBContext.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Configurations\\AppDBContext.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Configurations\\AppDBContext.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAswEQAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T07:49:07.586Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IUserContext.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Interface\\IUserContext.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Interface\\IUserContext.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Interface\\IUserContext.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Interface\\IUserContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:34:28.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "UserService.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Services\\UserService.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Services\\UserService.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Services\\UserService.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Services\\UserService.cs",
+              "ViewState": "AgIAACIAAACAzMzMzMwiwDMAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:20:56.369Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UserContext.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Util\\UserContext.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Util\\UserContext.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Util\\UserContext.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Util\\UserContext.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwCAAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:34:41.254Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "AuthenticationRequestDTO.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Resquests\\AuthenticationRequestDTO.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\DTOs\\Resquests\\AuthenticationRequestDTO.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Resquests\\AuthenticationRequestDTO.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\DTOs\\Resquests\\AuthenticationRequestDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T09:00:41.222Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "GetProfileResponseDto.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Responses\\GetProfileResponseDto.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\DTOs\\Responses\\GetProfileResponseDto.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Responses\\GetProfileResponseDto.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\DTOs\\Responses\\GetProfileResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAYAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:14:19.616Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "CreateAccountResponseDTO.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Responses\\CreateAccountResponseDTO.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\DTOs\\Responses\\CreateAccountResponseDTO.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Responses\\CreateAccountResponseDTO.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\DTOs\\Responses\\CreateAccountResponseDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:59:56.469Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "LoginRequestDTO.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Resquests\\LoginRequestDTO.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\DTOs\\Resquests\\LoginRequestDTO.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\DTOs\\Resquests\\LoginRequestDTO.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\DTOs\\Resquests\\LoginRequestDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:40:03.086Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Program.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Program.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Program.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Program.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T08:26:41.733Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "BMIService.cs",
+              "DocumentMoniker": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Services\\BMIService.cs",
+              "RelativeDocumentMoniker": "fitlife-planner-back-end\\Api\\Services\\BMIService.cs",
+              "ToolTip": "E:\\VS\u0027s Repo\\ALACA\\alaca\\back-end\\fitlife-planner-back-end\\Api\\Services\\BMIService.cs",
+              "RelativeToolTip": "fitlife-planner-back-end\\Api\\Services\\BMIService.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAAAwGAAAABIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-28T07:52:31.069Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

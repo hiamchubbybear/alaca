@@ -67,8 +67,6 @@ namespace fitlife_planner_back_end.Api.Configurations
                     .HasForeignKey<Profile>(p => p.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-
-
             modelBuilder.Entity<BMIRecord>(entity =>
             {
                 entity.HasKey(e => e.Id);

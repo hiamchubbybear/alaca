@@ -1,4 +1,4 @@
-namespace fitlife_planner_back_end.Api.Responses;
+namespace fitlife_planner_back_end.Api.DTOs.Responses;
 
 public class CreateBMIResponseDto
 {

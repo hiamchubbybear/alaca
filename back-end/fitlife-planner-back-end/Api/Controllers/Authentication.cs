@@ -1,12 +1,12 @@
 using System.Net;
 using fitlife_planner_back_end.Api.Configurations;
 using fitlife_planner_back_end.Api.Middlewares;
-using fitlife_planner_back_end.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIResponseWrapper;
-using fitlife_planner_back_end.Api.Responses;
 using fitlife_planner_back_end.Application.Services;
+using fitlife_planner_back_end.Api.DTOs.Responses;
+using fitlife_planner_back_end.Api.DTOs.Resquests;
 
 namespace fitlife_planner_back_end.Api.Controllers;
 

@@ -15,5 +15,19 @@ public class Profile
     public DateTime CreateAt;
     public DateTime UpdateAt;
     public int Version;
+
+    public Profile(Guid userId, string displayName, string avatarUrl, DateTime birthDate, Gender gender, string bio, DateTime createAt, DateTime updateAt)
+    {
+        Id = Guid.NewGuid();
+        UserId = userId;
+        DisplayName = displayName;
+        AvatarUrl = avatarUrl;
+        BirthDate = birthDate;
+        Gender = gender;
+        Bio = bio;
+        CreateAt = createAt;
+        UpdateAt = updateAt;
+        Version = 1;
+    }
 }
 

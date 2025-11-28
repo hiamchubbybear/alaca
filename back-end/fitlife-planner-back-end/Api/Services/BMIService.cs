@@ -1,9 +1,9 @@
 using fitlife_planner_back_end.Api.Configurations;
+using fitlife_planner_back_end.Api.DTOs.Responses;
+using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Interface;
 using fitlife_planner_back_end.Api.Models;
-using fitlife_planner_back_end.Api.Responses;
 using fitlife_planner_back_end.Api.Util;
-using fitlife_planner_back_end.Application.DTOs;
 
 namespace fitlife_planner_back_end.Application.Services;
 

@@ -1,11 +1,11 @@
 using fitlife_planner_back_end.Api.Configurations;
+using fitlife_planner_back_end.Api.DTOs.Responses;
+using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Interface;
 using fitlife_planner_back_end.Api.Mapper;
 using fitlife_planner_back_end.Api.Models;
-using fitlife_planner_back_end.Api.Responses;
 using fitlife_planner_back_end.Api.Util;
-using fitlife_planner_back_end.Application.DTOs;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace fitlife_planner_back_end.Application.Services;

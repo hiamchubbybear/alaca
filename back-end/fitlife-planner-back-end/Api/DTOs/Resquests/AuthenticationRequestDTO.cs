@@ -1,6 +1,6 @@
 using fitlife_planner_back_end.Api.Enums;
 
-namespace fitlife_planner_back_end.Application.DTOs;
+namespace fitlife_planner_back_end.Api.DTOs.Resquests;
 
 public record AuthenticationRequestDto(string username, string email, Guid id, Role role)
 {
