@@ -19,21 +19,21 @@ public class Mapping
             user.Role
         );
     }
+
     public GetProfileResponseDto GetProfileMapper(Profile profile)
     {
         return new GetProfileResponseDto(
-            profile.Id,
+            profile.ProfileId,
             profile.UserId,
             profile.DisplayName,
             profile.AvatarUrl,
             profile.BirthDate,
             profile.Gender,
             profile.Bio
-           
         );
     }
-     
-    
+
+
     public Profile InsertProfileMapper(CreateProfileRequestDTO dto, Guid userId)
     {
         return new Profile(
@@ -42,22 +42,66 @@ public class Mapping
             dto.AvatarUrl,
             dto.BirthDate,
             dto.Gender,
-            dto.Bio,
-            DateTime.Now,
-            DateTime.Now
-
+            dto.Bio
         );
     }
-    public CreateProfileResponseDto InsertProfileResponseMapper(Profile? profile)
-    { 
+
+    public CreateProfileResponseDto InsertProfileResponseMapper(Profile profile)
+    {
         return new CreateProfileResponseDto(
-            profile.Id,
+            profile.ProfileId,
             profile.UserId,
             profile.DisplayName,
             profile.AvatarUrl,
             profile.BirthDate,
             profile.Gender,
+            profile.Bio,
+            profile.CreateAt,
+            profile.UpdateAt
+        );
+    }
+
+    public UpdateProfileResponseDto UpdateProfileMapper(Profile profile)
+    {
+        return new UpdateProfileResponseDto(
+            profile.DisplayName,
+            profile.AvatarUrl,
+            profile.BirthDate,
+            profile.Gender,
             profile.Bio
+        );
+    }
+
+    public UpdatePostResponseDto UpdatePostMapper(Post post)
+    {
+        return new UpdatePostResponseDto(
+            post.Title,
+            post.Content,
+            post.Media
+        );
+    }
+
+    public Post InsertPostMapper(CreatePostRequestDto dto, Guid profileId)
+    {
+        return new Post(
+            profileId,
+            dto.Title,
+            dto.Content,
+            dto.Media
+        );
+    }
+    public CreatePostResponseDto InsertPostResponseMapper(Post post)
+    {
+        return new CreatePostResponseDto(
+            post.PostId,
+            post.ProfileId,
+            post.Title,
+            post.Content,
+            post.Media,
+            post.LikeCount,
+            post.CommentCount,
+            post.CreatedAt,
+            post.UpdatedAt
         );
     }
 }

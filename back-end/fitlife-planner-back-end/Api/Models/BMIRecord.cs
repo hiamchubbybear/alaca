@@ -5,7 +5,7 @@ namespace fitlife_planner_back_end.Api.Models;
 
 public class BMIRecord
 {
-    [Key] public Guid Id { get; set; } = Guid.NewGuid();
+    [Key] public Guid BmiRecordId { get; set; } = Guid.NewGuid();
     public Guid UserId { get; set; }
     public double HeightCm { get; set; }
     public double WeightKg { get; set; }
@@ -39,14 +39,17 @@ public class BMIRecord
         PraticeLevel = praticeLevel;
     }
 
-    public BMIRecord(Guid userId, double heightCm, double weightKg, double bmi, bool isCurrent, bool isComplete)
+    public BMIRecord(Guid userId, double heightCm, double weightKg, double bmi, string assessment, bool isCurrent,
+        bool isComplete)
     {
+        BmiRecordId = Guid.NewGuid();
         UserId = userId;
         HeightCm = heightCm;
         WeightKg = weightKg;
         BMI = bmi;
         IsCurrent = isCurrent;
         IsComplete = isComplete;
+        Assessment = assessment;
     }
 }
 

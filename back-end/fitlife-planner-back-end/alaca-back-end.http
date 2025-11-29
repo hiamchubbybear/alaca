@@ -1,46 +1,119 @@
-# Base URL
-@fitlife_planner_back_end_HostAddress = http://localhost:5000
-@access_token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpaXNzIjoiZDA3ZWJmNjQtZmMzOS00NmFjLWE1MzAtMGIwNTIyYTczYmI0IiwiaXNzIjoiY2hlc3N5eSIsImVtYWlsIjoiaHV5dHJhbkBleGFtcGxlLmNvbSIsImV4cCI6MTc2NDMyMzM3MzM1OH0.zp87NZJkfc69IS0WG3jPEjTmY0UvTNpQugC20osNut8
-### Get user by userId
-GET {{fitlife_planner_back_end_HostAddress}}/account
-Authorization: Bearer {{access_token}}
-Accept: application/json
+@host = http://localhost:5000
+@email = test@example.com
+@password = Password123!
+@profileId = cf6d7512-ff82-456d-b350-b1b914410b25 
+### Authentication
 
-### Create a new user
-POST {{fitlife_planner_back_end_HostAddress}}/account
+### Login
+POST {{host}}/auth/login
 Content-Type: application/json
-Accept: application/json
 
 {
-  "email": "huytran@example.com",
-  "password": "0123456",
-  "username": "chessyy"
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+> {%
+    client.global.set("token", response.body.data.token);
+    client.global.set("refreshToken", response.body.data.refreshToken);
+%}
+
+### Account
+
+### Get User Info (to get ID for refresh)
+GET {{host}}/account
+Authorization: Bearer {{token}}
+
+> {%
+    client.global.set("userId", response.body.data.id);
+    client.global.set("userName", response.body.data.username);
+%}
+
+### Create Account
+POST {{host}}/account
+Content-Type: application/json
+
+{
+  "username": "newuser",
+  "email": "test@example.com",
+  "password": "Password123!"
+}
+
+### Authentication (Refresh)
+
+### Refresh Token
+POST {{host}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}",
+  "userId": "{{userId}}",
+  "userName": "{{userName}}"
+}
+
+### Profile
+
+### Get My Profile
+GET {{host}}/profile
+Authorization: Bearer {{token}}
+
+> {%
+    client.global.set("profileId", response.body.data.id);
+%}
+#### Deprecated : Unused
+#### Create Profile
+#POST {{host}}/profile
+#Authorization: Bearer {{token}}
+#Content-Type: application/json
+#
+#{
+#  "userId": "{{userId}}",
+#  "displayName": "My Display Name",
+#  "avatarUrl": "https://example.com/avatar.png",
+#  "birthDate": "2000-01-01T00:00:00",
+#  "gender": 1,
+#  "bio": "Hello world"
+#}
+#
+#> {%
+#    client.global.set("profileId", response.body.data.id);
+#%}
+
+### Get All Profiles (Admin)
+GET {{host}}/profile/all?PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### Update Profile
+PUT {{host}}/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "displayName": "Updated Name",
+  "avatarUrl": "https://example.com/avatar-updated.png",
+  "birthDate": "2000-01-01T00:00:00",
+  "gender": 0,
+  "bio": "Updated bio"
+}
+
+### Calculate BMI
+POST {{host}}/bmi/calculate
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "heightCm" : 180,
+  "weightKg" : 65
 }
 
 
 
-### AuthenticationController
-### Login user
-POST {{fitlife_planner_back_end_HostAddress}}/auth/login
+### Planner
+POST {{host}}/bmi/me
+Authorization: Bearer {{token}}
 Content-Type: application/json
-Accept: application/json
 
 {
-  "email": "huytran@example.com",
-  "password": "0123456"
+  "practiceLevel" : 1,
+  "activityFactor" : 1.2
 }
-
-### AuthenticationController
-### Refresh token
-POST {{fitlife_planner_back_end_HostAddress}}/auth/refresh
-Content-Type: application/json
-Accept: application/json
-
-{
-  "refreshToken" : "7c53657e-2113-4262-baa1-9fd15de0e851",
-  "userId" : "2ce23af5-996f-48a7-9414-2775225f7550",
-  "userName": "chessy1603"
-} 
-
-
-

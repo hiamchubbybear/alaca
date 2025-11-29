@@ -5,7 +5,7 @@ namespace fitlife_planner_back_end.Api.Models
 {
     public class Token
     {
-        [Key] public Guid Id { get; set; } = Guid.NewGuid();
+        [Key] public Guid TokenId { get; set; } = Guid.NewGuid();
 
         [Required] public string RefreshToken { get; set; }
 

@@ -3,7 +3,7 @@ namespace fitlife_planner_back_end.Api.Util;
 public class BMIGoalPlan
 {
     public int PlanId { get; set; }
-    public string Goal { get; set; } = "";
+    public string Assessment { get; set; } = "";
     public float WeeklyTargetKg { get; set; }
     public int ExercisePerWeek { get; set; }
 }

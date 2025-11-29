@@ -1,7 +1,9 @@
 # --- Build stage ---
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY . .
+
+COPY . .   # copy đúng toàn bộ thư mục back-end/fitlife-planner-back-end
+
 RUN dotnet restore ./fitlife-planner-back-end.csproj
 RUN dotnet publish ./fitlife-planner-back-end.csproj -c Release -o /app/publish
 
@@ -9,7 +11,8 @@ RUN dotnet publish ./fitlife-planner-back-end.csproj -c Release -o /app/publish
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
-EXPOSE 8000
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV ASPNETCORE_URLS=http://+:8000
+
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:${PORT}
+
 ENTRYPOINT ["dotnet", "fitlife-planner-back-end.dll"]

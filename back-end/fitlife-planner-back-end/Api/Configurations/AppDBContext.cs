@@ -14,6 +14,7 @@ namespace fitlife_planner_back_end.Api.Configurations
         public DbSet<Token> Tokens { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<BMIRecord> BmiRecords { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -47,8 +48,8 @@ namespace fitlife_planner_back_end.Api.Configurations
 
             modelBuilder.Entity<Profile>(entity =>
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).HasColumnType("char(36)").IsRequired();
+                entity.HasKey(e => e.ProfileId);
+                entity.Property(e => e.ProfileId).HasColumnType("char(36)").IsRequired();
                 entity.HasIndex(e => e.UserId).IsUnique();
 
                 entity.Property(e => e.DisplayName).HasMaxLength(100);
@@ -67,10 +68,35 @@ namespace fitlife_planner_back_end.Api.Configurations
                     .HasForeignKey<Profile>(p => p.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.HasKey(e => e.PostId);
+                entity.Property(e => e.PostId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.ProfileId)
+                    .HasColumnType("char(36)")
+                    .IsRequired();
+                entity.Property(e => e.Content).HasMaxLength(500).IsRequired(false);
+                entity.Property(e => e.Media).HasMaxLength(200).IsRequired(false);
+                entity.Property(e => e.LikeCount).HasDefaultValue(0);
+                entity.Property(e => e.CommentCount).HasDefaultValue(0);
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+                entity.HasOne(p => p.Profile)
+                    .WithMany(pr => pr.Posts)
+                    .HasForeignKey(p => p.ProfileId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+
             modelBuilder.Entity<BMIRecord>(entity =>
             {
-                entity.HasKey(e => e.Id);
-                entity.Property(e => e.Id).HasColumnType("char(36)").IsRequired();
+                entity.HasKey(e => e.BmiRecordId);
+                entity.Property(e => e.BmiRecordId).HasColumnType("char(36)").IsRequired();
                 entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
                 entity.Property(e => e.HeightCm);
                 entity.Property(e => e.WeightKg);
@@ -97,7 +123,7 @@ namespace fitlife_planner_back_end.Api.Configurations
 
             modelBuilder.Entity<Token>(entity =>
             {
-                entity.HasKey(t => t.Id);
+                entity.HasKey(t => t.TokenId);
                 entity.Property(t => t.RefreshToken).IsRequired();
                 entity.Property(t => t.CreatedAt).IsRequired();
                 entity.Property(t => t.Revoked).HasDefaultValue(false);

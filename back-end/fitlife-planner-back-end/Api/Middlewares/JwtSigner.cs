@@ -39,6 +39,7 @@ public class JwtSigner
             var payload = new Dictionary<String, Object>
             {
                 { "iiss", authenticationRequestDto.id },
+                { "profileId", authenticationRequestDto.profileId },
                 { "iss", authenticationRequestDto.username },
                 { "email", authenticationRequestDto.email },
                 { "role", authenticationRequestDto.role.ToString() },
@@ -55,8 +56,8 @@ public class JwtSigner
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            _logger.LogInformation("Failed to sign the key {}", e);
+            throw new Exception("Failed to sign the key {}", e);
         }
     }
 }

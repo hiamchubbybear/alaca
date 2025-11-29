@@ -15,7 +15,8 @@ namespace fitlife_planner_back_end.Api.DTOs.Responses
         public DateTime UpdateAt;
         public int Version;
 
-        public CreateProfileResponseDto(Guid id,Guid userId, string displayName, string avatarUrl, DateTime birthDate, Gender gender, string bio)
+        public CreateProfileResponseDto(Guid id, Guid userId, string displayName, string avatarUrl, DateTime birthDate,
+            Gender gender, string bio, DateTime createAt, DateTime updateAt)
         {
             Id = id;
             UserId = userId;
@@ -24,8 +25,8 @@ namespace fitlife_planner_back_end.Api.DTOs.Responses
             BirthDate = birthDate;
             Gender = gender;
             Bio = bio;
-            CreateAt = DateTime.Now;
-            UpdateAt = DateTime.Now;
+            CreateAt = createAt;
+            UpdateAt = updateAt;
             Version = 1;
         }
     }

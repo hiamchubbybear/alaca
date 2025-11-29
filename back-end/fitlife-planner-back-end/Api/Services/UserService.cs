@@ -5,65 +5,61 @@ using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Interface;
 using fitlife_planner_back_end.Api.Mapper;
 using fitlife_planner_back_end.Api.Models;
+using fitlife_planner_back_end.Api.Services;
 using fitlife_planner_back_end.Api.Util;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 
 namespace fitlife_planner_back_end.Application.Services;
 
-public class UserService
+public class UserService(
+    AppDbContext db,
+    Mapping mapping,
+    ILogger<UserService> logger,
+    IUserContext userContext,
+    ProfileService profileService)
 {
-    private readonly AppDbContext _db;
-    private readonly Mapping _mapping;
-    private readonly ILogger<UserService> _logger;
-    private readonly IUserContext _userContext;
-
-    public UserService(AppDbContext db, Mapping mapping, ILogger<UserService> logger, IUserContext userContext)
+    public async Task<CreateAccountResponseDto> CreateUser(CreateAccountRequestDto user)
     {
-        _db = db;
-        _mapping = mapping;
-        _logger = logger;
-        _userContext = userContext;
-    }
-
-    public CreateAccountResponseDto CreateUser(CreateAccountRequestDto user)
-    {
-        string _rawPassword = user.password;
-        string _email = user.email;
-        string _username = user.username;
-        if (_rawPassword.Length < 6 || String.IsNullOrEmpty(_rawPassword) ||
-            String.IsNullOrWhiteSpace(_rawPassword))
-            throw new InputFormatterException("Password must be more than 6 chars");
-        if (_email.Length < 6 || String.IsNullOrEmpty(_email))
-            throw new InputFormatterException("Invalid email address");
-        if (_db.Users.Any(x => x.Email == _email))
-            throw new Exception("Email already exists");
-        if (_db.Users.Any(u => u.Username == _username))
-            throw new Exception("Username already exists");
-        User saveUser = new User(username: _username, email: _email, rawPassword: _rawPassword);
-        saveUser.Role = Role.User;
-        var profile = new Profile
+        try
         {
-            UserId = saveUser.Id,
-            DisplayName = _username,
-            CreateAt = DateTime.UtcNow,
-            UpdateAt = DateTime.UtcNow,
-            Version = 1
-        };
-        var savedUser = _db.Users.Add(saveUser);
-        _db.Profiles.Add(profile);
-        _db.SaveChanges();
-        return _mapping.CreateAccountMapper(saveUser);
+            string rawPassword = user.password;
+            string email = user.email;
+            string username = user.username;
+            if (rawPassword.Length < 6 || String.IsNullOrEmpty(rawPassword) ||
+                String.IsNullOrWhiteSpace(rawPassword))
+                throw new InputFormatterException("Password must be more than 6 chars");
+            if (email.Length < 6 || String.IsNullOrEmpty(email))
+                throw new InputFormatterException("Invalid email address");
+            if (db.Users.Any(x => x.Email == email))
+                throw new Exception("Email already exists");
+            if (db.Users.Any(u => u.Username == username))
+                throw new Exception("Username already exists");
+            User saveUser = new User(username: username, email: email, rawPassword: rawPassword);
+
+            saveUser.Role = Role.User;
+            var accountSaved = await db.Users.AddAsync(saveUser);
+            await profileService.CreateProfile(new CreateProfileRequestDTO(
+                username), accountSaved.Entity.Id);
+            await db.SaveChangesAsync();
+            return mapping.CreateAccountMapper(saveUser);
+        }
+        catch (Exception e)
+        {
+            logger.LogInformation("Error while create {}", e);
+            throw new Exception("Error while creating user");
+        }
     }
 
-    public User GetUser()
+    public async Task<User?> GetUser()
     {
-        Guid userId = _userContext.User.userId;
+        Guid userId = userContext.User.userId;
 
         if (userId == Guid.Empty)
         {
             throw new InputFormatterException("Invalid user id");
         }
 
-        return _db.Users.FirstOrDefault(x => x.Id == userId);
+        return await db.Users.FirstOrDefaultAsync(x => x.Id == userId);
     }
 }

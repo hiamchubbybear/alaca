@@ -1,6 +1,7 @@
 using System.Security.Authentication;
 using System.Security.Claims;
 using fitlife_planner_back_end.Api.DTOs;
+using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Interface;
 using fitlife_planner_back_end.Api.Models;
 
@@ -30,13 +31,40 @@ public class UserContext : IUserContext
             {
                 throw new Exception("Invalid UserId");
             }
+
+            var profileId = Guid.Parse(claims.FindFirst("profileId")?.Value
+                                    ?? throw new AuthenticationException("Profile ID not found"));
+            if (String.IsNullOrWhiteSpace(userId.ToString()))
+            {
+                throw new Exception("Invalid profile");
+            }
+
+            var roleString = claims.FindFirst(ClaimTypes.Role)?.Value
+                             ?? claims.FindFirst("role")?.Value
+                             ?? throw new AuthenticationException("Role not found");
+
+            if (Enum.TryParse<Role>(roleString, true, out var userRole))
+            {
+                _logger.LogInformation($"Role: {userRole}");
+            }
+            else
+            {
+                userRole = Role.User;
+                _logger.LogWarning("Invalid role. Default set to User");
+            }
+
+
             var username = claims.FindFirst("iss")?.Value
                            ?? throw new AuthenticationException("Username not found");
+
+            if (String.IsNullOrWhiteSpace(userId.ToString()))
+            {
+                throw new Exception("Invalid UserId");
+            }
 
             var email = claims.FindFirst(ClaimTypes.Email)?.Value
                         ?? claims.FindFirst("email")?.Value
                         ?? throw new AuthenticationException("Email not found");
-
 
             var tokenExp = claims.FindFirst("tokenExp")?.Value;
             long expUnix = tokenExp != null ? long.Parse(tokenExp) : 0;
@@ -45,7 +73,7 @@ public class UserContext : IUserContext
             if (expDate < DateTimeOffset.UtcNow)
                 throw new AuthenticationException("Token has expired");
 
-            return new UserJwtInfo(userId, username, email);
+            return new UserJwtInfo(userId, username, email, userRole, profileId);
         }
     }
 }

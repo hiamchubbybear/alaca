@@ -6,6 +6,8 @@ using System.Text.Json.Serialization;
 using fitlife_planner_back_end.Api.Interface;
 using fitlife_planner_back_end.Api.Mapper;
 using fitlife_planner_back_end.Api.Middlewares;
+using fitlife_planner_back_end.Api.Repository;
+using fitlife_planner_back_end.Api.Services;
 using fitlife_planner_back_end.Api.Util;
 using fitlife_planner_back_end.Application.Services;
 using Microsoft.IdentityModel.Tokens;
@@ -19,8 +21,6 @@ builder.Services.AddControllers()
         opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
-
-
 
 var jwtKey = builder.Configuration["Jwt:Key"]
              ?? "1/3pvho0/tHL9NElGz4OcrSdsbC10OB5iMHAmn3hOH+YnhFgpNsmbl/8i5REO3DTd6zsiwLu2pjr7UukdVA5Tw==";
@@ -44,17 +44,20 @@ builder.Services.AddAuthentication(options =>
         {
             OnTokenValidated = ctx =>
             {
-                var identity = ctx.Principal.Identity as ClaimsIdentity;
-                var userId = ctx.Principal.FindFirst("iiss")?.Value;
+                var identity = ctx.Principal?.Identity as ClaimsIdentity;
+                var userId = ctx.Principal?.FindFirst("iiss")?.Value;
                 if (!string.IsNullOrEmpty(userId))
                     identity?.AddClaim(new Claim("userId", userId));
-                var role = ctx.Principal.FindFirst("role")?.Value;
+                var profileId = ctx.Principal?.FindFirst("profileId")?.Value;
+                if (!string.IsNullOrEmpty(profileId))
+                    identity?.AddClaim(new Claim("profileId", profileId));
+                var role = ctx.Principal?.FindFirst("role")?.Value;
                 if (!string.IsNullOrEmpty(role))
                     identity?.AddClaim(new Claim(ClaimTypes.Role, role));
-                var email = ctx.Principal.FindFirst("email")?.Value;
+                var email = ctx.Principal?.FindFirst("email")?.Value;
                 if (!string.IsNullOrEmpty(email))
                     identity?.AddClaim(new Claim("email", email));
-                var exp = ctx.Principal.FindFirst("exp")?.Value;
+                var exp = ctx.Principal?.FindFirst("exp")?.Value;
                 if (!string.IsNullOrEmpty(exp))
                     identity?.AddClaim(new Claim("tokenExp", exp));
                 return Task.CompletedTask;
@@ -64,7 +67,8 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<AuthenticationService>()
-    .AddScoped<Mapping>();
+    .AddScoped<Mapping>().AddScoped<ProfileService>().AddScoped<ProfileRepository>().AddScoped<BMIService>()
+    .AddScoped<BMIUtil>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connString = "Server=127.0.0.1;Port=3306;Database=alaca;User=root;Password=12345678;";
@@ -76,8 +80,24 @@ app.UseAuthentication();
 app.UseAuthorization();
 using (var scope = app.Services.CreateScope())
 {
-    scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.Migrate();
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    try
+    {
+        if (dbContext.Database.ProviderName != "Microsoft.EntityFrameworkCore.InMemory")
+        {
+            // dbContext.Database.Migrate();
+        }
+    }
+    catch (InvalidOperationException)
+    {
+        throw new AbandonedMutexException("Database error");
+    }
 }
+
+using var scopeDB = app.Services.CreateScope();
+var db = scopeDB.ServiceProvider.GetRequiredService<AppDbContext>();
+db.Database.EnsureDeleted();
+db.Database.EnsureCreated();
 
 
 app.UseCors(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -90,3 +110,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapControllers();
 app.Run();
+
+public partial class Program
+{
+}

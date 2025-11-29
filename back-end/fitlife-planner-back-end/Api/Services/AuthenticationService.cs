@@ -27,36 +27,64 @@ public class AuthenticationService
 
     public async Task<AuthenticationResponseDto> Authenticate(LoginRequestDto loginRequestDto)
     {
-        var email = loginRequestDto.Email.Trim().ToLower();
-        var user = _db.Users.FirstOrDefault(u => u.Email.ToLower() == email);
-        _logger.LogInformation("[JwtSigner_Authenticate_Hashed] {}", user.Password);
-        _logger.LogInformation("[JwtSigner_Authenticate_Raw] {}", loginRequestDto.Password);
-        if (user == null)
-            throw new UnauthorizedAccessException("Email not found");
-        if (!PasswordEncoder.DecodePassword(user.Password, loginRequestDto.Password))
-            throw new UnauthorizedAccessException("Password incorrect");
+        try
+        {
+            var email = loginRequestDto.Email.Trim().ToLower();
+            var user = _db.Users.FirstOrDefault(u => u.Email.ToLower() == email);
+            _logger.LogInformation("[JwtSigner_Authenticate] {}", email);
+            if (user == null)
+                throw new UnauthorizedAccessException("Email not found");
+            _logger.LogInformation("[JwtSigner_Authenticate] {}", user.Email);
+            if (!PasswordEncoder.DecodePassword(user.Password, loginRequestDto.Password))
+                throw new UnauthorizedAccessException("Password incorrect");
+            var profile = _db.Profiles.FirstOrDefault(u => u.UserId == user.Id);
+            Guid profileId = profile?.ProfileId ?? Guid.Empty;
+            // public record AuthenticationRequestDto(string username, string email, Guid id, Role role, Guid? profileId)
+            var authRequestDto = new AuthenticationRequestDto(
+                user.Username,
+                user.Email,
+                user.Id,
+                user.Role,
+                profileId
+            );
 
-        var authRequestDto = new AuthenticationRequestDto(user.Username, user.Email, user.Id, user.Role);
-        AuthenticationResponseDto tokenResponse = await GenerateToken(authRequestDto);
-        _logger.LogInformation("[JwtSigner_Authenticate] {}", tokenResponse);
-        return tokenResponse;
+            AuthenticationResponseDto tokenResponse = await GenerateToken(authRequestDto);
+            _logger.LogInformation("[JwtSigner_Authenticate] {}", tokenResponse);
+            return tokenResponse;
+        }
+        catch (Exception e)
+        {
+            _logger.LogInformation(e.Message);
+            throw new UnauthorizedAccessException("Invalid credentials");
+        }
     }
+
 
     public async Task<AuthenticationResponseDto> RefreshToken(RefreshTokenRequestDto refreshTokenRequestDto)
     {
-        var tokenResponse =
-            await _db.Tokens.FirstOrDefaultAsync(t => t.RefreshToken == refreshTokenRequestDto.RefreshToken);
-        var userResponse = await _db.Users.FirstOrDefaultAsync(t => t.Id == tokenResponse.UserId);
-        if (tokenResponse == null) throw new UnauthorizedAccessException("Refresh token not found");
-        if (userResponse == null) throw new UnauthorizedAccessException("User not found");
-        AuthenticationRequestDto authenticationRequestDto = new AuthenticationRequestDto(
-            userResponse.Username,
-            userResponse.Email,
-            userResponse.Id,
-            userResponse.Role
-        );
-        AuthenticationResponseDto authenticationResponseDto = await GenerateToken(authenticationRequestDto);
-        return authenticationResponseDto;
+        try
+        {
+            var tokenResponse =
+                await _db.Tokens.FirstOrDefaultAsync(t => t.RefreshToken == refreshTokenRequestDto.RefreshToken);
+            var userResponse = await _db.Users.FirstOrDefaultAsync(t => t.Id == tokenResponse.UserId);
+            var profile = _db.Profiles.FirstOrDefault(u => u.UserId == userResponse.Id);
+            if (tokenResponse == null) throw new UnauthorizedAccessException("Refresh token not found");
+            if (userResponse == null) throw new UnauthorizedAccessException("User not found");
+            AuthenticationRequestDto authenticationRequestDto = new AuthenticationRequestDto(
+                userResponse.Username,
+                userResponse.Email,
+                userResponse.Id,
+                userResponse.Role,
+                profile.ProfileId
+            );
+            AuthenticationResponseDto authenticationResponseDto = await GenerateToken(authenticationRequestDto);
+            return authenticationResponseDto;
+        }
+        catch (Exception e)
+        {
+            _logger.LogInformation(e.Message);
+            throw new UnauthorizedAccessException("Invalid credentials");
+        }
     }
 
     public async Task<string> GenerateRefreshToken(AuthenticationRequestDto authenticationRequestDto)

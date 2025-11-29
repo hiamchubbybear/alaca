@@ -13,27 +13,20 @@ namespace fitlife_planner_back_end.Api.Controllers;
 
 [Route("account")]
 [ApiController]
-public class AccountController : ControllerBase
+public class AccountController(ILogger<AccountController> logger, UserService userService) : ControllerBase
 {
-    private readonly ILogger<AccountController> _logger;
-    private readonly UserService _userService;
-
-    public AccountController(ILogger<AccountController> logger, UserService userService)
-    {
-        _logger = logger;
-        _userService = userService;
-    }
-
     [Authorize]
     [HttpGet]
-    public ApiResponse<User> GetUser()
+    public async Task<ApiResponse<User>> GetUser()
     {
         try
         {
-            
-            var userResponse = _userService.GetUser();
-            return new ApiResponse<User>(success: true, message: "Successfully retrieved user",
-                statusCode: HttpStatusCode.Found, data: userResponse);
+            var userResponse = await userService.GetUser();
+            if (userResponse != null)
+                return new ApiResponse<User>(success: true, message: "Successfully retrieved user",
+                    statusCode: HttpStatusCode.Found, data: userResponse);
+            return new ApiResponse<User>(success: true, message: "Failed to find user",
+                statusCode: HttpStatusCode.BadRequest);
         }
         catch (Exception e)
         {
@@ -43,12 +36,13 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
-    public ApiResponse<CreateAccountRequestDto> CreateUser([FromBody] CreateAccountRequestDto user)
+    public async Task<ApiResponse<CreateAccountRequestDto>> CreateUser([FromBody] CreateAccountRequestDto user)
     {
         try
         {
-            var userResponse = _userService.CreateUser(user);
-            return new ApiResponse<CreateAccountRequestDto>(success: true, message: "Successfully retrieved user", data: userResponse,
+            var userResponse = await userService.CreateUser(user);
+            return new ApiResponse<CreateAccountRequestDto>(success: true, message: "Successfully retrieved user",
+                data: userResponse,
                 statusCode: HttpStatusCode.Found);
         }
         catch (Exception e)
