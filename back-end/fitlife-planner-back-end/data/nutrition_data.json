@@ -1,0 +1,3480 @@
+{
+    "stats": {
+        "total": 385,
+        "valid": 359,
+        "invalid": 26,
+        "missing_fields_count": {
+            "energy": 3,
+            "fat": 9,
+            "protein": 3,
+            "carb": 1
+        }
+    },
+    "data": [
+        {
+            "file": "Bánh gai.pdf",
+            "nutrition": {
+                "energy": 175.4,
+                "protein": 3.3,
+                "fat": 1.8,
+                "carb": 36.6
+            }
+        },
+        {
+            "file": "Cánh gà nướng (5 cái).pdf",
+            "nutrition": {
+                "energy": 731.1,
+                "protein": 82.2,
+                "fat": 39.8,
+                "carb": 11.1
+            }
+        },
+        {
+            "file": "Bánh mỳ Pate thập cẩm.pdf",
+            "nutrition": {
+                "energy": 662.1,
+                "protein": 26.2,
+                "fat": 42.5,
+                "carb": 43.6
+            }
+        },
+        {
+            "file": "Miến ngan.pdf",
+            "nutrition": {
+                "energy": 519.3,
+                "protein": 15.0,
+                "fat": 20.0,
+                "carb": 69.9
+            }
+        },
+        {
+            "file": "Nước ép lê.pdf",
+            "nutrition": {
+                "energy": 229.2,
+                "protein": 3.4,
+                "fat": 1.0,
+                "carb": 51.8
+            }
+        },
+        {
+            "file": "Bánh mỳ gà quay.pdf",
+            "nutrition": {
+                "energy": 358.6,
+                "protein": 22.5,
+                "fat": 12.1,
+                "carb": 39.9
+            }
+        },
+        {
+            "file": "Cháo trai.pdf",
+            "nutrition": {
+                "energy": 383.5,
+                "protein": 17.0,
+                "fat": 12.7,
+                "carb": 50.4
+            }
+        },
+        {
+            "file": "Cơn hến.pdf",
+            "nutrition": {
+                "energy": 291.0,
+                "protein": 18.0,
+                "fat": 6.3,
+                "carb": 40.1
+            }
+        },
+        {
+            "file": "Caramen matcha trộn.pdf",
+            "nutrition": {
+                "energy": 390.2,
+                "protein": 8.3,
+                "fat": 58.0,
+                "carb": 76.2
+            }
+        },
+        {
+            "file": "Cơm bình dân (cá nục, thịt ba chỉ).pdf",
+            "nutrition": {
+                "energy": 637.8,
+                "protein": 22.0,
+                "fat": 15.5,
+                "carb": 102.8
+            }
+        },
+        {
+            "file": "Bún riêu cua, giò, bò.pdf",
+            "nutrition": {
+                "energy": 661.3,
+                "protein": 19.7,
+                "fat": 19.0,
+                "carb": 43.9
+            }
+        },
+        {
+            "file": "Ốc bé hấp.pdf",
+            "nutrition": {
+                "energy": 232.4,
+                "protein": 36.7,
+                "fat": 2.4,
+                "carb": 16.7
+            }
+        },
+        {
+            "file": "Tào phớ.pdf",
+            "nutrition": {
+                "energy": 421.4,
+                "protein": 8.7,
+                "fat": 0.7,
+                "carb": 95.1
+            }
+        },
+        {
+            "file": "Set cánh, đùi gà tẩm bột chiên.pdf",
+            "nutrition": {
+                "energy": 685.9,
+                "protein": 21.1,
+                "fat": 43.1,
+                "carb": 53.4
+            }
+        },
+        {
+            "file": "Sữa chua nếp cẩm, mít, caramen.pdf",
+            "nutrition": {
+                "energy": 566.3,
+                "protein": 12.3,
+                "fat": 8.7,
+                "carb": 109.7
+            }
+        },
+        {
+            "file": "Phở chiên.pdf",
+            "nutrition": {
+                "energy": 648.9,
+                "protein": 23.0,
+                "fat": 19.6,
+                "carb": 95.2
+            }
+        },
+        {
+            "file": "Nem rán (4 cái).pdf",
+            "nutrition": {
+                "energy": 413.2,
+                "protein": 14.2,
+                "fat": 24.1,
+                "carb": 34.8
+            }
+        },
+        {
+            "file": "Miến ngan mọc.pdf",
+            "nutrition": {
+                "energy": 569.3,
+                "protein": 27.0,
+                "fat": 28.5,
+                "carb": 51.2
+            }
+        },
+        {
+            "file": "Nem Thính.pdf",
+            "nutrition": {
+                "energy": 612.3,
+                "protein": 44.8,
+                "fat": 25.2,
+                "carb": 51.7
+            }
+        },
+        {
+            "file": "Phở chiên phồng.pdf",
+            "nutrition": {
+                "energy": 677.1,
+                "protein": 25.2,
+                "fat": 33.1,
+                "carb": 69.6
+            }
+        },
+        {
+            "file": "Bánh cuốn.pdf",
+            "nutrition": {
+                "energy": 444.8,
+                "protein": 13.8,
+                "fat": 21.0,
+                "carb": 50.1
+            }
+        },
+        {
+            "file": "Set cánh, đùi gà chiên mắm.pdf",
+            "nutrition": {
+                "energy": 694.4,
+                "protein": 35.9,
+                "fat": 52.5,
+                "carb": 19.7
+            }
+        },
+        {
+            "file": "cơm rang dưa bò.pdf",
+            "nutrition": {
+                "energy": 1022.3,
+                "protein": 48.1,
+                "fat": 44.7,
+                "carb": 107.0
+            }
+        },
+        {
+            "file": "Cơm suất (sườn, đậu, chả lá lốt).pdf",
+            "nutrition": {
+                "energy": 664.6,
+                "protein": 33.3,
+                "fat": 20.6,
+                "carb": 86.6
+            }
+        },
+        {
+            "file": "Bún tôm.pdf",
+            "nutrition": {
+                "energy": 286.8,
+                "protein": 13.9,
+                "fat": 4.0,
+                "carb": 48.8
+            }
+        },
+        {
+            "file": "Xôi ngô.pdf",
+            "nutrition": {
+                "energy": 389.9,
+                "protein": 11.7,
+                "fat": 8.3,
+                "carb": 67.1
+            }
+        },
+        {
+            "file": "Chả rươi.pdf",
+            "nutrition": {
+                "energy": 423.1,
+                "protein": 49.4,
+                "fat": 16.1,
+                "carb": 20.2
+            }
+        },
+        {
+            "file": "Chè đỗ đen.pdf",
+            "nutrition": {
+                "energy": 386.8,
+                "protein": 7.7,
+                "fat": 8.5,
+                "carb": 70.0
+            }
+        },
+        {
+            "file": "Bánh crepe socola chuối.pdf",
+            "nutrition": {
+                "energy": 309.1,
+                "protein": 7.4,
+                "fat": 14.8,
+                "carb": 36.7
+            }
+        },
+        {
+            "file": "Tào phớ thập cẩm.pdf",
+            "nutrition": {
+                "energy": 356.3,
+                "protein": 13.2,
+                "fat": 2.4,
+                "carb": 71.2
+            }
+        },
+        {
+            "file": "Cháo sườn lợn.pdf",
+            "nutrition": {
+                "energy": 458.1,
+                "protein": 20.2,
+                "fat": 18.1,
+                "carb": 53.6
+            }
+        },
+        {
+            "file": "Cháo ếch.pdf",
+            "nutrition": {
+                "energy": 571.8,
+                "protein": 68.2,
+                "fat": 44.0,
+                "carb": 66.8
+            }
+        },
+        {
+            "file": "Bánh tráng trộn.pdf",
+            "nutrition": {
+                "energy": 436.7,
+                "protein": 12.6,
+                "fat": 14.4,
+                "carb": 63.6
+            }
+        },
+        {
+            "file": "Cháo trai sườn.pdf",
+            "nutrition": {
+                "energy": 339.0,
+                "protein": 14.1,
+                "fat": 11.8,
+                "carb": 44.1
+            }
+        },
+        {
+            "file": "Bánh crepe ngọt.pdf",
+            "nutrition": {
+                "energy": 284.5,
+                "protein": 8.5,
+                "fat": 13.6,
+                "carb": 32.2
+            }
+        },
+        {
+            "file": "Cà phê dừa.pdf",
+            "nutrition": {
+                "energy": 183.6,
+                "protein": 24.0,
+                "fat": 8.0,
+                "carb": 25.5
+            }
+        },
+        {
+            "file": "Burger BBQ.pdf",
+            "nutrition": {
+                "energy": 754.8,
+                "protein": 55.1,
+                "fat": 35.4,
+                "carb": 53.9
+            }
+        },
+        {
+            "file": "Bánh đa cua trộn.pdf",
+            "nutrition": {
+                "energy": 533.1,
+                "protein": 18.6,
+                "fat": 17.5,
+                "carb": 75.3
+            }
+        },
+        {
+            "file": "Cháo tim.pdf",
+            "nutrition": {
+                "energy": 327.2,
+                "protein": 16.3,
+                "fat": 4.3,
+                "carb": 55.7
+            }
+        },
+        {
+            "file": "Chè thập cẩm (không có xôi).pdf",
+            "nutrition": {
+                "energy": 287.1,
+                "protein": 4.8,
+                "fat": 0.5,
+                "carb": 65.9
+            }
+        },
+        {
+            "file": "Phở xào.pdf",
+            "nutrition": {
+                "energy": 456.5,
+                "protein": 18.5,
+                "fat": 20.3,
+                "carb": 49.9
+            }
+        },
+        {
+            "file": "Cháo lòng lợn.pdf",
+            "nutrition": {
+                "energy": 517.0,
+                "protein": 28.0,
+                "fat": 11.9,
+                "carb": 74.6
+            }
+        },
+        {
+            "file": "Bún bò dấm.pdf",
+            "nutrition": {
+                "energy": 553.8,
+                "protein": 32.5,
+                "fat": 8.5,
+                "carb": 86.7
+            }
+        },
+        {
+            "file": "Cơm nắm.pdf",
+            "nutrition": {
+                "energy": 336.0,
+                "protein": 8.7,
+                "fat": 57.0,
+                "carb": 62.2
+            }
+        },
+        {
+            "file": "Kem ốc quế vani.pdf",
+            "nutrition": {
+                "energy": 180.0,
+                "protein": 3.1,
+                "fat": 6.6,
+                "carb": 27.1
+            }
+        },
+        {
+            "file": "Ngô nướng.pdf",
+            "nutrition": {
+                "energy": 400.6,
+                "protein": 8.2,
+                "fat": 46.0,
+                "carb": 81.6
+            }
+        },
+        {
+            "file": "Cơm suất 30k.pdf",
+            "nutrition": {
+                "energy": 798.2,
+                "protein": 40.8,
+                "fat": 11.4,
+                "carb": 133.0
+            }
+        },
+        {
+            "file": "Bún ốc nóng.pdf",
+            "nutrition": {
+                "energy": 522.2,
+                "protein": 29.8,
+                "fat": 50.0,
+                "carb": 89.5
+            }
+        },
+        {
+            "file": "Xôi xéo thập cẩm.pdf",
+            "nutrition": {
+                "energy": 789.9,
+                "protein": 27.8,
+                "fat": 28.2,
+                "carb": 106.3
+            }
+        },
+        {
+            "file": "Bánh dày ngọt.pdf",
+            "nutrition": {
+                "energy": 374.9,
+                "protein": 9.6,
+                "fat": 1.4,
+                "carb": 81.1
+            }
+        },
+        {
+            "file": "Xôi khúc.pdf",
+            "nutrition": {
+                "energy": 611.0,
+                "protein": 16.2,
+                "fat": 16.8,
+                "carb": 98.8
+            }
+        },
+        {
+            "file": "Tào phớ truyền thống.pdf",
+            "nutrition": {
+                "energy": 83.8,
+                "protein": 4.43,
+                "fat": 0.4,
+                "carb": 15.8
+            }
+        },
+        {
+            "file": "Phở gà trộn.pdf",
+            "nutrition": {
+                "energy": 524.6,
+                "protein": 30.4,
+                "fat": 14.6,
+                "carb": 68.0
+            }
+        },
+        {
+            "file": "Cơm suất (ba chỉ rang).pdf",
+            "nutrition": {
+                "energy": 877.1,
+                "protein": 36.1,
+                "fat": 22.3,
+                "carb": 133.0
+            }
+        },
+        {
+            "file": "Cháo trai có quẩy.pdf",
+            "nutrition": {
+                "energy": 272.0,
+                "protein": 93.0,
+                "fat": 6.2,
+                "carb": 44.8
+            }
+        },
+        {
+            "file": "Cuốn bỗng 8 cái.pdf",
+            "nutrition": {
+                "energy": 284.6,
+                "protein": 25.2,
+                "fat": 6.6,
+                "carb": 31.1
+            }
+        },
+        {
+            "file": "Bún sườn mọc.pdf",
+            "nutrition": {
+                "energy": 510.2,
+                "protein": 25.1,
+                "fat": 14.5,
+                "carb": 69.8
+            }
+        },
+        {
+            "file": "Quả cóc dầm.pdf",
+            "nutrition": {
+                "energy": 217.0,
+                "protein": 6.3,
+                "fat": 0,
+                "carb": 48.0
+            }
+        },
+        {
+            "file": "Bún ốc.pdf",
+            "nutrition": {
+                "energy": 501.0,
+                "protein": 423.0,
+                "fat": 11.8,
+                "carb": 56.8
+            }
+        },
+        {
+            "file": "Sắn luộc.pdf",
+            "nutrition": {
+                "energy": 281.7,
+                "protein": 2.0,
+                "fat": 0.4,
+                "carb": 67.7
+            }
+        },
+        {
+            "file": "Bánh mỳ pate trứng.pdf",
+            "nutrition": {
+                "energy": 351.5,
+                "protein": 20.3,
+                "fat": 10.7,
+                "carb": 43.5
+            }
+        },
+        {
+            "file": "Hamburger Bò.pdf",
+            "nutrition": {
+                "energy": 308.9,
+                "protein": 18.0,
+                "fat": 11.5,
+                "carb": 33.2
+            }
+        },
+        {
+            "file": "Lòng dồi sụn.pdf",
+            "nutrition": {
+                "energy": 309.3,
+                "protein": 34.0,
+                "fat": 12.7,
+                "carb": 14.9
+            }
+        },
+        {
+            "file": "Xôi xíu.pdf",
+            "nutrition": {
+                "energy": 1022.0,
+                "protein": 36.7,
+                "fat": 46.4,
+                "carb": 114.4
+            }
+        },
+        {
+            "file": "Sữa chua trân châu.pdf",
+            "nutrition": {
+                "energy": 271.4,
+                "protein": 6.7,
+                "fat": 6.7,
+                "carb": 44.1
+            }
+        },
+        {
+            "file": "Ốc bông xào bơ trứng mặn.pdf",
+            "nutrition": {
+                "energy": 575.5,
+                "protein": 19.9,
+                "fat": 40.7,
+                "carb": 32.4
+            }
+        },
+        {
+            "file": "Xôi xéo.pdf",
+            "nutrition": {
+                "energy": 588.0,
+                "protein": 15.4,
+                "fat": 9.3,
+                "carb": 110.7
+            }
+        },
+        {
+            "file": "Bì bò.pdf",
+            "nutrition": {
+                "energy": 994.4,
+                "protein": 86.1,
+                "fat": 24.8,
+                "carb": 106.7
+            }
+        },
+        {
+            "file": "Tôm viên chiên đường phố.pdf",
+            "nutrition": {
+                "energy": 264.6,
+                "protein": 10.8,
+                "fat": 19.0,
+                "carb": 12.9
+            }
+        },
+        {
+            "file": "Bún đậu mẹt.pdf",
+            "nutrition": {
+                "energy": 857.7,
+                "protein": 40.5,
+                "fat": 30.6,
+                "carb": 105.2
+            }
+        },
+        {
+            "file": "Chân gà nướng.pdf",
+            "nutrition": {
+                "energy": 128.2,
+                "protein": 7.0,
+                "fat": 89.0,
+                "carb": 5.1
+            }
+        },
+        {
+            "file": "Bún mắm.pdf",
+            "nutrition": {
+                "energy": 471.8,
+                "protein": 22.5,
+                "fat": 16.1,
+                "carb": 59.3
+            }
+        },
+        {
+            "file": "Bún chả cô Thu.pdf",
+            "nutrition": {
+                "energy": 434.8,
+                "protein": 15.4,
+                "fat": 11.5,
+                "carb": 67.4
+            }
+        },
+        {
+            "file": "Phở Thìn.pdf",
+            "nutrition": {
+                "energy": 873.0,
+                "protein": 42.0,
+                "fat": 414.0,
+                "carb": 83.1
+            }
+        },
+        {
+            "file": "Nước mía chanh leo.pdf",
+            "nutrition": {
+                "energy": 256.3,
+                "protein": 0.3,
+                "fat": 0.1,
+                "carb": 63.7
+            }
+        },
+        {
+            "file": "Bún chả.pdf",
+            "nutrition": {
+                "energy": 1230.6,
+                "protein": 44.8,
+                "fat": 57.5,
+                "carb": 133.5
+            }
+        },
+        {
+            "file": "Bún ngan măng khô.pdf",
+            "nutrition": {
+                "energy": 630.1,
+                "protein": 29.7,
+                "fat": 32.1,
+                "carb": 55.6
+            }
+        },
+        {
+            "file": "Trứng chén nướng.pdf",
+            "nutrition": {
+                "energy": 154.9,
+                "protein": 6.0,
+                "fat": 13.8,
+                "carb": 1.7
+            }
+        },
+        {
+            "file": "Bún riêu cua sườn sụn.pdf",
+            "nutrition": {
+                "energy": 582.9,
+                "protein": 38.7,
+                "fat": 38.7,
+                "carb": 68.1
+            }
+        },
+        {
+            "file": "Sữa chua nếp cẩm.pdf",
+            "nutrition": {
+                "energy": 437.4,
+                "protein": 11.2,
+                "fat": 8.8,
+                "carb": 78.3
+            }
+        },
+        {
+            "file": "Hủ tiếu đại dương.pdf",
+            "nutrition": {
+                "energy": 572.1,
+                "protein": 474.0,
+                "fat": 18.9,
+                "carb": 53.1
+            }
+        },
+        {
+            "file": "Pho mai que chiên 2 cái.pdf",
+            "nutrition": {
+                "energy": 341.8,
+                "protein": 14.4,
+                "fat": 25.1,
+                "carb": 14.6
+            }
+        },
+        {
+            "file": "Cháo đỗ xanh.pdf",
+            "nutrition": {
+                "energy": 244.6,
+                "protein": 3.8,
+                "fat": 0.6,
+                "carb": 56.0
+            }
+        },
+        {
+            "file": "Cháo trai không quẩy.pdf",
+            "nutrition": {
+                "energy": 253.7,
+                "protein": 12.5,
+                "fat": 3.1,
+                "carb": 43.9
+            }
+        },
+        {
+            "file": "Chân gà nướng mắm (5 cái).pdf",
+            "nutrition": {
+                "energy": 175.5,
+                "protein": 9.9,
+                "fat": 86.0,
+                "carb": 14.6
+            }
+        },
+        {
+            "file": "Bánh chay.pdf",
+            "nutrition": {
+                "energy": 200.5,
+                "protein": 2.8,
+                "fat": 56.0,
+                "carb": 34.8
+            }
+        },
+        {
+            "file": "Sữa tươi trân châu.pdf",
+            "nutrition": {
+                "energy": 424.5,
+                "protein": 9.2,
+                "fat": 9.9,
+                "carb": 74.7
+            }
+        },
+        {
+            "file": "Bánh đa cua.pdf",
+            "nutrition": {
+                "energy": 420.5,
+                "protein": 19.7,
+                "fat": 11.9,
+                "carb": 58.7
+            }
+        },
+        {
+            "file": "Ngô luộc.pdf",
+            "nutrition": {
+                "energy": 288.4,
+                "protein": 6.5,
+                "fat": 3.7,
+                "carb": 56.8
+            }
+        },
+        {
+            "file": "Sữa chua chân trâu.pdf",
+            "nutrition": {
+                "energy": 244.4,
+                "protein": 4.5,
+                "fat": 6.1,
+                "carb": 428.0
+            }
+        },
+        {
+            "file": "Bún riêu gánh.pdf",
+            "nutrition": {
+                "energy": 673.9,
+                "protein": 43.5,
+                "fat": 29.2,
+                "carb": 59.2
+            }
+        },
+        {
+            "file": "Burger cá.pdf",
+            "nutrition": {
+                "energy": 305.7,
+                "protein": 22.1,
+                "fat": 7.1,
+                "carb": 38.4
+            }
+        },
+        {
+            "file": "Trứng ngải cứu.pdf",
+            "nutrition": {
+                "energy": 269.8,
+                "protein": 16.9,
+                "fat": 16.9,
+                "carb": 6.4
+            }
+        },
+        {
+            "file": "Xôi pate thịt.pdf",
+            "nutrition": {
+                "energy": 849.8,
+                "protein": 32.3,
+                "fat": 21.2,
+                "carb": 132.6
+            }
+        },
+        {
+            "file": "Bánh mỳ pa tê trứng.pdf",
+            "nutrition": {
+                "energy": 426.5,
+                "protein": 23.5,
+                "fat": 18.4,
+                "carb": 41.7
+            }
+        },
+        {
+            "file": "Phở lõi bò.pdf",
+            "nutrition": {
+                "energy": 461.8,
+                "protein": 19.9,
+                "fat": 11.4,
+                "carb": 69.9
+            }
+        },
+        {
+            "file": "Xôi thập cẩm.pdf",
+            "nutrition": {
+                "energy": 1227.1,
+                "protein": 56.9,
+                "fat": 50.8,
+                "carb": 135.5
+            }
+        },
+        {
+            "file": "Bún nem cá.pdf",
+            "nutrition": {
+                "energy": 668.2,
+                "protein": 38.5,
+                "fat": 17.8,
+                "carb": 88.5
+            }
+        },
+        {
+            "file": "Mỳ vằn thắn Thắng Huyền.pdf",
+            "nutrition": {
+                "energy": 540.0,
+                "protein": 31.0,
+                "fat": 18.0,
+                "carb": 63.5
+            }
+        },
+        {
+            "file": "Bánh tôm Hồ Tây.pdf",
+            "nutrition": {
+                "energy": 479.8,
+                "protein": 17.9,
+                "fat": 16.6,
+                "carb": 64.8
+            }
+        },
+        {
+            "file": "Nước ép ổi (size l).pdf",
+            "nutrition": {
+                "energy": 346.3,
+                "protein": 3.5,
+                "fat": 0,
+                "carb": 83.1
+            }
+        },
+        {
+            "file": "Nộm bò khô.pdf",
+            "nutrition": {
+                "energy": 416.5,
+                "protein": 32.8,
+                "fat": 20.4,
+                "carb": 25.3
+            }
+        },
+        {
+            "file": "Chim cút quay lá mắc mật (4 con).pdf",
+            "nutrition": {
+                "energy": 373.7,
+                "protein": 61.0,
+                "fat": 12.9,
+                "carb": 3.4
+            }
+        },
+        {
+            "file": "Xôi pate.pdf",
+            "nutrition": {
+                "energy": 771.6,
+                "protein": 22.2,
+                "fat": 17.0,
+                "carb": 132.5
+            }
+        },
+        {
+            "file": "Chả lợn mỡ.pdf",
+            "nutrition": {
+                "energy": 367.2,
+                "protein": 7.7,
+                "fat": 35.8,
+                "carb": 3.6
+            }
+        },
+        {
+            "file": "Xôi đỗ xanh.pdf",
+            "nutrition": {
+                "energy": 603.4,
+                "protein": 17.2,
+                "fat": 12.8,
+                "carb": 104.9
+            }
+        },
+        {
+            "file": "Pizza thịt xông khói (cỡ L).pdf",
+            "nutrition": {
+                "energy": 2027.2,
+                "protein": 100.8,
+                "fat": 82.4,
+                "carb": 220.6
+            }
+        },
+        {
+            "file": "Bún nem cua bể.pdf",
+            "nutrition": {
+                "energy": 596.3,
+                "protein": 13.4,
+                "fat": 7.1,
+                "carb": 119.7
+            }
+        },
+        {
+            "file": "Mỳ vằn thắn.pdf",
+            "nutrition": {
+                "energy": 579.6,
+                "protein": 35.6,
+                "fat": 22.8,
+                "carb": 58.0
+            }
+        },
+        {
+            "file": "Bánh mỳ thập cẩm.pdf",
+            "nutrition": {
+                "energy": 541.4,
+                "protein": 228.0,
+                "fat": 30.3,
+                "carb": 44.5
+            }
+        },
+        {
+            "file": "Burger Tôm.pdf",
+            "nutrition": {
+                "energy": 537.4,
+                "protein": 20.8,
+                "fat": 28.1,
+                "carb": 50.2
+            }
+        },
+        {
+            "file": "Bánh mỳ chảo bò.pdf",
+            "nutrition": {
+                "energy": 686.5,
+                "protein": 37.4,
+                "fat": 34.9,
+                "carb": 55.7
+            }
+        },
+        {
+            "file": "Cơm tẻ miệng bát.pdf",
+            "nutrition": {
+                "energy": 258.0,
+                "protein": 5.7,
+                "fat": 0.8,
+                "carb": 57.2
+            }
+        },
+        {
+            "file": "Bún bò Nam Bộ.pdf",
+            "nutrition": {
+                "energy": 457.7,
+                "protein": 26.3,
+                "fat": 7.4,
+                "carb": 71.5
+            }
+        },
+        {
+            "file": "Bún ốc chấm.pdf",
+            "nutrition": {
+                "energy": 661.3,
+                "protein": 58.2,
+                "fat": 7.9,
+                "carb": 89.3
+            }
+        },
+        {
+            "file": "Bánh mì - xôi chảo.pdf",
+            "nutrition": {
+                "energy": 995.8,
+                "protein": 41.4,
+                "fat": 626.0,
+                "carb": 66.7
+            }
+        },
+        {
+            "file": "Cốm làng vòng.pdf",
+            "nutrition": {
+                "energy": 2992.0,
+                "protein": 61.0,
+                "fat": 8.0,
+                "carb": 669.0
+            }
+        },
+        {
+            "file": "Bánh chuối.pdf",
+            "nutrition": {
+                "energy": 177.1,
+                "protein": 20.0,
+                "fat": 9.5,
+                "carb": 20.9
+            }
+        },
+        {
+            "file": "Bánh nếp.pdf",
+            "nutrition": {
+                "energy": 282.9,
+                "protein": 8.0,
+                "fat": 37.0,
+                "carb": 54.3
+            }
+        },
+        {
+            "file": "Cơm suất 40K.pdf",
+            "nutrition": {
+                "energy": 727.4,
+                "protein": 40.2,
+                "fat": 29.0,
+                "carb": 76.4
+            }
+        },
+        {
+            "file": "Bánh tráng nướng.pdf",
+            "nutrition": {
+                "energy": 314.0,
+                "protein": 13.0,
+                "fat": 20.2,
+                "carb": 19.7
+            }
+        },
+        {
+            "file": "Bánh bột lọc.pdf",
+            "nutrition": {
+                "energy": 449.3,
+                "protein": 10.3,
+                "fat": 19.4,
+                "carb": 58.4
+            }
+        },
+        {
+            "file": "Bún cá chấm.pdf",
+            "nutrition": {
+                "energy": 451.2,
+                "protein": 37.6,
+                "fat": 4.8,
+                "carb": 64.4
+            }
+        },
+        {
+            "file": "Miến ngan nước.pdf",
+            "nutrition": {
+                "energy": 588.4,
+                "protein": 27.9,
+                "fat": 18.9,
+                "carb": 65.4
+            }
+        },
+        {
+            "file": "Phở gà chặt.pdf",
+            "nutrition": {
+                "energy": 414.7,
+                "protein": 17.9,
+                "fat": 13.5,
+                "carb": 55.4
+            }
+        },
+        {
+            "file": "Cháo đậu đen, đậu phụ.pdf",
+            "nutrition": {
+                "energy": 307.1,
+                "protein": 15.2,
+                "fat": 10.4,
+                "carb": 38.2
+            }
+        },
+        {
+            "file": "Kem cốm.pdf",
+            "nutrition": {
+                "energy": 139.2,
+                "protein": 2.2,
+                "fat": 59.0,
+                "carb": 19.3
+            }
+        },
+        {
+            "file": "Kem đậu xanh.pdf",
+            "nutrition": {
+                "energy": 139.2,
+                "protein": 2.2,
+                "fat": 59.0,
+                "carb": 19.3
+            }
+        },
+        {
+            "file": "Củ dong luộc.pdf",
+            "nutrition": {
+                "energy": 287.8,
+                "protein": 3.1,
+                "fat": 0,
+                "carb": 68.8
+            }
+        },
+        {
+            "file": "Cháo đậu đen đường.pdf",
+            "nutrition": {
+                "energy": 322.0,
+                "protein": 4.9,
+                "fat": 0.5,
+                "carb": 744.0
+            }
+        },
+        {
+            "file": "Sữa chua đậu xanh rau má.pdf",
+            "nutrition": {
+                "energy": 291.1,
+                "protein": 14.2,
+                "fat": 6.2,
+                "carb": 44.6
+            }
+        },
+        {
+            "file": "Nước ép lựu.pdf",
+            "nutrition": {
+                "energy": 211.8,
+                "protein": 0.6,
+                "fat": 1.1,
+                "carb": 49.9
+            }
+        },
+        {
+            "file": "Sữa chua kem.pdf",
+            "nutrition": {
+                "energy": 117.3,
+                "protein": 5.9,
+                "fat": 6.7,
+                "carb": 8.4
+            }
+        },
+        {
+            "file": "Bánh canh ghẹ.pdf",
+            "nutrition": {
+                "energy": 590.0,
+                "protein": 21.6,
+                "fat": 18.1,
+                "carb": 85.2
+            }
+        },
+        {
+            "file": "Bánh đa cua, bò, giò.pdf",
+            "nutrition": {
+                "energy": 480.1,
+                "protein": 18.6,
+                "fat": 20.0,
+                "carb": 56.4
+            }
+        },
+        {
+            "file": "Bánh rán vừng.pdf",
+            "nutrition": {
+                "energy": 1042.0,
+                "protein": 17.1,
+                "fat": 57.8,
+                "carb": 113.3
+            }
+        },
+        {
+            "file": "Xôi lạc vừng ruốc.pdf",
+            "nutrition": {
+                "energy": 457.0,
+                "protein": 15.7,
+                "fat": 8.5,
+                "carb": 79.5
+            }
+        },
+        {
+            "file": "Dồi sụn nướng.pdf",
+            "nutrition": {
+                "energy": 307.1,
+                "protein": 23.6,
+                "fat": 222.0,
+                "carb": 3.2
+            }
+        },
+        {
+            "file": "Cơm gà.pdf",
+            "nutrition": {
+                "energy": 1140.4,
+                "protein": 51.8,
+                "fat": 56.5,
+                "carb": 106.2
+            }
+        },
+        {
+            "file": "Xôi chè.pdf",
+            "nutrition": {
+                "energy": 404.6,
+                "protein": 11.0,
+                "fat": 54.0,
+                "carb": 78.0
+            }
+        },
+        {
+            "file": "Bún ốc cô Mít.pdf",
+            "nutrition": {
+                "energy": 659.4,
+                "protein": 41.1,
+                "fat": 26.1,
+                "carb": 65.1
+            }
+        },
+        {
+            "file": "Cơm suất (sườn, móng giò giả cầy).pdf",
+            "nutrition": {
+                "energy": 661.5,
+                "protein": 20.0,
+                "fat": 58.0,
+                "carb": 132.3
+            }
+        },
+        {
+            "file": "Bánh cuốn chả bà hoành.pdf",
+            "nutrition": {
+                "energy": 762.7,
+                "protein": 26.2,
+                "fat": 31.0,
+                "carb": 94.7
+            }
+        },
+        {
+            "file": "Caramen thập cẩm (có xôi).pdf",
+            "nutrition": {
+                "energy": 522.9,
+                "protein": 12.6,
+                "fat": 7.2,
+                "carb": 102.0
+            }
+        },
+        {
+            "file": "Phở trộn.pdf",
+            "nutrition": {
+                "energy": 490.2,
+                "protein": 422.0,
+                "fat": 8.5,
+                "carb": 61.3
+            }
+        },
+        {
+            "file": "Bánh mỳ giò chả.pdf",
+            "nutrition": {
+                "energy": 337.1,
+                "protein": 10.4,
+                "fat": 19.0,
+                "carb": 31.1
+            }
+        },
+        {
+            "file": "Bánh gối 3 cái.pdf",
+            "nutrition": {
+                "energy": 573.8,
+                "protein": 16.1,
+                "fat": 25.3,
+                "carb": 70.4
+            }
+        },
+        {
+            "file": "Bún riêu.pdf",
+            "nutrition": {
+                "energy": 334.5,
+                "protein": 97.0,
+                "fat": 8.1,
+                "carb": 55.8
+            }
+        },
+        {
+            "file": "Pizza thập cẩm (cỡ L).pdf",
+            "nutrition": {
+                "energy": 1890.9,
+                "protein": 98.5,
+                "fat": 68.5,
+                "carb": 220.1
+            }
+        },
+        {
+            "file": "Bún ốc nguội.pdf",
+            "nutrition": {
+                "energy": 563.5,
+                "protein": 38.0,
+                "fat": 6.1,
+                "carb": 89.3
+            }
+        },
+        {
+            "file": "Cánh gà nướng.pdf",
+            "nutrition": {
+                "energy": 739.0,
+                "protein": 64.1,
+                "fat": 51.2,
+                "carb": 5.5
+            }
+        },
+        {
+            "file": "Kem trứng.pdf",
+            "nutrition": {
+                "energy": 390.8,
+                "protein": 10.4,
+                "fat": 22.1,
+                "carb": 37.5
+            }
+        },
+        {
+            "file": "Cơm suất (tôm,ốc, thịt gà).pdf",
+            "nutrition": {
+                "energy": 970.3,
+                "protein": 64.9,
+                "fat": 21.8,
+                "carb": 128.6
+            }
+        },
+        {
+            "file": "Bánh crepe mặn.pdf",
+            "nutrition": {
+                "energy": 299.8,
+                "protein": 10.0,
+                "fat": 20.5,
+                "carb": 18.9
+            }
+        },
+        {
+            "file": "Cơm rang thập cẩm.pdf",
+            "nutrition": {
+                "energy": 1088.2,
+                "protein": 33.6,
+                "fat": 55.6,
+                "carb": 113.5
+            }
+        },
+        {
+            "file": "Caramen hoa quả tươi.pdf",
+            "nutrition": {
+                "energy": 251.5,
+                "protein": 5.8,
+                "fat": 6.9,
+                "carb": 41.5
+            }
+        },
+        {
+            "file": "Nha đam trộn mít caramen.pdf",
+            "nutrition": {
+                "energy": 401.1,
+                "protein": 8.3,
+                "fat": 58.0,
+                "carb": 79.0
+            }
+        },
+        {
+            "file": "Bánh mỳ que.pdf",
+            "nutrition": {
+                "energy": 478.0,
+                "protein": 5.6,
+                "fat": 42.1,
+                "carb": 19.1
+            }
+        },
+        {
+            "file": "Cháo sườn sụn.pdf",
+            "nutrition": {
+                "energy": 470.5,
+                "protein": 31.4,
+                "fat": 127.0,
+                "carb": 57.7
+            }
+        },
+        {
+            "file": "Cơm bình dân (thịt gà, tôm, thịt lợn ba chỉ).pdf",
+            "nutrition": {
+                "energy": 558.9,
+                "protein": 25.1,
+                "fat": 13.7,
+                "carb": 83.8
+            }
+        },
+        {
+            "file": "Hủ tiếu thịt bằm.pdf",
+            "nutrition": {
+                "energy": 530.9,
+                "protein": 31.7,
+                "fat": 18.5,
+                "carb": 59.5
+            }
+        },
+        {
+            "file": "Chè dừa dầm.pdf",
+            "nutrition": {
+                "energy": 469.8,
+                "protein": 12.4,
+                "fat": 8.2,
+                "carb": 86.6
+            }
+        },
+        {
+            "file": "Caramen.pdf",
+            "nutrition": {
+                "energy": 111.9,
+                "protein": 5.2,
+                "fat": 4.1,
+                "carb": 13.5
+            }
+        },
+        {
+            "file": "Bánh tiêu.pdf",
+            "nutrition": {
+                "energy": 199.6,
+                "protein": 29.0,
+                "fat": 11.9,
+                "carb": 20.4
+            }
+        },
+        {
+            "file": "Khoai tây chiên.pdf",
+            "nutrition": {
+                "energy": 216.1,
+                "protein": 27.0,
+                "fat": 94.0,
+                "carb": 30.1
+            }
+        },
+        {
+            "file": "Xôi trắng thịt trứng.pdf",
+            "nutrition": {
+                "energy": 689.7,
+                "protein": 23.6,
+                "fat": 14.6,
+                "carb": 115.9
+            }
+        },
+        {
+            "file": "Bánh rán vừng (5 cái).pdf",
+            "nutrition": {
+                "energy": 508.6,
+                "protein": 8.3,
+                "fat": 28.1,
+                "carb": 55.6
+            }
+        },
+        {
+            "file": "Bánh cuốn nhân tôm thịt.pdf",
+            "nutrition": {
+                "energy": 475.7,
+                "protein": 12.5,
+                "fat": 19.1,
+                "carb": 63.4
+            }
+        },
+        {
+            "file": "Khoai lang mật nướng.pdf",
+            "nutrition": {
+                "energy": 746.2,
+                "protein": 4.8,
+                "fat": 12.0,
+                "carb": 179.0
+            }
+        },
+        {
+            "file": "Bún dọc mùng.pdf",
+            "nutrition": {
+                "energy": 503.9,
+                "protein": 29.0,
+                "fat": 18.2,
+                "carb": 56.0
+            }
+        },
+        {
+            "file": "Chè kem dừa.pdf",
+            "nutrition": {
+                "energy": 385.5,
+                "protein": 5.5,
+                "fat": 10.8,
+                "carb": 66.5
+            }
+        },
+        {
+            "file": "cơm bình dân 35k.pdf",
+            "nutrition": {
+                "energy": 595.9,
+                "protein": 32.0,
+                "fat": 14.7,
+                "carb": 83.9
+            }
+        },
+        {
+            "file": "Miến ngan trộn.pdf",
+            "nutrition": {
+                "energy": 802.7,
+                "protein": 40.1,
+                "fat": 43.0,
+                "carb": 63.9
+            }
+        },
+        {
+            "file": "Burger gà.pdf",
+            "nutrition": {
+                "energy": 490.5,
+                "protein": 19.4,
+                "fat": 27.3,
+                "carb": 41.8
+            }
+        },
+        {
+            "file": "Kem sữa chua trân châu.pdf",
+            "nutrition": {
+                "energy": 284.2,
+                "protein": 6.4,
+                "fat": 7.5,
+                "carb": 478.0
+            }
+        },
+        {
+            "file": "Xôi trắng muối vừng.pdf",
+            "nutrition": {
+                "energy": 505.7,
+                "protein": 12.5,
+                "fat": 3.5,
+                "carb": 106.2
+            }
+        },
+        {
+            "file": "Bánh cuốn chả.pdf",
+            "nutrition": {
+                "energy": 492.3,
+                "protein": 26.1,
+                "fat": 17.3,
+                "carb": 58.1
+            }
+        },
+        {
+            "file": "Bún cá cay.pdf",
+            "nutrition": {
+                "energy": 548.8,
+                "protein": 24.3,
+                "fat": 15.5,
+                "carb": 78.1
+            }
+        },
+        {
+            "file": "Bánh đa ngan.pdf",
+            "nutrition": {
+                "energy": 534.1,
+                "protein": 23.2,
+                "fat": 24.2,
+                "carb": 55.8
+            }
+        },
+        {
+            "file": "Phô mai chiên (2 viên).pdf",
+            "nutrition": {
+                "energy": 210.0,
+                "protein": 6.2,
+                "fat": 15.7,
+                "carb": 11.0
+            }
+        },
+        {
+            "file": "Sữa chua kem gạo tím.pdf",
+            "nutrition": {
+                "energy": 196.1,
+                "protein": 6.4,
+                "fat": 543.0,
+                "carb": 30.6
+            }
+        },
+        {
+            "file": "Trứng gà rán ngải cứu.pdf",
+            "nutrition": {
+                "energy": 114.6,
+                "protein": 6.9,
+                "fat": 8.8,
+                "carb": 2.0
+            }
+        },
+        {
+            "file": "Cơm suất (thịt lợn, tôm).pdf",
+            "nutrition": {
+                "energy": 1071.8,
+                "protein": 53.1,
+                "fat": 28.4,
+                "carb": 150.9
+            }
+        },
+        {
+            "file": "Bánh mỳ chảo.pdf",
+            "nutrition": {
+                "energy": 702.7,
+                "protein": 33.0,
+                "fat": 27.8,
+                "carb": 80.1
+            }
+        },
+        {
+            "file": "Bún giả cày.pdf",
+            "nutrition": {
+                "energy": 817.0,
+                "protein": 21.5,
+                "fat": 17.6,
+                "carb": 143.2
+            }
+        },
+        {
+            "file": "Miến lươn nước.pdf",
+            "nutrition": {
+                "energy": 338.2,
+                "protein": 8.9,
+                "fat": 7.0,
+                "carb": 59.9
+            }
+        },
+        {
+            "file": "Cơm suất (thịt, cá).pdf",
+            "nutrition": {
+                "energy": 599.2,
+                "protein": 273.0,
+                "fat": 11.5,
+                "carb": 96.7
+            }
+        },
+        {
+            "file": "Bún đậu mắm tôm, lòng lợn.pdf",
+            "nutrition": {
+                "energy": 914.9,
+                "protein": 422.0,
+                "fat": 36.0,
+                "carb": 105.7
+            }
+        },
+        {
+            "file": "Cháo lươn cay.pdf",
+            "nutrition": {
+                "energy": 174.1,
+                "protein": 7.1,
+                "fat": 34.0,
+                "carb": 29.5
+            }
+        },
+        {
+            "file": "Miến riêu cua (trộn).pdf",
+            "nutrition": {
+                "energy": 493.0,
+                "protein": 24.0,
+                "fat": 17.7,
+                "carb": 59.4
+            }
+        },
+        {
+            "file": "Kem khoai môn.pdf",
+            "nutrition": {
+                "energy": 141.2,
+                "protein": 2.3,
+                "fat": 6.0,
+                "carb": 19.6
+            }
+        },
+        {
+            "file": "Mực viên chiên đường phố (5 cái).pdf",
+            "nutrition": {
+                "energy": 146.9,
+                "protein": 5.6,
+                "fat": 9.8,
+                "carb": 9.1
+            }
+        },
+        {
+            "file": "Chân gà nướng muối.pdf",
+            "nutrition": {
+                "energy": 162.2,
+                "protein": 64.0,
+                "fat": 97.0,
+                "carb": 12.4
+            }
+        },
+        {
+            "file": "Cháo gà.pdf",
+            "nutrition": {
+                "energy": 587.4,
+                "protein": 33.7,
+                "fat": 220.0,
+                "carb": 63.6
+            }
+        },
+        {
+            "file": "Chả cá thăng long chảo.pdf",
+            "nutrition": {
+                "energy": 782.0,
+                "protein": 54.0,
+                "fat": 17.1,
+                "carb": 103.0
+            }
+        },
+        {
+            "file": "Bún ngan măng tươi.pdf",
+            "nutrition": {
+                "energy": 601.2,
+                "protein": 31.1,
+                "fat": 29.2,
+                "carb": 53.5
+            }
+        },
+        {
+            "file": "Bánh cuốn nóng.pdf",
+            "nutrition": {
+                "energy": 761.2,
+                "protein": 35.9,
+                "fat": 31.7,
+                "carb": 83.2
+            }
+        },
+        {
+            "file": "Bánh đa bò nhừ.pdf",
+            "nutrition": {
+                "energy": 545.6,
+                "protein": 51.5,
+                "fat": 59.0,
+                "carb": 71.5
+            }
+        },
+        {
+            "file": "Bánh dày giò.pdf",
+            "nutrition": {
+                "energy": 290.3,
+                "protein": 16.6,
+                "fat": 3.9,
+                "carb": 47.1
+            }
+        },
+        {
+            "file": "Bánh mỳ thịt xiên mật ong.pdf",
+            "nutrition": {
+                "energy": 336.3,
+                "protein": 14.3,
+                "fat": 19.1,
+                "carb": 26.8
+            }
+        },
+        {
+            "file": "cơm suất 35k.pdf",
+            "nutrition": {
+                "energy": 597.4,
+                "protein": 31.8,
+                "fat": 31.8,
+                "carb": 31.8
+            }
+        },
+        {
+            "file": "Bánh đa cua, giò.pdf",
+            "nutrition": {
+                "energy": 479.1,
+                "protein": 13.8,
+                "fat": 22.4,
+                "carb": 55.0
+            }
+        },
+        {
+            "file": "Miến gà trộn.pdf",
+            "nutrition": {
+                "energy": 452.3,
+                "protein": 18.2,
+                "fat": 127.0,
+                "carb": 68.3
+            }
+        },
+        {
+            "file": "Cà phê trứng.pdf",
+            "nutrition": {
+                "energy": 228.8,
+                "protein": 8.7,
+                "fat": 17.7,
+                "carb": 8.7
+            }
+        },
+        {
+            "file": "Phở cuốn (10 cái).pdf",
+            "nutrition": {
+                "energy": 712.0,
+                "protein": 33.0,
+                "fat": 19.1,
+                "carb": 102.0
+            }
+        },
+        {
+            "file": "Bánh rán mật (5 cái).pdf",
+            "nutrition": {
+                "energy": 297.6,
+                "protein": 4.6,
+                "fat": 14.0,
+                "carb": 38.3
+            }
+        },
+        {
+            "file": "Xôi dừa.pdf",
+            "nutrition": {
+                "energy": 596.3,
+                "protein": 14.5,
+                "fat": 6.0,
+                "carb": 121.0
+            }
+        },
+        {
+            "file": "Pizza gà nướng nấm (cỡ L).pdf",
+            "nutrition": {
+                "energy": 1728.6,
+                "protein": 85.8,
+                "fat": 56.2,
+                "carb": 219.9
+            }
+        },
+        {
+            "file": "Bún riêu cua bò giò.pdf",
+            "nutrition": {
+                "energy": 515.6,
+                "protein": 22.1,
+                "fat": 23.3,
+                "carb": 54.3
+            }
+        },
+        {
+            "file": "Bánh cuốn Thanh Trì.pdf",
+            "nutrition": {
+                "energy": 518.5,
+                "protein": 31.6,
+                "fat": 17.9,
+                "carb": 57.7
+            }
+        },
+        {
+            "file": "Kem socola.pdf",
+            "nutrition": {
+                "energy": 134.9,
+                "protein": 2.2,
+                "fat": 6.0,
+                "carb": 18.1
+            }
+        },
+        {
+            "file": "Bánh mì chảo.pdf",
+            "nutrition": {
+                "energy": 708.4,
+                "protein": 38.3,
+                "fat": 26.9,
+                "carb": 78.4
+            }
+        },
+        {
+            "file": "Bánh đúc.pdf",
+            "nutrition": {
+                "energy": 193.7,
+                "protein": 4.6,
+                "fat": 1.2,
+                "carb": 41.1
+            }
+        },
+        {
+            "file": "Nước trà hoa cúc.pdf",
+            "nutrition": {
+                "energy": 18.3,
+                "protein": 0.1,
+                "fat": 0,
+                "carb": 4.5
+            }
+        },
+        {
+            "file": "Bánh tẻ.pdf",
+            "nutrition": {
+                "energy": 336.4,
+                "protein": 13.7,
+                "fat": 9.8,
+                "carb": 48.4
+            }
+        },
+        {
+            "file": "Chè thập cẩm (có xôi).pdf",
+            "nutrition": {
+                "energy": 458.7,
+                "protein": 4.6,
+                "fat": 27.0,
+                "carb": 103.9
+            }
+        },
+        {
+            "file": "Đùi gà rán.pdf",
+            "nutrition": {
+                "energy": 287.2,
+                "protein": 14.9,
+                "fat": 21.9,
+                "carb": 7.6
+            }
+        },
+        {
+            "file": "Ốc bông xào me.pdf",
+            "nutrition": {
+                "energy": 488.7,
+                "protein": 38.6,
+                "fat": 23.8,
+                "carb": 30.1
+            }
+        },
+        {
+            "file": "Mỳ trọn bò.pdf",
+            "nutrition": {
+                "energy": 670.2,
+                "protein": 36.9,
+                "fat": 234.0,
+                "carb": 78.0
+            }
+        },
+        {
+            "file": "Kem sữa dừa.pdf",
+            "nutrition": {
+                "energy": 139.2,
+                "protein": 2.2,
+                "fat": 59.0,
+                "carb": 19.3
+            }
+        },
+        {
+            "file": "Bánh mỳ sốt trứng cút.pdf",
+            "nutrition": {
+                "energy": 401.0,
+                "protein": 24.9,
+                "fat": 16.3,
+                "carb": 37.9
+            }
+        },
+        {
+            "file": "Bún ngâm.pdf",
+            "nutrition": {
+                "energy": 485.5,
+                "protein": 21.9,
+                "fat": 97.0,
+                "carb": 777.0
+            }
+        },
+        {
+            "file": "Hamburger lợn.pdf",
+            "nutrition": {
+                "energy": 282.5,
+                "protein": 18.4,
+                "fat": 9.9,
+                "carb": 30.1
+            }
+        },
+        {
+            "file": "Bánh trôi tàu.pdf",
+            "nutrition": {
+                "energy": 393.2,
+                "protein": 10.8,
+                "fat": 15.2,
+                "carb": 53.5
+            }
+        },
+        {
+            "file": "Bánh ngô.pdf",
+            "nutrition": {
+                "energy": 458.7,
+                "protein": 6.7,
+                "fat": 21.6,
+                "carb": 59.4
+            }
+        },
+        {
+            "file": "Set cánh - đùi gà chiên mắm.pdf",
+            "nutrition": {
+                "energy": 694.4,
+                "protein": 35.9,
+                "fat": 525.0,
+                "carb": 19.7
+            }
+        },
+        {
+            "file": "Hủ tiếu Nam vang nước.pdf",
+            "nutrition": {
+                "energy": 482.6,
+                "protein": 31.5,
+                "fat": 17.0,
+                "carb": 50.9
+            }
+        },
+        {
+            "file": "Pizza bò (cỡ M).pdf",
+            "nutrition": {
+                "energy": 1111.9,
+                "protein": 51.0,
+                "fat": 45.1,
+                "carb": 125.5
+            }
+        },
+        {
+            "file": "Cơm bụi.pdf",
+            "nutrition": {
+                "energy": 770.9,
+                "protein": 40.2,
+                "fat": 23.7,
+                "carb": 99.3
+            }
+        },
+        {
+            "file": "Cơm suất (móng giò, giả cầy).pdf",
+            "nutrition": {
+                "energy": 661.5,
+                "protein": 20.0,
+                "fat": 58.0,
+                "carb": 132.3
+            }
+        },
+        {
+            "file": "Kem ốc quế cacao.pdf",
+            "nutrition": {
+                "energy": 195.2,
+                "protein": 3.4,
+                "fat": 8.1,
+                "carb": 27.2
+            }
+        },
+        {
+            "file": "Phở xào mềm.pdf",
+            "nutrition": {
+                "energy": 728.6,
+                "protein": 273.0,
+                "fat": 18.3,
+                "carb": 113.7
+            }
+        },
+        {
+            "file": "Cháo lòng.pdf",
+            "nutrition": {
+                "energy": 362.6,
+                "protein": 23.7,
+                "fat": 58.0,
+                "carb": 53.9
+            }
+        },
+        {
+            "file": "Ốc mít luộc mắm.pdf",
+            "nutrition": {
+                "energy": 158.3,
+                "protein": 17.6,
+                "fat": 1.2,
+                "carb": 19.3
+            }
+        },
+        {
+            "file": "Cháo khoái.pdf",
+            "nutrition": {
+                "energy": 195.7,
+                "protein": 8.2,
+                "fat": 59.0,
+                "carb": 274.0
+            }
+        },
+        {
+            "file": "Bỏng ngô.pdf",
+            "nutrition": {
+                "energy": 262.2,
+                "protein": 5.9,
+                "fat": 1.1,
+                "carb": 57.3
+            }
+        },
+        {
+            "file": "Bánh gio mật mía.pdf",
+            "nutrition": {
+                "energy": 432.5,
+                "protein": 3.4,
+                "fat": 0.6,
+                "carb": 103.3
+            }
+        },
+        {
+            "file": "Cơm suất (ba chỉ kho).pdf",
+            "nutrition": {
+                "energy": 849.3,
+                "protein": 34.2,
+                "fat": 25.8,
+                "carb": 120.2
+            }
+        },
+        {
+            "file": "Bún cá cay chú Khò.pdf",
+            "nutrition": {
+                "energy": 515.8,
+                "protein": 36.1,
+                "fat": 17.1,
+                "carb": 54.4
+            }
+        },
+        {
+            "file": "Kẹo bông gòn.pdf",
+            "nutrition": {
+                "energy": 99.3,
+                "protein": 0,
+                "fat": 0,
+                "carb": 24.8
+            }
+        },
+        {
+            "file": "Cơm suất (thịt gà, lợn, trứng).pdf",
+            "nutrition": {
+                "energy": 893.5,
+                "protein": 48.4,
+                "fat": 17.4,
+                "carb": 135.8
+            }
+        },
+        {
+            "file": "Phở bò sốt vang.pdf",
+            "nutrition": {
+                "energy": 825.6,
+                "protein": 60.8,
+                "fat": 29.3,
+                "carb": 79.7
+            }
+        },
+        {
+            "file": "Bún ngan Thanh Hà.pdf",
+            "nutrition": {
+                "energy": 707.0,
+                "protein": 28.1,
+                "fat": 30.1,
+                "carb": 81.1
+            }
+        },
+        {
+            "file": "Bánh tôm.pdf",
+            "nutrition": {
+                "energy": 553.1,
+                "protein": 20.2,
+                "fat": 18.4,
+                "carb": 76.8
+            }
+        },
+        {
+            "file": "Bánh giò.pdf",
+            "nutrition": {
+                "energy": 325.5,
+                "protein": 15.0,
+                "fat": 11.1,
+                "carb": 41.3
+            }
+        },
+        {
+            "file": "Bánh mỳ nướng muối ớt.pdf",
+            "nutrition": {
+                "energy": 428.9,
+                "protein": 16.2,
+                "fat": 19.8,
+                "carb": 46.4
+            }
+        },
+        {
+            "file": "Bánh rán đường (5 cái).pdf",
+            "nutrition": {
+                "energy": 325.9,
+                "protein": 5.1,
+                "fat": 15.3,
+                "carb": 41.9
+            }
+        },
+        {
+            "file": "Hamburger Gà.pdf",
+            "nutrition": {
+                "energy": 451.7,
+                "protein": 29.3,
+                "fat": 19.6,
+                "carb": 39.4
+            }
+        },
+        {
+            "file": "Miến riêu cua (nước).pdf",
+            "nutrition": {
+                "energy": 461.2,
+                "protein": 22.5,
+                "fat": 17.6,
+                "carb": 53.2
+            }
+        },
+        {
+            "file": "Bánh cuốn trứng.pdf",
+            "nutrition": {
+                "energy": 537.6,
+                "protein": 22.6,
+                "fat": 28.5,
+                "carb": 47.7
+            }
+        },
+        {
+            "file": "Bánh rán ngọt.pdf",
+            "nutrition": {
+                "energy": 250.9,
+                "protein": 3.6,
+                "fat": 0.4,
+                "carb": 58.4
+            }
+        },
+        {
+            "file": "Bún cá cay Cảng.pdf",
+            "nutrition": {
+                "energy": 451.0,
+                "protein": 20.0,
+                "fat": 14.5,
+                "carb": 60.1
+            }
+        },
+        {
+            "file": "Bún cua thập cẩm.pdf",
+            "nutrition": {
+                "energy": 595.3,
+                "protein": 24.2,
+                "fat": 6.9,
+                "carb": 109.1
+            }
+        },
+        {
+            "file": "Bắp xào tép.pdf",
+            "nutrition": {
+                "energy": 758.7,
+                "protein": 11.0,
+                "fat": 41.1,
+                "carb": 86.3
+            }
+        },
+        {
+            "file": "Bún riêu cua.pdf",
+            "nutrition": {
+                "energy": 497.5,
+                "protein": 19.5,
+                "fat": 19.6,
+                "carb": 60.9
+            }
+        },
+        {
+            "file": "Cơm bình dân (cá, thịt, tôm, đậu).pdf",
+            "nutrition": {
+                "energy": 845.5,
+                "protein": 40.8,
+                "fat": 30.1,
+                "carb": 102.8
+            }
+        },
+        {
+            "file": "Miến lươn trộn.pdf",
+            "nutrition": {
+                "energy": 308.8,
+                "protein": 8.5,
+                "fat": 6.1,
+                "carb": 54.9
+            }
+        },
+        {
+            "file": "Vịt rang me.pdf",
+            "nutrition": {
+                "energy": 656.2,
+                "protein": 33.7,
+                "fat": 53.7,
+                "carb": 9.5
+            }
+        },
+        {
+            "file": "Cháo sườn.pdf",
+            "nutrition": {
+                "energy": 332.9,
+                "protein": 11.0,
+                "fat": 11.2,
+                "carb": 47.0
+            }
+        },
+        {
+            "file": "Tiết luộc.pdf",
+            "nutrition": {
+                "energy": 65.9,
+                "protein": 11.4,
+                "fat": 0.2,
+                "carb": 46.0
+            }
+        },
+        {
+            "file": "Phở bò tái gầu.pdf",
+            "nutrition": {
+                "energy": 581.5,
+                "protein": 28.1,
+                "fat": 17.5,
+                "carb": 779.0
+            }
+        },
+        {
+            "file": "Bò bía.pdf",
+            "nutrition": {
+                "energy": 184.5,
+                "protein": 2.1,
+                "fat": 10.0,
+                "carb": 21.6
+            }
+        },
+        {
+            "file": "Mỳ trộn.pdf",
+            "nutrition": {
+                "energy": 703.5,
+                "protein": 23.6,
+                "fat": 22.0,
+                "carb": 102.8
+            }
+        },
+        {
+            "file": "Burger Cheesy.pdf",
+            "nutrition": {
+                "energy": 832.6,
+                "protein": 80.2,
+                "fat": 46.4,
+                "carb": 53.5
+            }
+        },
+        {
+            "file": "Chè đỗ đỏ.pdf",
+            "nutrition": {
+                "energy": 311.5,
+                "protein": 8.0,
+                "fat": 5.5,
+                "carb": 57.5
+            }
+        },
+        {
+            "file": "Mỳ chờ.pdf",
+            "nutrition": {
+                "energy": 645.0,
+                "protein": 26.1,
+                "fat": 20.5,
+                "carb": 89.0
+            }
+        },
+        {
+            "file": "Chè đỗ xanh trân châu.pdf",
+            "nutrition": {
+                "energy": 388.7,
+                "protein": 10.3,
+                "fat": 10.6,
+                "carb": 63.0
+            }
+        },
+        {
+            "file": "Bánh mỳ chả cá sốt cay.pdf",
+            "nutrition": {
+                "energy": 177.5,
+                "protein": 7.5,
+                "fat": 49.0,
+                "carb": 25.8
+            }
+        },
+        {
+            "file": "Chè xoài.pdf",
+            "nutrition": {
+                "energy": 151.9,
+                "protein": 3.1,
+                "fat": 23.0,
+                "carb": 29.7
+            }
+        },
+        {
+            "file": "Giá bể xào.pdf",
+            "nutrition": {
+                "energy": 308.7,
+                "protein": 39.0,
+                "fat": 3.2,
+                "carb": 31.1
+            }
+        },
+        {
+            "file": "Cơm suất (cá, tôm, sườn chua ngọt).pdf",
+            "nutrition": {
+                "energy": 922.7,
+                "protein": 454.0,
+                "fat": 24.5,
+                "carb": 130.2
+            }
+        },
+        {
+            "file": "Chè khúc bạch.pdf",
+            "nutrition": {
+                "energy": 145.5,
+                "protein": 3.4,
+                "fat": 2.4,
+                "carb": 28.2
+            }
+        },
+        {
+            "file": "Hoa quả dầm.pdf",
+            "nutrition": {
+                "energy": 233.2,
+                "protein": 3.6,
+                "fat": 34.0,
+                "carb": 47.1
+            }
+        },
+        {
+            "file": "Bún thang.pdf",
+            "nutrition": {
+                "energy": 534.5,
+                "protein": 26.1,
+                "fat": 17.7,
+                "carb": 67.7
+            }
+        },
+        {
+            "file": "Sữa ngô.pdf",
+            "nutrition": {
+                "energy": 123.8,
+                "protein": 4.3,
+                "fat": 2.5,
+                "carb": 21.0
+            }
+        },
+        {
+            "file": "Bánh mỳ chảo lợn.pdf",
+            "nutrition": {
+                "energy": 726.2,
+                "protein": 35.7,
+                "fat": 39.7,
+                "carb": 56.5
+            }
+        },
+        {
+            "file": "Bánh khoai.pdf",
+            "nutrition": {
+                "energy": 162.6,
+                "protein": 47.0,
+                "fat": 18.0,
+                "carb": 31.8
+            }
+        },
+        {
+            "file": "Bánh crepe dăm bông phô mai.pdf",
+            "nutrition": {
+                "energy": 350.4,
+                "protein": 10.3,
+                "fat": 23.8,
+                "carb": 23.7
+            }
+        },
+        {
+            "file": "Khoai lang chiên.pdf",
+            "nutrition": {
+                "energy": 376.8,
+                "protein": 2.2,
+                "fat": 234.0,
+                "carb": 39.4
+            }
+        },
+        {
+            "file": "Bánh tôm (5 cái).pdf",
+            "nutrition": {
+                "energy": 587.5,
+                "protein": 21.6,
+                "fat": 18.2,
+                "carb": 84.3
+            }
+        },
+        {
+            "file": "Ngao trắng hấp.pdf",
+            "nutrition": {
+                "energy": 226.2,
+                "protein": 27.5,
+                "fat": 2.2,
+                "carb": 24.1
+            }
+        },
+        {
+            "file": "Phở bò chín.pdf",
+            "nutrition": {
+                "energy": 474.9,
+                "protein": 224.0,
+                "fat": 11.8,
+                "carb": 69.8
+            }
+        },
+        {
+            "file": "Phở sốt vang.pdf",
+            "nutrition": {
+                "energy": 582.1,
+                "protein": 40.9,
+                "fat": 254.0,
+                "carb": 474.0
+            }
+        },
+        {
+            "file": "Bánh rán mật.pdf",
+            "nutrition": {
+                "energy": 691.0,
+                "protein": 10.7,
+                "fat": 32.5,
+                "carb": 88.9
+            }
+        },
+        {
+            "file": "Mỳ chờ thập cẩm.pdf",
+            "nutrition": {
+                "energy": 613.0,
+                "protein": 274.0,
+                "fat": 217.0,
+                "carb": 77.0
+            }
+        },
+        {
+            "file": "Trứng vịt lộn.pdf",
+            "nutrition": {
+                "energy": 118.2,
+                "protein": 8.8,
+                "fat": 8.0,
+                "carb": 2.7
+            }
+        },
+        {
+            "file": "Cá viên chiên đường phố (5 cái).pdf",
+            "nutrition": {
+                "energy": 203.5,
+                "protein": 5.7,
+                "fat": 15.5,
+                "carb": 10.3
+            }
+        },
+        {
+            "file": "Nem nướng (5 cái).pdf",
+            "nutrition": {
+                "energy": 162.0,
+                "protein": 25.0,
+                "fat": 4.3,
+                "carb": 5.8
+            }
+        },
+        {
+            "file": "Bún bò nhừ.pdf",
+            "nutrition": {
+                "energy": 803.3,
+                "protein": 60.9,
+                "fat": 19.8,
+                "carb": 95.1
+            }
+        },
+        {
+            "file": "Nem nướng cuốn.pdf",
+            "nutrition": {
+                "energy": 641.2,
+                "protein": 26.2,
+                "fat": 12.5,
+                "carb": 106.0
+            }
+        },
+        {
+            "file": "Cơm suất (trứng, thịt ba chỉ).pdf",
+            "nutrition": {
+                "energy": 793.8,
+                "protein": 29.1,
+                "fat": 36.8,
+                "carb": 86.6
+            }
+        },
+        {
+            "file": "Bánh bỏng kê.pdf",
+            "nutrition": {
+                "energy": 286.0,
+                "protein": 3.7,
+                "fat": 1.6,
+                "carb": 64.2
+            }
+        },
+        {
+            "file": "Hạt dẻ luộc.pdf",
+            "nutrition": {
+                "energy": 159.3,
+                "protein": 3.0,
+                "fat": 0.8,
+                "carb": 35.0
+            }
+        },
+        {
+            "file": "Ốc mỡ xào ngô.pdf",
+            "nutrition": {
+                "energy": 420.9,
+                "protein": 42.1,
+                "fat": 10.7,
+                "carb": 39.1
+            }
+        },
+        {
+            "file": "Kem sầu riêng.pdf",
+            "nutrition": {
+                "energy": 137.2,
+                "protein": 2.2,
+                "fat": 58.0,
+                "carb": 19.0
+            }
+        },
+        {
+            "file": "Xúc xích rán (5 cái).pdf",
+            "nutrition": {
+                "energy": 333.2,
+                "protein": 18.5,
+                "fat": 27.1,
+                "carb": 4.0
+            }
+        },
+        {
+            "file": "Phá lấu.pdf",
+            "nutrition": {
+                "energy": 305.9,
+                "protein": 21.6,
+                "fat": 6.1,
+                "carb": 41.3
+            }
+        },
+        {
+            "file": "Nước chanh leo.pdf",
+            "nutrition": {
+                "energy": 66.0,
+                "protein": 0.5,
+                "fat": 0.2,
+                "carb": 15.6
+            }
+        },
+        {
+            "file": "Chè Thái.pdf",
+            "nutrition": {
+                "energy": 123.0,
+                "protein": 4.5,
+                "fat": 2.5,
+                "carb": 20.6
+            }
+        },
+        {
+            "file": "Bánh rán đường.pdf",
+            "nutrition": {
+                "energy": 680.0,
+                "protein": 10.5,
+                "fat": 320.0,
+                "carb": 875.0
+            }
+        },
+        {
+            "file": "Thạch găng.pdf",
+            "nutrition": {
+                "energy": 175.5,
+                "protein": 5.9,
+                "fat": 0.3,
+                "carb": 37.3
+            }
+        },
+        {
+            "file": "Bánh cuốn nhân thịt.pdf",
+            "nutrition": {
+                "energy": 476.8,
+                "protein": 24.0,
+                "fat": 222.0,
+                "carb": 45.1
+            }
+        },
+        {
+            "file": "Pizza hải sản (cỡ L).pdf",
+            "nutrition": {
+                "energy": 1751.7,
+                "protein": 113.2,
+                "fat": 47.6,
+                "carb": 217.6
+            }
+        },
+        {
+            "file": "Bún ốc sườn.pdf",
+            "nutrition": {
+                "energy": 540.9,
+                "protein": 35.3,
+                "fat": 14.0,
+                "carb": 68.4
+            }
+        },
+        {
+            "file": "Quẩy rán.pdf",
+            "nutrition": {
+                "energy": 150.4,
+                "protein": 4.1,
+                "fat": 5.5,
+                "carb": 21.1
+            }
+        },
+        {
+            "file": "Bánh dày.pdf",
+            "nutrition": {
+                "energy": 222.7,
+                "protein": 7.0,
+                "fat": 1.1,
+                "carb": 46.1
+            }
+        },
+        {
+            "file": "Cơm suất (tôm, ốc, thịt gà).pdf",
+            "nutrition": {
+                "energy": 970.3,
+                "protein": 64.9,
+                "fat": 21.8,
+                "carb": 128.6
+            }
+        },
+        {
+            "file": "Bánh mỳ chảo sốt ngọt.pdf",
+            "nutrition": {
+                "energy": 713.6,
+                "protein": 24.8,
+                "fat": 30.2,
+                "carb": 85.6
+            }
+        },
+        {
+            "file": "Phở bò tái.pdf",
+            "nutrition": {
+                "energy": 441.7,
+                "protein": 22.6,
+                "fat": 7.0,
+                "carb": 72.1
+            }
+        },
+        {
+            "file": "Bánh bỏng gạo.pdf",
+            "nutrition": {
+                "energy": 398.9,
+                "protein": 6.0,
+                "fat": 0.7,
+                "carb": 92.2
+            }
+        },
+        {
+            "file": "Quẩy đường (5 cái).pdf",
+            "nutrition": {
+                "energy": 267.5,
+                "protein": 6.7,
+                "fat": 9.1,
+                "carb": 39.7
+            }
+        },
+        {
+            "file": "Chả cá lã vọng.pdf",
+            "nutrition": {
+                "energy": 666.1,
+                "protein": 39.9,
+                "fat": 17.5,
+                "carb": 87.3
+            }
+        },
+        {
+            "file": "Bún riêu bò.pdf",
+            "nutrition": {
+                "energy": 527.0,
+                "protein": 31.0,
+                "fat": 23.0,
+                "carb": 49.0
+            }
+        },
+        {
+            "file": "Cốm Huy Linh.pdf",
+            "nutrition": {
+                "energy": 1496.0,
+                "protein": 30.5,
+                "fat": 4.0,
+                "carb": 334.5
+            }
+        },
+        {
+            "file": "Bánh đa đỏ trộn.pdf",
+            "nutrition": {
+                "energy": 550.7,
+                "protein": 24.0,
+                "fat": 19.4,
+                "carb": 70.1
+            }
+        },
+        {
+            "file": "Caramen hoa quả.pdf",
+            "nutrition": {
+                "energy": 136.7,
+                "protein": 59.0,
+                "fat": 42.0,
+                "carb": 18.8
+            }
+        },
+        {
+            "file": "Xôi xéo đùi gà sốt.pdf",
+            "nutrition": {
+                "energy": 612.6,
+                "protein": 29.5,
+                "fat": 9.2,
+                "carb": 102.9
+            }
+        },
+        {
+            "file": "Chè bưởi.pdf",
+            "nutrition": {
+                "energy": 204.7,
+                "protein": 3.4,
+                "fat": 45.0,
+                "carb": 37.7
+            }
+        },
+        {
+            "file": "Bánh mỳ sốt vang.pdf",
+            "nutrition": {
+                "energy": 527.7,
+                "protein": 46.6,
+                "fat": 21.9,
+                "carb": 36.0
+            }
+        },
+        {
+            "file": "Sữa chua uống lá nếp.pdf",
+            "nutrition": {
+                "energy": 284.2,
+                "protein": 10.1,
+                "fat": 8.1,
+                "carb": 428.0
+            }
+        },
+        {
+            "file": "Bún chả quạt.pdf",
+            "nutrition": {
+                "energy": 837.0,
+                "protein": 35.4,
+                "fat": 35.0,
+                "carb": 95.1
+            }
+        },
+        {
+            "file": "Bánh đa cua, bò, mọc.pdf",
+            "nutrition": {
+                "energy": 749.7,
+                "protein": 59.4,
+                "fat": 24.4,
+                "carb": 73.1
+            }
+        },
+        {
+            "file": "Xôi lạc vừng.pdf",
+            "nutrition": {
+                "energy": 692.8,
+                "protein": 20.6,
+                "fat": 16.2,
+                "carb": 116.3
+            }
+        },
+        {
+            "file": "Củ từ luộc.pdf",
+            "nutrition": {
+                "energy": 357.4,
+                "protein": 5.5,
+                "fat": 0,
+                "carb": 83.8
+            }
+        },
+        {
+            "file": "Bún chả nem.pdf",
+            "nutrition": {
+                "energy": 901.1,
+                "protein": 40.8,
+                "fat": 33.1,
+                "carb": 110.0
+            }
+        },
+        {
+            "file": "Bánh đa.pdf",
+            "nutrition": {
+                "energy": 818.1,
+                "protein": 25.9,
+                "fat": 7.3,
+                "carb": 162.2
+            }
+        },
+        {
+            "file": "Nước ép chanh leo.pdf",
+            "nutrition": {
+                "energy": 67.3,
+                "protein": 0.7,
+                "fat": 0.2,
+                "carb": 15.7
+            }
+        },
+        {
+            "file": "Xôi cá rô đồng.pdf",
+            "nutrition": {
+                "energy": 572.6,
+                "protein": 23.6,
+                "fat": 5.0,
+                "carb": 108.3
+            }
+        },
+        {
+            "file": "Hủ tiếu Nam Vang.pdf",
+            "nutrition": {
+                "energy": 537.1,
+                "protein": 30.1,
+                "fat": 9.5,
+                "carb": 82.8
+            }
+        },
+        {
+            "file": "Bánh gà Hồng Mai.pdf",
+            "nutrition": {
+                "energy": 1603.0,
+                "protein": 81.5,
+                "fat": 129.0,
+                "carb": 29.0
+            }
+        },
+        {
+            "file": "Nước mía.pdf",
+            "nutrition": {
+                "energy": 228.9,
+                "protein": 0,
+                "fat": 0,
+                "carb": 0
+            }
+        },
+        {
+            "file": "Bánh rán mặn.pdf",
+            "nutrition": {
+                "energy": 406.1,
+                "protein": 9.3,
+                "fat": 20.0,
+                "carb": 473.0
+            }
+        },
+        {
+            "file": "Bánh trôi.pdf",
+            "nutrition": {
+                "energy": 355.3,
+                "protein": 7.0,
+                "fat": 9.3,
+                "carb": 60.9
+            }
+        },
+        {
+            "file": "Cơm tẻ lưng bát.pdf",
+            "nutrition": {
+                "energy": 189.0,
+                "protein": 4.2,
+                "fat": 0.6,
+                "carb": 41.9
+            }
+        },
+        {
+            "file": "Cánh gà tẩm bột chiên.pdf",
+            "nutrition": {
+                "energy": 335.8,
+                "protein": 14.4,
+                "fat": 27.7,
+                "carb": 7.2
+            }
+        },
+        {
+            "file": "Xôi xéo thịt.pdf",
+            "nutrition": {
+                "energy": 676.1,
+                "protein": 23.2,
+                "fat": 14.8,
+                "carb": 112.6
+            }
+        },
+        {
+            "file": "Cơm suất (cá, trứng, thịt).pdf",
+            "nutrition": {
+                "energy": 799.7,
+                "protein": 41.7,
+                "fat": 36.7,
+                "carb": 75.7
+            }
+        },
+        {
+            "file": "Bún cá.pdf",
+            "nutrition": {
+                "energy": 370.5,
+                "protein": 29.5,
+                "fat": 9.2,
+                "carb": 425.0
+            }
+        },
+        {
+            "file": "Chân gà nướng (5 cái).pdf",
+            "nutrition": {
+                "energy": 162.0,
+                "protein": 12.4,
+                "fat": 8.0,
+                "carb": 10.1
+            }
+        },
+        {
+            "file": "Cháo ruốc thịt lợn.pdf",
+            "nutrition": {
+                "energy": 223.6,
+                "protein": 7.7,
+                "fat": 43.0,
+                "carb": 38.6
+            }
+        },
+        {
+            "file": "Phở bò xào.pdf",
+            "nutrition": {
+                "energy": 576.3,
+                "protein": 28.8,
+                "fat": 17.1,
+                "carb": 76.8
+            }
+        },
+        {
+            "file": "Bánh canh sườn heo.pdf",
+            "nutrition": {
+                "energy": 487.6,
+                "protein": 20.6,
+                "fat": 127.0,
+                "carb": 72.8
+            }
+        },
+        {
+            "file": "Caramen thập cẩm (không xôi).pdf",
+            "nutrition": {
+                "energy": 299.2,
+                "protein": 5.6,
+                "fat": 46.0,
+                "carb": 58.8
+            }
+        },
+        {
+            "file": "Bún trộn nam bộ.pdf",
+            "nutrition": {
+                "energy": 492.8,
+                "protein": 20.0,
+                "fat": 12.8,
+                "carb": 74.5
+            }
+        },
+        {
+            "file": "Khoai lang luộc.pdf",
+            "nutrition": {
+                "energy": 393.3,
+                "protein": 2.5,
+                "fat": 0.6,
+                "carb": 94.4
+            }
+        },
+        {
+            "file": "Kem cacao.pdf",
+            "nutrition": {
+                "energy": 161.2,
+                "protein": 27.0,
+                "fat": 7.8,
+                "carb": 20.0
+            }
+        },
+        {
+            "file": "Bánh bỏng ngô mật.pdf",
+            "nutrition": {
+                "energy": 195.0,
+                "protein": 2.9,
+                "fat": 0.5,
+                "carb": 44.7
+            }
+        },
+        {
+            "file": "Bún ngan.pdf",
+            "nutrition": {
+                "energy": 457.4,
+                "protein": 17.6,
+                "fat": 224.0,
+                "carb": 46.4
+            }
+        },
+        {
+            "file": "Nước ép dưa hấu.pdf",
+            "nutrition": {
+                "energy": 85.1,
+                "protein": 57.0,
+                "fat": 1.0,
+                "carb": 13.4
+            }
+        },
+        {
+            "file": "Bánh mỳ pate trứng chả.pdf",
+            "nutrition": {
+                "energy": 359.5,
+                "protein": 20.1,
+                "fat": 11.3,
+                "carb": 44.5
+            }
+        },
+        {
+            "file": "Ốc đá xào.pdf",
+            "nutrition": {
+                "energy": 187.6,
+                "protein": 30.3,
+                "fat": 1.2,
+                "carb": 14.0
+            }
+        },
+        {
+            "file": "Sữa chua gạo tím.pdf",
+            "nutrition": {
+                "energy": 301.8,
+                "protein": 10.5,
+                "fat": 86.0,
+                "carb": 45.6
+            }
+        },
+        {
+            "file": "Bún đậu mắm tôm.pdf",
+            "nutrition": {
+                "energy": 1194.9,
+                "protein": 44.1,
+                "fat": 614.0,
+                "carb": 116.5
+            }
+        },
+        {
+            "file": "Mỳ tim cật.pdf",
+            "nutrition": {
+                "energy": 332.7,
+                "protein": 14.9,
+                "fat": 64.0,
+                "carb": 53.8
+            }
+        },
+        {
+            "file": "Bún gà.pdf",
+            "nutrition": {
+                "energy": 443.0,
+                "protein": 23.4,
+                "fat": 15.3,
+                "carb": 53.0
+            }
+        },
+        {
+            "file": "Phở gà.pdf",
+            "nutrition": {
+                "energy": 445.3,
+                "protein": 31.6,
+                "fat": 17.7,
+                "carb": 39.8
+            }
+        },
+        {
+            "file": "Bánh mỳ.pdf",
+            "nutrition": {
+                "energy": 125.0,
+                "protein": 4.0,
+                "fat": 0.4,
+                "carb": 26.4
+            }
+        },
+        {
+            "file": "Thịt xiên nướng.pdf",
+            "nutrition": {
+                "energy": 227.4,
+                "protein": 31.3,
+                "fat": 11.0,
+                "carb": 0.9
+            }
+        },
+        {
+            "file": "Bánh chưng rán.pdf",
+            "nutrition": {
+                "energy": 374.5,
+                "protein": 14.3,
+                "fat": 4.8,
+                "carb": 68.4
+            }
+        },
+        {
+            "file": "Sủi dìn.pdf",
+            "nutrition": {
+                "energy": 274.8,
+                "protein": 4.8,
+                "fat": 6.5,
+                "carb": 49.3
+            }
+        },
+        {
+            "file": "Bánh mỳ bate trứng.pdf",
+            "nutrition": {
+                "energy": 415.8,
+                "protein": 17.6,
+                "fat": 20.9,
+                "carb": 39.5
+            }
+        },
+        {
+            "file": "Pizza gà phô mai (cỡ S).pdf",
+            "nutrition": {
+                "energy": 638.1,
+                "protein": 28.0,
+                "fat": 28.5,
+                "carb": 67.4
+            }
+        },
+        {
+            "file": "Tào phớ caramen.pdf",
+            "nutrition": {
+                "energy": 174.0,
+                "protein": 7.5,
+                "fat": 27.0,
+                "carb": 29.9
+            }
+        },
+        {
+            "file": "Cơm suất 45k.pdf",
+            "nutrition": {
+                "energy": 967.1,
+                "protein": 35.1,
+                "fat": 19.7,
+                "carb": 162.4
+            }
+        },
+        {
+            "file": "Bún rươi.pdf",
+            "nutrition": {
+                "energy": 371.4,
+                "protein": 13.8,
+                "fat": 6.7,
+                "carb": 64.1
+            }
+        },
+        {
+            "file": "Quả xoài dầm.pdf",
+            "nutrition": {
+                "energy": 360.7,
+                "protein": 4.2,
+                "fat": 1.0,
+                "carb": 83.7
+            }
+        },
+        {
+            "file": "Xôi chè bà cốt.pdf",
+            "nutrition": {
+                "energy": 476.8,
+                "protein": 15.2,
+                "fat": 26.0,
+                "carb": 98.1
+            }
+        },
+        {
+            "file": "Chè sầu riêng.pdf",
+            "nutrition": {
+                "energy": 283.2,
+                "protein": 5.7,
+                "fat": 15.0,
+                "carb": 61.7
+            }
+        },
+        {
+            "file": "Cơm suất (thịt lợn, cá, ốc).pdf",
+            "nutrition": {
+                "energy": 978.7,
+                "protein": 425.0,
+                "fat": 28.9,
+                "carb": 137.3
+            }
+        },
+        {
+            "file": "Phở Trâu.pdf",
+            "nutrition": {
+                "energy": 466.7,
+                "protein": 43.4,
+                "fat": 10.7,
+                "carb": 49.3
+            }
+        },
+        {
+            "file": "Cơm suất văn phòng ( Thịt nạc vai, đậu phụ).pdf",
+            "nutrition": {
+                "energy": 759.0,
+                "protein": 29.9,
+                "fat": 26.3,
+                "carb": 100.7
+            }
+        },
+        {
+            "file": "Bánh mỳ bít tết.pdf",
+            "nutrition": {
+                "energy": 920.0,
+                "protein": 44.5,
+                "fat": 34.0,
+                "carb": 109.0
+            }
+        },
+        {
+            "file": "Bún chả rươi.pdf",
+            "nutrition": {
+                "energy": 719.8,
+                "protein": 50.2,
+                "fat": 24.0,
+                "carb": 75.9
+            }
+        },
+        {
+            "file": "Chè thập cẩm.pdf",
+            "nutrition": {
+                "energy": 593.2,
+                "protein": 20.7,
+                "fat": 16.8,
+                "carb": 89.8
+            }
+        },
+        {
+            "file": "Phở tái bò.pdf",
+            "nutrition": {
+                "energy": 528.8,
+                "protein": 50.6,
+                "fat": 5.6,
+                "carb": 69.1
+            }
+        },
+        {
+            "file": "Bánh mì thập cẩm.pdf",
+            "nutrition": {
+                "energy": 678.8,
+                "protein": 30.6,
+                "fat": 40.5,
+                "carb": 48.1
+            }
+        },
+        {
+            "file": "Hạt dẻ nướng.pdf",
+            "nutrition": {
+                "energy": 227.5,
+                "protein": 4.3,
+                "fat": 1.1,
+                "carb": 50.1
+            }
+        },
+        {
+            "file": "Bánh crepe xúc xích.pdf",
+            "nutrition": {
+                "energy": 346.5,
+                "protein": 11.7,
+                "fat": 22.8,
+                "carb": 23.5
+            }
+        },
+        {
+            "file": "Bánh quẩy.pdf",
+            "nutrition": {
+                "energy": 100.4,
+                "protein": 2.4,
+                "fat": 3.2,
+                "carb": 15.4
+            }
+        },
+        {
+            "file": "Sữa chua thạch lá nếp.pdf",
+            "nutrition": {
+                "energy": 395.8,
+                "protein": 8.6,
+                "fat": 6.8,
+                "carb": 74.9
+            }
+        },
+        {
+            "file": "Nước ép cam (size l).pdf",
+            "nutrition": {
+                "energy": 176.8,
+                "protein": 3.4,
+                "fat": 0,
+                "carb": 40.8
+            }
+        },
+        {
+            "file": "Miến lươn (nước).pdf",
+            "nutrition": {
+                "energy": 447.8,
+                "protein": 14.1,
+                "fat": 94.0,
+                "carb": 76.6
+            }
+        },
+        {
+            "file": "Phở bò tái chín.pdf",
+            "nutrition": {
+                "energy": 503.6,
+                "protein": 36.4,
+                "fat": 11.9,
+                "carb": 62.6
+            }
+        },
+        {
+            "file": "Pizza hải sản (cỡ M).pdf",
+            "nutrition": {
+                "energy": 935.9,
+                "protein": 51.9,
+                "fat": 30.1,
+                "carb": 114.4
+            }
+        },
+        {
+            "file": "Nem chua rán 5 cái.pdf",
+            "nutrition": {
+                "energy": 157.9,
+                "protein": 25.0,
+                "fat": 98.9,
+                "carb": 4.9
+            }
+        }
+    ]
+}

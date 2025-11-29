@@ -1,0 +1,36 @@
+using System.ComponentModel.DataAnnotations;
+using fitlife_planner_back_end.Api.Enums;
+
+namespace fitlife_planner_back_end.Api.Models;
+
+public class Post
+{
+    [Key] public Guid PostId { get; set; }
+    public Guid ProfileId { get; set; }
+
+    public string Title { get; set; }
+    public string Content { get; set; }
+    public string Media { get; set; }
+    public int LikeCount { get; set; }
+    public int CommentCount { get; set; }
+    public DateTime CreatedAt { get; set; } 
+    public DateTime UpdatedAt { get; set; }
+    public Profile Profile { get; set; }
+
+    public Post()
+    {
+    }
+
+    public Post(Guid profileId, string title, string content, string media)
+    {
+        PostId = Guid.NewGuid();
+        ProfileId = profileId;
+        Title = title;
+        Content = content;
+        Media = media;
+        LikeCount = 0;
+        CommentCount = 0;
+        CreatedAt = DateTime.Now;
+        UpdatedAt = DateTime.Now;
+    }
+}
