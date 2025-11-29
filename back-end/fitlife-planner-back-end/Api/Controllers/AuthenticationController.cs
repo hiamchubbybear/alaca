@@ -12,17 +12,9 @@ namespace fitlife_planner_back_end.Api.Controllers;
 
 [ApiController]
 [Route("auth")]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController(AuthenticationService authService, ILogger<AuthenticationController> logger)
+    : ControllerBase
 {
-    private readonly AuthenticationService _authService;
-    private readonly ILogger<AuthenticationController> _logger;
-
-    public AuthenticationController(AuthenticationService authService, ILogger<AuthenticationController> logger)
-    {
-        _authService = authService;
-        _logger = logger;
-    }
-
     [HttpPost("login")]
     public async Task<ApiResponse<AuthenticationResponseDto>> Login([FromBody] LoginRequestDto loginRequest)
     {
@@ -37,7 +29,7 @@ public class AuthenticationController : ControllerBase
 
         try
         {
-            var token = await _authService.Authenticate(loginRequest);
+            var token = await authService.Authenticate(loginRequest);
             return new ApiResponse<AuthenticationResponseDto>(
                 success: true,
                 statusCode: HttpStatusCode.OK,
@@ -69,8 +61,8 @@ public class AuthenticationController : ControllerBase
     {
         try
         {
-            _logger.LogInformation("Refreshing token");
-            var refreshToken = await _authService.RefreshToken(refreshTokenRequestDto);
+            logger.LogInformation("Refreshing token");
+            var refreshToken = await authService.RefreshToken(refreshTokenRequestDto);
             return new ApiResponse<AuthenticationResponseDto>(
                 success: true,
                 statusCode: HttpStatusCode.Created,
@@ -80,7 +72,7 @@ public class AuthenticationController : ControllerBase
         }
         catch (Exception e)
         {
-            _logger.LogInformation(e.StackTrace);
+            logger.LogInformation(e.StackTrace);
             return new ApiResponse<AuthenticationResponseDto>(
                 success: false,
                 statusCode: HttpStatusCode.InternalServerError,
