@@ -1,16 +1,20 @@
 using System.Collections;
 using fitlife_planner_back_end.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace fitlife_planner_back_end.Api.Repository;
 
-public class Repository
+public abstract class RepositoryBase
 {
-    public IEnumerable GetAllProfile(PaginationParameters paginationParameters)
+    protected readonly DbContext _context;
+
+    protected RepositoryBase(DbContext context)
     {
-        return FindAll()
-            .OrderBy(item => item.Name)
-            .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize)
-            .Take(paginationParameters.PageSize)
-            .ToList();
+        _context = context;
+    }
+
+    protected IQueryable<T> FindAll<T>() where T : class
+    {
+        return _context.Set<T>().AsNoTracking().AsQueryable();
     }
 }
