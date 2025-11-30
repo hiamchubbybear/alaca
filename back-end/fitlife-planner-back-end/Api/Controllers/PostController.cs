@@ -106,7 +106,7 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
         }
     }
     [HttpPut()]
-    public async Task<ApiResponse<UpdatePostResponseDto>> DeletePost(Guid postId,
+    public async Task<ApiResponse<>> DeletePost(Guid postId,
         [FromBody] UpdatePostRequestDto dto)
     {
         try

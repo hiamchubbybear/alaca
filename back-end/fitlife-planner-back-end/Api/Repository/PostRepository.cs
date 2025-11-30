@@ -25,8 +25,6 @@ public class PostRepository : RepositoryBase
     public PaginatedList<Post> GetAll(PaginationParameters paginationParameters)
     {
         var query = FindAll<Post>();
-        
-
         return PaginatedList<Post>.ToPagedList(
             query,
             paginationParameters.PageNumber,

@@ -104,4 +104,18 @@ public class Mapping
             post.UpdatedAt
         );
     }
+    public GetPostResponseDto GetPostMapper(Post post)
+    {
+        return new GetPostResponseDto(
+            post.PostId,
+            post.ProfileId,
+            post.Title,
+            post.Content,
+            post.Media,
+            post.LikeCount,
+            post.CommentCount,
+            post.CreatedAt,
+            post.UpdatedAt
+        );
+    }
 }

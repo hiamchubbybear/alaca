@@ -32,7 +32,56 @@ public class PostService
     {
         return _postRepository.GetAll(paginationParameters);
     }
+    public async Task<PaginatedList<Post>> GetAllPostsByLikeAsync(PaginationParameters paginationParameters)
+    {
+        return _postRepository.GetAllByLike(paginationParameters);
+    }
+    public async Task<GetPostResponseDto> GetPostById(Guid postId)
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(postId.ToString()))
+            {
+                throw new Exception("Invalid post id ");
+            }
 
+            var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == postId) ??
+                       throw new Exception("Post not found");
+
+            var response = _mapping.GetPostMapper(post);
+            return response ?? throw new Exception("Post not found");
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            throw new Exception("Get Post By Id Failed");
+        }
+    }
+    
+    public async Task<List<GetPostResponseDto>> GetMyPost()
+    {
+        try
+        {
+            var userId = _userContext.User.userId;
+            var profile = await _dbContext.Profiles
+                .FirstOrDefaultAsync(p => p.UserId == userId);
+            if (profile == null)
+                throw new Exception("Profile not found");
+            var posts = await _dbContext.Posts
+                .Where(p => p.ProfileId == profile.ProfileId)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
+            if (posts == null || posts.Count == 0)
+                return new List<GetPostResponseDto>();
+            var result = posts.Select(p => _mapping.GetPostMapper(p)).ToList();
+            return result;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            throw new Exception("Get My Post Failed");
+        }
+    }
     /*public async Task<List<GetPostResponseDto>> GetAllPosts()
     {
         var user = _dbContext.Users;
