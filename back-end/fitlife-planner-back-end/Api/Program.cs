@@ -80,7 +80,7 @@ builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<Authe
     .AddScoped<NotificationService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-var connString = "Server=127.0.0.1;Port=3306;Database=alaca;User=root;Password=12345678;";
+var connString = "Server=mysql-3528d4f7-mysql2.g.aivencloud.com;Port=10788;Database=defaultdb;User=avnadmin;Password=REMOVED;SslMode=Required;";
 var useInMemory = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
 if (!useInMemory)
 {
