@@ -68,13 +68,26 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<AuthenticationService>()
     .AddScoped<Mapping>().AddScoped<ProfileService>().AddScoped<ProfileRepository>().AddScoped<BMIService>()
-    .AddScoped<BMIUtil>();
+    .AddScoped<BMIUtil>().AddScoped<UserContext>()
+    .AddScoped<PostService>().AddScoped<PostRepository>()
+    .AddScoped<FoodItemService>()
+    .AddScoped<NutritionPlanService>()
+    .AddScoped<ExerciseLibraryService>()
+    .AddScoped<WorkoutService>()
+    .AddScoped<WorkoutScheduleService>()
+    .AddScoped<ProgressService>()
+    .AddScoped<ChallengeService>()
+    .AddScoped<NotificationService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connString = "Server=127.0.0.1;Port=3306;Database=alaca;User=root;Password=12345678;";
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySql(connString, ServerVersion.AutoDetect(connString))
-);
+var useInMemory = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
+if (!useInMemory)
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseMySql(connString, new MySqlServerVersion(new Version(8, 0, 23)))
+    );
+}
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -88,16 +101,17 @@ using (var scope = app.Services.CreateScope())
             // dbContext.Database.Migrate();
         }
     }
-    catch (InvalidOperationException)
+    catch (Exception ex)
     {
-        throw new AbandonedMutexException("Database error");
+        // Log error instead of crashing
+        Console.WriteLine($"Database initialization error: {ex.Message}");
     }
 }
 
-using var scopeDB = app.Services.CreateScope();
-var db = scopeDB.ServiceProvider.GetRequiredService<AppDbContext>();
-db.Database.EnsureDeleted();
-db.Database.EnsureCreated();
+// using var scopeDB = app.Services.CreateScope();
+// var db = scopeDB.ServiceProvider.GetRequiredService<AppDbContext>();
+// db.Database.EnsureDeleted();
+// db.Database.EnsureCreated();
 
 
 app.UseCors(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());

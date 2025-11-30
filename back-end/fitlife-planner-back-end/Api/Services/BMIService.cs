@@ -12,11 +12,11 @@ public class BMIService
 {
     private readonly AppDbContext _dbContext;
     private readonly ILogger<BMIService> _logger;
-    private readonly IUserContext _userContext;
+    private readonly UserContext _userContext;
     private readonly BMIUtil _bmiUtil;
 
 
-    public BMIService(AppDbContext dbContext, ILogger<BMIService> logger, BMIUtil bmiUtil, IUserContext userContext)
+    public BMIService(AppDbContext dbContext, ILogger<BMIService> logger, BMIUtil bmiUtil, UserContext userContext)
     {
         _dbContext = dbContext;
         _logger = logger;
@@ -29,6 +29,7 @@ public class BMIService
         try
         {
             var userId = _userContext.User.userId;
+            var profileId = _userContext.User.profileId;
             _logger.LogInformation("Received BMI input: height={Height}, weight={Weight}",
                 requestDto.HeightCm, requestDto.WeightKg);
 
@@ -41,12 +42,13 @@ public class BMIService
             if (goalPlan == null)
                 throw new Exception("BMI goal plan not found");
             var profile = await _dbContext.Profiles
-                .FirstOrDefaultAsync(p => p.UserId == _userContext.User.userId);
+                .FirstOrDefaultAsync(p => p.ProfileId == profileId);
+            if (profile.UserId != userId)
+                throw new Exception("User id  does not match");
             if (profile == null)
                 throw new Exception("Profile not found. Cannot create BMI record.");
-
             var record = new BMIRecord(
-                userId: userId,
+                profileId: profileId,
                 heightCm: requestDto.HeightCm,
                 weightKg: requestDto.WeightKg,
                 bmi: bmi,
@@ -57,7 +59,6 @@ public class BMIService
 
             _dbContext.BmiRecords.Add(record);
             await _dbContext.SaveChangesAsync();
-
             return new CreateBMIResponseDto(
                 bmi: record.BMI,
                 bmiRecordId: record.BmiRecordId,
@@ -75,10 +76,12 @@ public class BMIService
     public async Task<ChoosePlanResponseDto> ChoosePlan(ChoosePlanRequestDto request)
     {
         Guid userId = _userContext.User.userId;
+        var profileId = _userContext.User.profileId;
         _logger.LogInformation("User id choose plan is {}", userId);
-        var record = await _dbContext.BmiRecords.FirstOrDefaultAsync(r => r.UserId == userId && r.IsCurrent == true);
+        var record =
+            await _dbContext.BmiRecords.FirstOrDefaultAsync(r => r.ProfileId == profileId && r.IsCurrent == true);
         if (record == null) throw new KeyNotFoundException("BMI record not found");
-        record.PraticeLevel = request.PracticeLevel;
+        record.PracticeLevel = request.PracticeLevel;
         record.ActivityFactor = request.ActivityFactor;
         var goalPlan = _bmiUtil.GetGoalPlanByBmi(record.BMI);
         double tdee = _bmiUtil.CalculateDailyCalories(record.WeightKg, record.HeightCm, record.ActivityFactor,

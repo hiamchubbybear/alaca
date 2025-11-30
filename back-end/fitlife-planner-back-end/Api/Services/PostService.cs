@@ -10,32 +10,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace fitlife_planner_back_end.Api.Services;
 
-public class PostService
+public class PostService(
+    AppDbContext dbContext,
+    ILogger<ProfileService> logger,
+    Mapping mapping,
+    PostRepository postRepository,
+    UserContext userContext)
 {
-    private readonly AppDbContext _dbContext;
-    private readonly ILogger<ProfileService> _logger;
-    private readonly Mapping _mapping;
-    private readonly PostRepository _postRepository;
-    private readonly UserContext _userContext;
-
-    public PostService(AppDbContext dbContext, ILogger<ProfileService> logger, Mapping mapping,
-        PostRepository postRepository, UserContext userContext)
+    public Task<PaginatedList<Post>> GetAllPostsAsync(PaginationParameters paginationParameters)
     {
-        _dbContext = dbContext;
-        _logger = logger;
-        _mapping = mapping;
-        _postRepository = postRepository;
-        _userContext = userContext;
+        return Task.FromResult(postRepository.GetAll(paginationParameters));
     }
 
-    public async Task<PaginatedList<Post>> GetAllPostsAsync(PaginationParameters paginationParameters)
-    {
-        return _postRepository.GetAll(paginationParameters);
-    }
     public async Task<PaginatedList<Post>> GetAllPostsByLikeAsync(PaginationParameters paginationParameters)
     {
-        return _postRepository.GetAllByLike(paginationParameters);
+        return postRepository.GetAllByLike(paginationParameters);
     }
+
     public async Task<GetPostResponseDto> GetPostById(Guid postId)
     {
         try
@@ -45,43 +36,44 @@ public class PostService
                 throw new Exception("Invalid post id ");
             }
 
-            var post = await _dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == postId) ??
+            var post = await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == postId) ??
                        throw new Exception("Post not found");
 
-            var response = _mapping.GetPostMapper(post);
+            var response = mapping.GetPostMapper(post);
             return response ?? throw new Exception("Post not found");
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            logger.LogError(e, e.Message);
             throw new Exception("Get Post By Id Failed");
         }
     }
-    
+
     public async Task<List<GetPostResponseDto>> GetMyPost()
     {
         try
         {
-            var userId = _userContext.User.userId;
-            var profile = await _dbContext.Profiles
+            var userId = userContext.User.userId;
+            var profile = await dbContext.Profiles
                 .FirstOrDefaultAsync(p => p.UserId == userId);
             if (profile == null)
                 throw new Exception("Profile not found");
-            var posts = await _dbContext.Posts
+            var posts = await dbContext.Posts
                 .Where(p => p.ProfileId == profile.ProfileId)
                 .OrderByDescending(p => p.CreatedAt)
                 .ToListAsync();
             if (posts == null || posts.Count == 0)
                 return new List<GetPostResponseDto>();
-            var result = posts.Select(p => _mapping.GetPostMapper(p)).ToList();
+            var result = posts.Select(p => mapping.GetPostMapper(p)).ToList();
             return result;
         }
         catch (Exception e)
         {
-            _logger.LogError(e, e.Message);
+            logger.LogError(e, e.Message);
             throw new Exception("Get My Post Failed");
         }
     }
+
     /*public async Task<List<GetPostResponseDto>> GetAllPosts()
     {
         var user = _dbContext.Users;
@@ -102,7 +94,7 @@ public class PostService
     //     try
     //     {
     //         var profileId = _userContext.User.profileId;
-    //        
+    //
     //         var post =
     //             await _dbContext.Posts.FirstOrDefaultAsync(p =>
     //                 p.ProfileId == profileId) ??
@@ -121,9 +113,9 @@ public class PostService
     {
         try
         {
-            var currentProfileId = _userContext.User.profileId;
-            var currentUserRole = _userContext.User.role;
-            var post = await _dbContext.Posts
+            var currentProfileId = userContext.User.profileId;
+            var currentUserRole = userContext.User.role;
+            var post = await dbContext.Posts
                 .FirstOrDefaultAsync<Post>(p => p.PostId == postId);
 
             if (post == null)
@@ -138,10 +130,12 @@ public class PostService
             post.Content = dto.Content;
             post.Title = dto.Title;
 
-            await _dbContext.SaveChangesAsync();
-            return _mapping.UpdatePostMapper(post);
-        }catch(Exception e){
-            _logger.LogError(e, e.Message);
+            await dbContext.SaveChangesAsync();
+            return mapping.UpdatePostMapper(post);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, e.Message);
             throw new Exception("Updated Post Failed");
         }
     }
@@ -150,40 +144,82 @@ public class PostService
     {
         try
         {
-            var post = await _dbContext.Posts.FindAsync(postId)
+            var post = await dbContext.Posts.FindAsync(postId)
                        ?? throw new Exception("Post not found");
 
-            var user = _userContext.User;
+            var user = userContext.User;
             if (post.ProfileId != user.profileId)
             {
                 throw new Exception("Forbidden");
             }
 
-            _dbContext.Posts.Remove(post);
-            await _dbContext.SaveChangesAsync();
+            dbContext.Posts.Remove(post);
+            await dbContext.SaveChangesAsync();
 
             return true;
-        }catch(Exception e){
-            _logger.LogError(e, e.Message);
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, e.Message);
             throw new Exception("Deleted Post Failed");
         }
     }
 
-    public async Task<CreatePostResponseDto> CreatePost(CreatePostRequestDto dto, Guid profileId)
+    public async Task<CreatePostResponseDto> CreatePost( CreatePostRequestDto dto)
     {
         try
         {
-            var post = _mapping.InsertPostMapper(dto, profileId);
-            var createdPost = await _dbContext.Posts.AddAsync(post) ??
+            var profileId = userContext.User.profileId;
+            var post = mapping.InsertPostMapper(dto, profileId);
+            var createdPost = await dbContext.Posts.AddAsync(post) ??
                               throw new Exception("Failed to create post");
             ;
-            await _dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync();
 
 
-            var response = _mapping.InsertPostResponseMapper(createdPost.Entity);
+            var response = mapping.InsertPostResponseMapper(createdPost.Entity);
             return response;
-        }catch(Exception e){
-            _logger.LogError(e, e.Message);
-            throw new Exception("Created Post Failed");}
         }
+        catch (Exception e)
+        {
+            logger.LogError(e, e.Message);
+            throw new Exception("Created Post Failed");
+        }
+    }
+
+
+    public async Task<bool> ApprovePostAsync(Guid postId)
+    {
+        var post = await dbContext.Posts.FindAsync(postId);
+
+        if (post == null)
+            throw new Exception("Post not found");
+
+        if (post.Status != Status.Pending)
+            throw new Exception("Post is not in pending state");
+
+        post.Status = Status.Accept;
+        dbContext.Posts.Update(post);
+        await dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> RejectPostAsync(Guid postId)
+    {
+        var post = await dbContext.Posts.FindAsync(postId);
+
+        if (post == null)
+            throw new Exception("Post not found");
+
+        if (post.Status != Status.Pending)
+            throw new Exception("Post is not in pending state");
+
+        post.Status = Status.Reject;
+
+        dbContext.Posts.Update(post);
+        await dbContext.SaveChangesAsync();
+
+        return true;
+    }
 }

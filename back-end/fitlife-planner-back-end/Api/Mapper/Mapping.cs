@@ -81,7 +81,7 @@ public class Mapping
         );
     }
 
-    public Post InsertPostMapper(CreatePostRequestDto dto, Guid profileId)
+    public Post InsertPostMapper(CreatePostRequestDto dto , Guid profileId)
     {
         return new Post(
             profileId,

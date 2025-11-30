@@ -6,7 +6,7 @@ namespace fitlife_planner_back_end.Api.Models;
 public class BMIRecord
 {
     [Key] public Guid BmiRecordId { get; set; } = Guid.NewGuid();
-    public Guid UserId { get; set; }
+    public Guid ProfileId { get; set; }
     public double HeightCm { get; set; }
     public double WeightKg { get; set; }
     public double BMI { get; set; }
@@ -17,18 +17,18 @@ public class BMIRecord
     public DateTime MeasuredAt { get; set; } = DateTime.UtcNow;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public double ActivityFactor { get; set; }
-    public PracticeLevel PraticeLevel { get; set; }
-
+    public PracticeLevel PracticeLevel { get; set; }
+    public Profile Profile { get; set; }
     public BMIRecord()
     {
     }
 
-    public BMIRecord(Guid userId, double heightCm, double weightKg, double bmi,
+    public BMIRecord(Guid profileId, double heightCm, double weightKg, double bmi,
         string assessment, bool isCurrent, bool isComplete, double activityFactor, Dictionary<string, object> goal,
-        PracticeLevel praticeLevel)
+        PracticeLevel practiceLevel)
     {
         Goal = goal;
-        UserId = userId;
+        ProfileId = profileId;
         HeightCm = heightCm;
         WeightKg = weightKg;
         BMI = bmi;
@@ -36,14 +36,14 @@ public class BMIRecord
         IsCurrent = isCurrent;
         IsComplete = isComplete;
         ActivityFactor = activityFactor;
-        PraticeLevel = praticeLevel;
+        PracticeLevel = practiceLevel;
     }
 
-    public BMIRecord(Guid userId, double heightCm, double weightKg, double bmi, string assessment, bool isCurrent,
+    public BMIRecord(Guid profileId, double heightCm, double weightKg, double bmi, string assessment, bool isCurrent,
         bool isComplete)
     {
         BmiRecordId = Guid.NewGuid();
-        UserId = userId;
+        ProfileId = profileId;
         HeightCm = heightCm;
         WeightKg = weightKg;
         BMI = bmi;

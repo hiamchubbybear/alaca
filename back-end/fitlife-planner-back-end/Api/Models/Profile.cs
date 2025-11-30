@@ -16,7 +16,8 @@ public class Profile
     public DateTime CreateAt { get; set; }
     public DateTime UpdateAt { get; set; }
     public int Version { get; set; }
-    public ICollection<Post> Posts { get; set; }
+    public ICollection<Post> Posts { get; set; } = new List<Post>();
+    public ICollection<BMIRecord> BmiRecords { get; set; } = new List<BMIRecord>();
 
     public Profile()
     {
@@ -31,7 +32,6 @@ public class Profile
         BirthDate = birthDate;
         Gender = gender;
         Bio = bio;
-        Posts = new List<Post>();
         CreateAt = DateTime.Now;
         UpdateAt = DateTime.Now;
         Version = 1;

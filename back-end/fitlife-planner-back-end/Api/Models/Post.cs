@@ -15,8 +15,9 @@ public class Post
     public int CommentCount { get; set; }
     public DateTime CreatedAt { get; set; } 
     public DateTime UpdatedAt { get; set; }
+    public Status Status { get; set; }
     public Profile Profile { get; set; }
-
+    
     public Post()
     {
     }
@@ -32,5 +33,6 @@ public class Post
         CommentCount = 0;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
+        Status = Status.Pending;
     }
 }

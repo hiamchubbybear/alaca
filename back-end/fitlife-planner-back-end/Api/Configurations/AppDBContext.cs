@@ -1,7 +1,7 @@
 using System.Text.Json;
 using fitlife_planner_back_end.Api.Models;
 using Microsoft.EntityFrameworkCore;
-
+using fitlife_planner_back_end.Api.Enums;
 namespace fitlife_planner_back_end.Api.Configurations
 {
     public class AppDbContext : DbContext
@@ -15,6 +15,40 @@ namespace fitlife_planner_back_end.Api.Configurations
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<BMIRecord> BmiRecords { get; set; }
         public DbSet<Post> Posts { get; set; }
+
+        // Nutrition
+        public DbSet<FoodItem> FoodItems { get; set; }
+        public DbSet<NutritionPlan> NutritionPlans { get; set; }
+        public DbSet<NutritionPlanItem> NutritionPlanItems { get; set; }
+
+        // Exercise & Workout
+        public DbSet<ExerciseLibrary> ExerciseLibrary { get; set; }
+        public DbSet<ExerciseTag> ExerciseTags { get; set; }
+        public DbSet<Workout> Workouts { get; set; }
+        public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
+        public DbSet<WorkoutSchedule> WorkoutSchedules { get; set; }
+
+        // Progress & Challenges
+        public DbSet<ProgressEntry> ProgressEntries { get; set; }
+        public DbSet<Challenge> Challenges { get; set; }
+        public DbSet<ChallengeParticipant> ChallengeParticipants { get; set; }
+
+        // Social Features
+        public DbSet<PostLike> PostLikes { get; set; }
+        public DbSet<PostComment> PostComments { get; set; }
+        public DbSet<UserFollower> UserFollowers { get; set; }
+
+        // Messaging & Reviews
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
+        // Notifications & Settings
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserSettings> UserSettings { get; set; }
+
+        // Statistics
+        public DbSet<StatsUserWeekly> StatsUserWeekly { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -79,6 +113,7 @@ namespace fitlife_planner_back_end.Api.Configurations
                 entity.Property(e => e.Media).HasMaxLength(200).IsRequired(false);
                 entity.Property(e => e.LikeCount).HasDefaultValue(0);
                 entity.Property(e => e.CommentCount).HasDefaultValue(0);
+                entity.Property(e => e.Status).HasDefaultValue(Status.Pending);
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("CURRENT_TIMESTAMP");
@@ -97,7 +132,7 @@ namespace fitlife_planner_back_end.Api.Configurations
             {
                 entity.HasKey(e => e.BmiRecordId);
                 entity.Property(e => e.BmiRecordId).HasColumnType("char(36)").IsRequired();
-                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.ProfileId).HasColumnType("char(36)").IsRequired();
                 entity.Property(e => e.HeightCm);
                 entity.Property(e => e.WeightKg);
                 entity.Property(e => e.BMI);
@@ -114,9 +149,9 @@ namespace fitlife_planner_back_end.Api.Configurations
                         v => JsonSerializer.Deserialize<Dictionary<string, object>>(v, (JsonSerializerOptions)null))
                     .HasColumnType("text")
                     .IsRequired(false);
-                entity.HasOne<Profile>()
-                    .WithMany()
-                    .HasForeignKey(e => e.UserId)
+                entity.HasOne(e => e.Profile)
+                    .WithMany(p => p.BmiRecords)
+                    .HasForeignKey(e => e.ProfileId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
@@ -132,6 +167,275 @@ namespace fitlife_planner_back_end.Api.Configurations
                     .HasForeignKey(t => t.UserId)
                     .IsRequired();
             });
+
+            // Nutrition Management
+            modelBuilder.Entity<FoodItem>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<NutritionPlan>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.OwnerUserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Title).HasMaxLength(255);
+                entity.Property(e => e.Description).HasColumnType("text");
+                entity.Property(e => e.Macros).HasColumnType("text");
+                entity.Property(e => e.Visibility).HasMaxLength(50).HasDefaultValue("private");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<NutritionPlanItem>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.PlanId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.FoodItemId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.MealTime).HasMaxLength(50);
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(e => e.NutritionPlan)
+                    .WithMany(p => p.Items)
+                    .HasForeignKey(e => e.PlanId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.FoodItem)
+                    .WithMany()
+                    .HasForeignKey(e => e.FoodItemId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Exercise & Workout
+            modelBuilder.Entity<ExerciseLibrary>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.Title).HasMaxLength(255).IsRequired();
+                entity.Property(e => e.Description).HasColumnType("text");
+                entity.Property(e => e.PrimaryMuscle).HasMaxLength(100);
+                entity.Property(e => e.SecondaryMuscles).HasMaxLength(255);
+                entity.Property(e => e.Equipment).HasMaxLength(255);
+                entity.Property(e => e.Difficulty).HasMaxLength(50);
+                entity.Property(e => e.VideoUrl).HasMaxLength(512);
+                entity.Property(e => e.Images).HasColumnType("text");
+                entity.Property(e => e.CreatedBy).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<ExerciseTag>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.ExerciseId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Tag).HasMaxLength(100).IsRequired();
+
+                entity.HasOne(e => e.Exercise)
+                    .WithMany(ex => ex.Tags)
+                    .HasForeignKey(e => e.ExerciseId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Workout>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.OwnerUserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Title).HasMaxLength(255).IsRequired();
+                entity.Property(e => e.Description).HasColumnType("text");
+                entity.Property(e => e.Intensity).HasMaxLength(50);
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<WorkoutExercise>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.WorkoutId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.ExerciseId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Reps).HasMaxLength(50);
+                entity.Property(e => e.Tempo).HasMaxLength(50);
+                entity.Property(e => e.Notes).HasColumnType("text");
+
+                entity.HasOne(e => e.Workout)
+                    .WithMany(w => w.Exercises)
+                    .HasForeignKey(e => e.WorkoutId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Exercise)
+                    .WithMany()
+                    .HasForeignKey(e => e.ExerciseId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<WorkoutSchedule>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.WorkoutId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Status).HasMaxLength(50).HasDefaultValue("planned");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(e => e.Workout)
+                    .WithMany()
+                    .HasForeignKey(e => e.WorkoutId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Progress & Challenges
+            modelBuilder.Entity<ProgressEntry>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Type).HasMaxLength(50).IsRequired();
+                entity.Property(e => e.TextValue).HasColumnType("text");
+                entity.Property(e => e.PhotoUrl).HasMaxLength(512);
+                entity.Property(e => e.RecordedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
+
+            modelBuilder.Entity<Challenge>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.Title).HasMaxLength(255).IsRequired();
+                entity.Property(e => e.Description).HasColumnType("text");
+                entity.Property(e => e.CreatedBy).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Rules).HasColumnType("text");
+                entity.Property(e => e.Reward).HasColumnType("text");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<ChallengeParticipant>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.ChallengeId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Status).HasMaxLength(50).HasDefaultValue("active");
+                entity.Property(e => e.Progress).HasColumnType("text");
+                entity.Property(e => e.FinalResult).HasColumnType("text");
+                entity.Property(e => e.JoinedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(e => e.Challenge)
+                    .WithMany(c => c.Participants)
+                    .HasForeignKey(e => e.ChallengeId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Social Features
+            modelBuilder.Entity<PostLike>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.PostId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(e => e.Post)
+                    .WithMany()
+                    .HasForeignKey(e => e.PostId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => new { e.PostId, e.UserId }).IsUnique();
+            });
+
+            modelBuilder.Entity<PostComment>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.PostId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Content).HasColumnType("text").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(e => e.Post)
+                    .WithMany()
+                    .HasForeignKey(e => e.PostId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<UserFollower>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.FollowerId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasIndex(e => new { e.UserId, e.FollowerId }).IsUnique();
+            });
+
+            // Communication
+            modelBuilder.Entity<Message>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.ChannelId).HasColumnType("char(36)");
+                entity.Property(e => e.SenderId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Content).HasColumnType("text").IsRequired();
+                entity.Property(e => e.ContentType).HasMaxLength(50);
+                entity.Property(e => e.Attachments).HasColumnType("text");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
+
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.ReviewerId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.TargetUserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Content).HasColumnType("text");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Title).HasMaxLength(255);
+                entity.Property(e => e.Body).HasColumnType("text").IsRequired();
+                entity.Property(e => e.Type).HasMaxLength(50);
+                entity.Property(e => e.Data).HasColumnType("text");
+                entity.Property(e => e.IsRead).HasDefaultValue(false);
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.ReadAt).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<UserSettings>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Preferences).HasColumnType("text");
+                entity.Property(e => e.NotificationPrefs).HasColumnType("text");
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
+
+                entity.HasIndex(e => e.UserId).IsUnique();
+            });
+
+            modelBuilder.Entity<StatsUserWeekly>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
         }
+
     }
 }

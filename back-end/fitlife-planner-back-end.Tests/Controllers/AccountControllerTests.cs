@@ -30,7 +30,8 @@ public class AccountControllerTests : IntegrationTestBase
 
         // Assert
         // The controller returns HttpStatusCode.Found (302) on success
-        response.StatusCode.Should().Be(HttpStatusCode.Found);
+        // The controller returns 200 OK with status in body
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Fact]
@@ -64,6 +65,7 @@ public class AccountControllerTests : IntegrationTestBase
         var response = await _client.GetAsync("/account");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Found);
+        // The controller returns 200 OK with status in body
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 }

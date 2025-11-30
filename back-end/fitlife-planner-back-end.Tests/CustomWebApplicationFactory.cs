@@ -21,6 +21,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 services.Remove(descriptor);
             }
 
+            var dbContextDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(AppDbContext));
+            if (dbContextDescriptor != null)
+            {
+                services.Remove(dbContextDescriptor);
+            }
+
             // Add InMemory database for testing
             services.AddDbContext<AppDbContext>(options =>
             {

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fitlife_planner_back_end.Api.Controllers;
-    
+
 [ApiController]
 [Route("post")]
 public class PostController(ILogger<ProfileController> logger, PostService postService)
@@ -30,7 +30,6 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
         }
     }
 
-    
 
     // [Authorize(Roles = "Admin")]
     [Authorize]
@@ -46,10 +45,8 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
             statusCode: HttpStatusCode.OK
         ));
     }
-   
- 
-    
-    
+
+
     [Authorize]
     [HttpGet("all-by-like")]
     public async Task<ApiResponse<PaginatedList<Post>>> GetAllPostByLike([FromQuery] PaginationParameters pagination)
@@ -64,8 +61,9 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
         ));
     }
 
-     
+
     [HttpPut()]
+    [Authorize]
     public async Task<ApiResponse<UpdatePostResponseDto>> UpdatePost(Guid postId,
         [FromBody] UpdatePostRequestDto dto)
     {
@@ -84,15 +82,15 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
                 statusCode: HttpStatusCode.BadRequest);
         }
     }
-    
+
     [Authorize]
     [HttpPost]
-    public async Task<ApiResponse<CreatePostResponseDto>> CreatePost(Guid profileId,
+    public async Task<ApiResponse<CreatePostResponseDto>> CreatePost(
         [FromBody] CreatePostRequestDto dto)
     {
         try
         {
-            var result = await postService.CreatePost(dto,profileId);
+            var result = await postService.CreatePost(dto);
             return new ApiResponse<CreatePostResponseDto>(
                 success: true,
                 message: "Successfully create Post",
@@ -105,30 +103,29 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
                 statusCode: HttpStatusCode.BadRequest);
         }
     }
-    [HttpPut()]
-    public async Task<ApiResponse<>> DeletePost(Guid postId,
-        [FromBody] UpdatePostRequestDto dto)
+
+    [HttpDelete("{postId:guid}")]
+    [Authorize]
+    public async Task<ApiResponse<bool>> DeletePost(Guid postId)
     {
         try
         {
-            var result = await postService.UpdatePost(postId, dto);
-            return new ApiResponse<UpdatePostResponseDto>(
+            var result = await postService.DeletePost(postId);
+            return new ApiResponse<bool>(
                 success: true,
-                message: "Successfully updated Post",
+                message: "Successfully delete Post",
                 data: result,
                 statusCode: HttpStatusCode.OK);
         }
         catch (Exception e)
         {
-            return new ApiResponse<UpdatePostResponseDto>(success: false, message: e.Message,
+            return new ApiResponse<bool>(success: false, message: e.Message,
                 statusCode: HttpStatusCode.BadRequest);
         }
     }
-    
-    // ================================
-    // GET POST BY ID
-    // ================================
+
     [HttpGet("{postId:guid}")]
+    [Authorize]
     public async Task<ApiResponse<GetPostResponseDto>> GetPostById(Guid postId)
     {
         try
@@ -145,5 +142,42 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
     }
     
     
-    
+    [HttpPost("{id}/approve")]
+    public async Task<ApiResponse<bool>> Approve(Guid id)
+    {
+        try
+        {
+            var result = await postService.ApprovePostAsync(id);
+            return new ApiResponse<bool>(
+                success: true,
+                message: "Successfully approve Post",
+                data: result,
+                statusCode: HttpStatusCode.OK);
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message,
+                statusCode: HttpStatusCode.BadRequest);
+        }
+    }
+
+    // --- REJECT ---
+    [HttpPost("{id}/reject")]
+    public async Task<ApiResponse<bool>> Reject(Guid id)
+    {
+        try
+        {
+            var result = await postService.RejectPostAsync(id);
+            return new ApiResponse<bool>(
+                success: true,
+                message: "Successfully reject Post",
+                data: result,
+                statusCode: HttpStatusCode.OK);
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message,
+                statusCode: HttpStatusCode.BadRequest);
+        }
+    }
 }

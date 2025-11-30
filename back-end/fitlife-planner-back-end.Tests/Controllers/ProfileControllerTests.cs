@@ -28,6 +28,7 @@ public class ProfileControllerTests : IntegrationTestBase
         var email = "profileuser@example.com";
         var password = "Password123!";
         Guid userId = Guid.Empty;
+        Guid profileId = Guid.Empty;
 
         // Seed user
         using (var scope = _factory.Services.CreateScope())
@@ -35,8 +36,11 @@ public class ProfileControllerTests : IntegrationTestBase
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             var user = new User("profileuser", email, password);
             db.Users.Add(user);
+            var profile = new Profile(user.Id, "Test User", "http://avatar.com", DateTime.Now.AddYears(-20), Gender.MALE, "Bio");
+            db.Profiles.Add(profile);
             await db.SaveChangesAsync();
             userId = user.Id;
+            profileId = profile.ProfileId;
         }
 
         // Login
@@ -47,27 +51,19 @@ public class ProfileControllerTests : IntegrationTestBase
         loginContent!.Data.Should().NotBeNull();
         var token = loginContent.Data!.Token;
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        // 1. Create Profile
-        var createProfileRequest = new CreateProfileRequestDTO
-        {
-            DisplayName = "Test User",
-            AvatarUrl = "http://avatar.com",
-            BirthDate = DateTime.Now.AddYears(-20),
-            Gender = Gender.MALE,
-            Bio = "Bio"
-        };
-        var createResponse = await _client.PostAsJsonAsync("/profile", createProfileRequest);
-        createResponse.StatusCode.Should().Be(HttpStatusCode.Created);
+        // 1. Create Profile (Deprecated) - Skipped because seeded
 
-        var createContent = await createResponse.Content.ReadFromJsonAsync<TestApiResponse<CreateProfileResponseDto>>();
-        createContent.Should().NotBeNull();
-        createContent!.Data.Should().NotBeNull();
-        var profileId = createContent.Data!.Id;
 
         // 2. Get Profile
         var getResponse = await _client.GetAsync("/profile");
-        getResponse.StatusCode.Should().Be(HttpStatusCode.Found);
-        var getContent = await getResponse.Content.ReadFromJsonAsync<TestApiResponse<GetProfileResponseDto>>();
+        getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var options = new System.Text.Json.JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+        options.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+
+        var getContent = await getResponse.Content.ReadFromJsonAsync<TestApiResponse<GetProfileResponseDto>>(options);
         getContent.Should().NotBeNull();
         getContent!.Data.Should().NotBeNull();
         getContent.Data!.DisplayName.Should().Be("Test User");
@@ -75,12 +71,12 @@ public class ProfileControllerTests : IntegrationTestBase
         // 3. Update Profile
         var updateRequest = new UpdateProfileRequestDto("Updated Name", "http://avatar.com", DateTime.Now.AddYears(-20),
             Gender.FEMALE, "New Bio");
-        var updateResponse = await _client.PutAsJsonAsync($"/profile/{profileId}", updateRequest);
+        var updateResponse = await _client.PutAsJsonAsync("/profile", updateRequest);
         updateResponse.StatusCode.Should().Be(HttpStatusCode.OK);
 
         // Verify update
         var getResponse2 = await _client.GetAsync("/profile");
-        var getContent2 = await getResponse2.Content.ReadFromJsonAsync<TestApiResponse<GetProfileResponseDto>>();
+        var getContent2 = await getResponse2.Content.ReadFromJsonAsync<TestApiResponse<GetProfileResponseDto>>(options);
         getContent2.Should().NotBeNull();
         getContent2!.Data.Should().NotBeNull();
         getContent2.Data!.DisplayName.Should().Be("Updated Name");
