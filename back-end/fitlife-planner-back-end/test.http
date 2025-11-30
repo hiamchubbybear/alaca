@@ -1,0 +1,125 @@
+@host = http://localhost:5000
+@newEmail = test@example.com
+@password = Password123!
+@username = newuser
+
+### 1. Create Account
+POST {{host}}/account
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "email": "{{newEmail}}",
+  "password": "{{password}}"
+}
+
+> {%
+    if (!response.body.success) {
+        throw new Error("❌ Create account failed: " + response.body.message);
+    }
+    client.global.set("userId", response.body.data.id);
+    client.global.set("userName", response.body.data.username);
+%}
+
+### 2. Login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{newEmail}}",
+  "password": "{{password}}"
+}
+
+> {%
+    if (!response.body.success) {
+        throw new Error("❌ Login failed: " + response.body.message);
+    }
+    client.global.set("token", response.body.data.token);
+    client.global.set("refreshToken", response.body.data.refreshToken);
+%}
+
+### 3. Get Account Info
+GET {{host}}/account
+Authorization: Bearer {{token}}
+
+> {%
+    if (!response.body.success) {
+        throw new Error("❌ Get account failed: " + response.body.message);
+    }
+    client.global.set("userId", response.body.data.id);
+    client.global.set("userName", response.body.data.username);
+%}
+
+### 4. Get My Profile
+GET {{host}}/profile
+Authorization: Bearer {{token}}
+
+> {%
+    if (!response.body.success) {
+        throw new Error("❌ Get profile failed: " + response.body.message);
+    }
+    client.global.set("profileId", response.body.data.id);
+%}
+
+### 5. Update Profile
+PUT {{host}}/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "displayName": "Updated Name",
+  "avatarUrl": "https://example.com/avatar-updated.png",
+  "birthDate": "2000-01-01T00:00:00",
+  "gender": 0,
+  "bio": "Updated bio"
+}
+
+> {%
+    if (!response.body.success) {
+        throw new Error("❌ Update profile failed: " + response.body.message);
+    }
+%}
+
+### 6. Calculate BMI
+POST {{host}}/bmi/calculate
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "heightCm": 180,
+  "weightKg": 65
+}
+
+> {%
+    if (!response.body.success) {
+        throw new Error("❌ Calculate BMI failed: " + response.body.message);
+    }
+    client.global.set("calculatedBmi", response.body.data.bmi);
+%}
+
+### 7. Create BMI Record / Planner
+POST {{host}}/bmi/me
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "practiceLevel": 1,
+  "activityFactor": 1.2
+}
+
+> {%
+    if (!response.body.success) {
+        throw new Error("❌ Create BMI record / planner failed: " + response.body.message);
+    }
+    client.global.set("bmiRecordId", response.body.data.bmiRecordId);
+%}
+
+### 8. Get All Profiles (Admin)
+GET {{host}}/profile/all?PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+> {%
+    if (!response.body.success) {
+        throw new Error("❌ Get all profiles failed: " + response.body.message);
+    }
+%}
