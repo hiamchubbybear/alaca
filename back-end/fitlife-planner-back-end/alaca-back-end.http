@@ -1,7 +1,8 @@
 @host = http://localhost:5000
 @email = test@example.com
 @password = Password123!
-@profileId = cf6d7512-ff82-456d-b350-b1b914410b25 
+@profileId = cf6d7512-ff82-456d-b350-b1b914410b25
+@token= 
 ### Authentication
 
 ### Login

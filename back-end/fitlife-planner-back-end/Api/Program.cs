@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
+DotNetEnv.Env.Load();
 builder.Services.AddCors();
 builder.Services.AddControllers()
     .AddJsonOptions(opts =>
@@ -21,6 +22,14 @@ builder.Services.AddControllers()
         opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
+
+var host = Environment.GetEnvironmentVariable("AIVEN_DB_HOST");
+var port = Environment.GetEnvironmentVariable("AIVEN_DB_PORT");
+var db = Environment.GetEnvironmentVariable("AIVEN_DB_NAME");
+var user = Environment.GetEnvironmentVariable("AIVEN_DB_USER");
+var pass = Environment.GetEnvironmentVariable("AIVEN_DB_PASSWORD");
+var ssl = Environment.GetEnvironmentVariable("AIVEN_DB_SSLMODE");
+
 
 var jwtKey = builder.Configuration["Jwt:Key"]
              ?? "1/3pvho0/tHL9NElGz4OcrSdsbC10OB5iMHAmn3hOH+YnhFgpNsmbl/8i5REO3DTd6zsiwLu2pjr7UukdVA5Tw==";
@@ -80,7 +89,7 @@ builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<Authe
     .AddScoped<NotificationService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-var connString = "Server=mysql-3528d4f7-mysql2.g.aivencloud.com;Port=10788;Database=defaultdb;User=avnadmin;Password=REMOVED;SslMode=Required;";
+var connString = $"Server={host};Port={port};Database={db};User={user};Password={pass};SslMode={ssl};";
 var useInMemory = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");
 if (!useInMemory)
 {
@@ -88,6 +97,8 @@ if (!useInMemory)
         options.UseMySql(connString, new MySqlServerVersion(new Version(8, 0, 23)))
     );
 }
+Console.WriteLine($"Using MySQL connection: {connString}");
+
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -1,26 +1,16 @@
-version: '3.8'
-
 services:
-  mysql:
-    image: mysql:8
-    container_name: mysql_db
-    restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: 12345678
-      MYSQL_DATABASE: alaca
-      MYSQL_USER: root123
-      MYSQL_PASSWORD: 12345678
+  fitlife-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
-
-volumes:
-  mysql_data:
-    driver: local
+      - "8000:8000"
+    environment:
+      - AIVEN_DB_HOST=${AIVEN_DB_HOST}
+      - AIVEN_DB_PORT=${AIVEN_DB_PORT}
+      - AIVEN_DB_NAME=${AIVEN_DB_NAME}
+      - AIVEN_DB_USER=${AIVEN_DB_USER}
+      - AIVEN_DB_PASSWORD=${AIVEN_DB_PASSWORD}
+      - AIVEN_DB_SSLMODE=${AIVEN_DB_SSLMODE}
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8000
