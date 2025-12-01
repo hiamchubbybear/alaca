@@ -85,7 +85,7 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: back-end/fitlife-planner-back-end
-        file: back-end/fitlife-planner-back-end/dockerfile
+        file: back-end/fitlife-planner-back-end/Dockerfile
         push: true
         tags: docker.io/hiamchubbybear/alaca-backend
         labels: docker.io/hiamchubbybear/alaca-backend
