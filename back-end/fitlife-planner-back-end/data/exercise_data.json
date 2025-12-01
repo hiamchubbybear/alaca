@@ -1,0 +1,355 @@
+{
+    "exercises": [
+        {
+            "title": "Bench Press",
+            "description": "Compound chest exercise performed lying on a bench pressing a barbell",
+            "primaryMuscle": "chest",
+            "secondaryMuscles": [
+                "triceps",
+                "shoulders"
+            ],
+            "equipment": [
+                "barbell",
+                "bench"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Lie flat on bench with feet firmly on floor",
+                "Grip barbell slightly wider than shoulder width",
+                "Unrack bar and position over mid-chest",
+                "Lower bar slowly to chest",
+                "Press bar up explosively until arms fully extended",
+                "Repeat for desired reps"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "compound",
+                "strength",
+                "push",
+                "chest"
+            ],
+            "caloriesBurnedPerSet": 15,
+            "recommendedSets": "3-4",
+            "recommendedReps": "8-12",
+            "restSeconds": 90
+        },
+        {
+            "title": "Squat",
+            "description": "Fundamental lower body compound exercise",
+            "primaryMuscle": "legs",
+            "secondaryMuscles": [
+                "glutes",
+                "core",
+                "lower_back"
+            ],
+            "equipment": [
+                "barbell",
+                "rack"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Position barbell on upper back",
+                "Stand with feet shoulder-width apart",
+                "Lower body by bending knees and hips",
+                "Descend until thighs parallel to ground",
+                "Drive through heels to return to start",
+                "Keep chest up and core tight throughout"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "compound",
+                "strength",
+                "legs",
+                "lower_body"
+            ],
+            "caloriesBurnedPerSet": 20,
+            "recommendedSets": "3-5",
+            "recommendedReps": "6-10",
+            "restSeconds": 120
+        },
+        {
+            "title": "Pull-up",
+            "description": "Bodyweight back exercise pulling yourself up to a bar",
+            "primaryMuscle": "back",
+            "secondaryMuscles": [
+                "biceps",
+                "shoulders",
+                "core"
+            ],
+            "equipment": [
+                "pull_up_bar"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Hang from bar with overhand grip",
+                "Hands slightly wider than shoulders",
+                "Pull body up until chin over bar",
+                "Lower with control to full extension",
+                "Avoid swinging or kipping"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "compound",
+                "bodyweight",
+                "pull",
+                "back"
+            ],
+            "caloriesBurnedPerSet": 12,
+            "recommendedSets": "3-4",
+            "recommendedReps": "6-12",
+            "restSeconds": 90
+        },
+        {
+            "title": "Push-up",
+            "description": "Classic bodyweight chest and tricep exercise",
+            "primaryMuscle": "chest",
+            "secondaryMuscles": [
+                "triceps",
+                "shoulders",
+                "core"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Start in plank position, hands shoulder-width",
+                "Lower body until chest nearly touches ground",
+                "Keep elbows at 45-degree angle",
+                "Push back up to start position",
+                "Maintain straight line from head to heels"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "bodyweight",
+                "push",
+                "chest",
+                "beginner_friendly"
+            ],
+            "caloriesBurnedPerSet": 8,
+            "recommendedSets": "3-4",
+            "recommendedReps": "10-20",
+            "restSeconds": 60
+        },
+        {
+            "title": "Deadlift",
+            "description": "Full-body compound lift focusing on posterior chain",
+            "primaryMuscle": "back",
+            "secondaryMuscles": [
+                "glutes",
+                "hamstrings",
+                "core",
+                "forearms"
+            ],
+            "equipment": [
+                "barbell"
+            ],
+            "difficulty": "advanced",
+            "instructions": [
+                "Stand with feet hip-width, bar over mid-foot",
+                "Bend at hips and knees to grip bar",
+                "Keep back straight, chest up",
+                "Drive through heels, extend hips and knees",
+                "Stand fully upright",
+                "Lower bar with control"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "compound",
+                "strength",
+                "full_body",
+                "posterior_chain"
+            ],
+            "caloriesBurnedPerSet": 25,
+            "recommendedSets": "3-5",
+            "recommendedReps": "5-8",
+            "restSeconds": 180
+        },
+        {
+            "title": "Overhead Press",
+            "description": "Shoulder press performed standing with barbell",
+            "primaryMuscle": "shoulders",
+            "secondaryMuscles": [
+                "triceps",
+                "core",
+                "upper_chest"
+            ],
+            "equipment": [
+                "barbell"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Stand with barbell at shoulder height",
+                "Grip slightly wider than shoulders",
+                "Press bar overhead until arms locked",
+                "Lower with control to shoulders",
+                "Keep core tight, avoid leaning back"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "compound",
+                "strength",
+                "push",
+                "shoulders"
+            ],
+            "caloriesBurnedPerSet": 12,
+            "recommendedSets": "3-4",
+            "recommendedReps": "6-10",
+            "restSeconds": 90
+        },
+        {
+            "title": "Plank",
+            "description": "Isometric core strengthening exercise",
+            "primaryMuscle": "core",
+            "secondaryMuscles": [
+                "shoulders",
+                "glutes"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Start in forearm plank position",
+                "Elbows under shoulders",
+                "Body in straight line",
+                "Engage core, squeeze glutes",
+                "Hold position for time",
+                "Breathe normally"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "bodyweight",
+                "core",
+                "isometric",
+                "beginner_friendly"
+            ],
+            "caloriesBurnedPerSet": 5,
+            "recommendedSets": "3",
+            "recommendedReps": "30-60s hold",
+            "restSeconds": 60
+        },
+        {
+            "title": "Bicep Curl",
+            "description": "Isolation exercise for biceps",
+            "primaryMuscle": "biceps",
+            "secondaryMuscles": [
+                "forearms"
+            ],
+            "equipment": [
+                "dumbbells"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Stand with dumbbells at sides",
+                "Curl weights up to shoulders",
+                "Keep elbows stationary",
+                "Squeeze biceps at top",
+                "Lower with control",
+                "Avoid swinging"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "isolation",
+                "arms",
+                "biceps",
+                "beginner_friendly"
+            ],
+            "caloriesBurnedPerSet": 6,
+            "recommendedSets": "3-4",
+            "recommendedReps": "10-15",
+            "restSeconds": 60
+        },
+        {
+            "title": "Lunges",
+            "description": "Unilateral leg exercise for strength and balance",
+            "primaryMuscle": "legs",
+            "secondaryMuscles": [
+                "glutes",
+                "core"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Stand with feet hip-width apart",
+                "Step forward with one leg",
+                "Lower hips until both knees at 90 degrees",
+                "Push back to start position",
+                "Alternate legs",
+                "Keep torso upright"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "bodyweight",
+                "legs",
+                "unilateral",
+                "beginner_friendly"
+            ],
+            "caloriesBurnedPerSet": 10,
+            "recommendedSets": "3",
+            "recommendedReps": "10-12 per leg",
+            "restSeconds": 60
+        },
+        {
+            "title": "Dumbbell Row",
+            "description": "Back exercise performed with one arm at a time",
+            "primaryMuscle": "back",
+            "secondaryMuscles": [
+                "biceps",
+                "core"
+            ],
+            "equipment": [
+                "dumbbell",
+                "bench"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Place one knee and hand on bench",
+                "Hold dumbbell in other hand",
+                "Pull dumbbell to hip",
+                "Squeeze shoulder blade",
+                "Lower with control",
+                "Keep back flat"
+            ],
+            "videoUrl": "",
+            "images": [],
+            "tags": [
+                "unilateral",
+                "pull",
+                "back"
+            ],
+            "caloriesBurnedPerSet": 8,
+            "recommendedSets": "3-4",
+            "recommendedReps": "10-12 per arm",
+            "restSeconds": 60
+        }
+    ],
+    "metadata": {
+        "total_exercises": 10,
+        "difficulty_distribution": {
+            "beginner": 5,
+            "intermediate": 4,
+            "advanced": 1
+        },
+        "muscle_groups_covered": [
+            "chest",
+            "back",
+            "legs",
+            "shoulders",
+            "arms",
+            "core"
+        ],
+        "note": "This is mock data for testing. Replace with scraped data from fitness websites."
+    }
+}
