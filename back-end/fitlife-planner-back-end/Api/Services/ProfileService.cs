@@ -73,7 +73,7 @@ namespace fitlife_planner_back_end.Api.Services
         //         _logger.LogInformation("Profile user id  {}", profile.UserId );
         //         _logger.LogInformation("Profile displayName {}", profile.DisplayName );
         //         _logger.LogInformation("Profile avatarUri  {}", profile.AvatarUrl );
-        //         
+        //
         //         return profile ?? throw new Exception("Profile not found");
         // }
         //     catch (Exception e)
@@ -99,21 +99,19 @@ namespace fitlife_planner_back_end.Api.Services
         public async Task<CreateProfileResponseDto> CreateProfile(CreateProfileRequestDTO dto, Guid userId)
         {
             var existing = await _dbContext.Profiles.AnyAsync(p => p.UserId == userId);
-            if (existing == null)
+            if (existing)
             {
                 _logger.LogInformation("Profile creation failed: Profile already exists for user {UserId}", userId);
-                throw new Exception("Failed to create profile");
+                throw new Exception("Profile already exists for this user");
             }
 
             var profile = _mapping.InsertProfileMapper(dto, userId);
-            var createdProfile = await _dbContext.Profiles.AddAsync(profile) ??
-                                 throw new Exception("Failed to create profile");
-            ;
+            var createdProfile = await _dbContext.Profiles.AddAsync(profile);
             await _dbContext.SaveChangesAsync();
 
-            if (createdProfile == null)
+            if (createdProfile == null || createdProfile.Entity == null)
             {
-                _logger.LogInformation("Profile creation failed: Profile already exists for user {UserId}", userId);
+                _logger.LogError("Profile creation failed for user {UserId}", userId);
                 throw new Exception("Failed to create profile");
             }
 

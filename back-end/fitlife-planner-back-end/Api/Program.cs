@@ -86,7 +86,10 @@ builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<Authe
     .AddScoped<WorkoutScheduleService>()
     .AddScoped<ProgressService>()
     .AddScoped<ChallengeService>()
-    .AddScoped<NotificationService>();
+    .AddScoped<NotificationService>()
+    .AddScoped<FollowerService>()
+    .AddScoped<NutritionDataSeeder>()
+    .AddScoped<RecommendationService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connString = $"Server={host};Port={port};Database={db};User={user};Password={pass};SslMode={ssl};";

@@ -69,7 +69,7 @@ public class FoodItemController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     [HttpPost]
     public async Task<ApiResponse<GetFoodItemResponseDTO>> CreateFoodItem([FromBody] CreateFoodItemRequestDTO dto)
     {
@@ -93,7 +93,7 @@ public class FoodItemController : ControllerBase
         }
     }
 
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<ApiResponse<bool>> DeleteFoodItem(Guid id)
     {

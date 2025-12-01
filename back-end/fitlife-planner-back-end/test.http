@@ -1,125 +1,775 @@
-@host = http://localhost:5000
-@newEmail = test@example.com
-@password = Password123!
-@username = newuser
+###############################################################################
+# FitLife Planner API Test Suite
+# Run tests sequentially from top to bottom
+# Each test extracts variables for the next test
+###############################################################################
 
-### 1. Create Account
+@host = http://localhost:5000
+@randomEmail = test{{$timestamp}}@example.com
+@password = Password123!
+@username = user{{$timestamp}}
+
+###############################################################################
+# STEP 1: AUTHENTICATION - Create Account & Login
+###############################################################################
+
+### 1.1 Create New Account
 POST {{host}}/account
 Content-Type: application/json
 
 {
   "username": "{{username}}",
-  "email": "{{newEmail}}",
+  "email": "{{randomEmail}}",
   "password": "{{password}}"
 }
 
 > {%
-    if (!response.body.success) {
-        throw new Error("❌ Create account failed: " + response.body.message);
+    client.test("Account created successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.success === true, "Success is not true");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("userId", response.body.data.id);
+        client.log("✅ Account created. User ID: " + response.body.data.id);
     }
-    client.global.set("userId", response.body.data.id);
-    client.global.set("userName", response.body.data.username);
 %}
 
-### 2. Login
+### 1.2 Login with New Account
 POST {{host}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "{{newEmail}}",
+  "email": "{{randomEmail}}",
   "password": "{{password}}"
 }
 
 > {%
-    if (!response.body.success) {
-        throw new Error("❌ Login failed: " + response.body.message);
+    client.test("Login successful", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.success === true, "Login failed");
+        client.assert(response.body.data.token !== undefined, "No token received");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("token", response.body.data.token);
+        client.global.set("refreshToken", response.body.data.refreshToken);
+        client.log("✅ Login successful. Token saved.");
     }
-    client.global.set("token", response.body.data.token);
-    client.global.set("refreshToken", response.body.data.refreshToken);
 %}
 
-### 3. Get Account Info
+### 1.3 Get Account Info (Verify Token)
 GET {{host}}/account
 Authorization: Bearer {{token}}
 
 > {%
-    if (!response.body.success) {
-        throw new Error("❌ Get account failed: " + response.body.message);
+    client.test("Get account info successful", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.success === true, "Failed to get account");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("userId", response.body.data.id);
+        client.log("✅ Account verified. User ID: " + response.body.data.id);
     }
-    client.global.set("userId", response.body.data.id);
-    client.global.set("userName", response.body.data.username);
 %}
 
-### 4. Get My Profile
+###############################################################################
+# STEP 2: PROFILE - Get/Create Profile (Required for BMI)
+###############################################################################
+
+### 2.1 Get My Profile (May not exist yet)
 GET {{host}}/profile
 Authorization: Bearer {{token}}
 
 > {%
-    if (!response.body.success) {
-        throw new Error("❌ Get profile failed: " + response.body.message);
+    if (response.body.success && response.body.data) {
+        client.global.set("profileId", response.body.data.profileId);
+        client.log("✅ Profile exists. Profile ID: " + response.body.data.profileId);
+    } else {
+        client.log("ℹ️ Profile not found. Will be created with BMI record.");
     }
-    client.global.set("profileId", response.body.data.id);
 %}
 
-### 5. Update Profile
+### 2.2 Update/Create Profile
 PUT {{host}}/profile
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "displayName": "Updated Name",
-  "avatarUrl": "https://example.com/avatar-updated.png",
-  "birthDate": "2000-01-01T00:00:00",
+  "displayName": "Test User",
+  "avatarUrl": "https://example.com/avatar.png",
+  "birthDate": "1995-05-15T00:00:00Z",
   "gender": 0,
-  "bio": "Updated bio"
+  "bio": "Fitness enthusiast testing the app"
 }
 
 > {%
-    if (!response.body.success) {
-        throw new Error("❌ Update profile failed: " + response.body.message);
+    client.test("Profile updated/created", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("profileId", response.body.data.profileId);
+        client.log("✅ Profile saved. Profile ID: " + response.body.data.profileId);
     }
 %}
 
-### 6. Calculate BMI
+###############################################################################
+# STEP 3: BMI & NUTRITION PLANNING
+###############################################################################
+
+### 3.1 Calculate BMI
 POST {{host}}/bmi/calculate
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "heightCm": 180,
-  "weightKg": 65
+  "heightCm": 175,
+  "weightKg": 70
 }
 
 > {%
-    if (!response.body.success) {
-        throw new Error("❌ Calculate BMI failed: " + response.body.message);
+    client.test("BMI calculated", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+        client.assert(response.body.success === true, "BMI calculation failed");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("calculatedBmi", response.body.data.bmi);
+        client.log("✅ BMI calculated: " + response.body.data.bmi);
     }
-    client.global.set("calculatedBmi", response.body.data.bmi);
 %}
 
-### 7. Create BMI Record / Planner
+### 3.2 Create BMI Record & Choose Plan
 POST {{host}}/bmi/me
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "practiceLevel": 1,
-  "activityFactor": 1.2
+  "practiceLevel": 2,
+  "activityFactor": 1.5
 }
 
 > {%
-    if (!response.body.success) {
-        throw new Error("❌ Create BMI record / planner failed: " + response.body.message);
+    client.test("BMI record created", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("bmiRecordId", response.body.data.bmiRecordId);
+        client.global.set("nutritionPlanId", response.body.data.nutritionPlanId);
+        client.log("✅ BMI record created. ID: " + response.body.data.bmiRecordId);
     }
-    client.global.set("bmiRecordId", response.body.data.bmiRecordId);
 %}
 
-### 8. Get All Profiles (Admin)
-GET {{host}}/profile/all?PageNumber=1&PageSize=10
+###############################################################################
+# STEP 4: FOOD ITEMS - Create Test Data
+###############################################################################
+
+### 4.1 Create Food Item #1
+POST {{host}}/food-items
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Grilled Chicken Breast",
+  "servingSize": "100g",
+  "servingAmount": 1,
+  "caloriesKcal": 165,
+  "proteinG": 31,
+  "carbsG": 0,
+  "fatG": 3.6,
+  "fiberG": 0,
+  "sodiumMg": 74,
+  "micronutrients": "{}"
+}
+
+> {%
+    client.test("Food item created", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("foodItemId1", response.body.data.id);
+        client.log("✅ Food item created: " + response.body.data.name);
+    }
+%}
+
+### 4.2 Create Food Item #2
+POST {{host}}/food-items
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Brown Rice",
+  "servingSize": "100g",
+  "servingAmount": 1,
+  "caloriesKcal": 112,
+  "proteinG": 2.6,
+  "carbsG": 24,
+  "fatG": 0.9,
+  "fiberG": 1.8,
+  "sodiumMg": 5,
+  "micronutrients": "{}"
+}
+
+> {%
+    if (response.body.success && response.body.data) {
+        client.global.set("foodItemId2", response.body.data.id);
+        client.log("✅ Food item created: " + response.body.data.name);
+    }
+%}
+
+### 4.3 Get All Food Items
+GET {{host}}/food-items?PageNumber=1&PageSize=20
 Authorization: Bearer {{token}}
 
 > {%
-    if (!response.body.success) {
-        throw new Error("❌ Get all profiles failed: " + response.body.message);
+    client.test("Food items retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Food items list retrieved");
+%}
+
+### 4.4 Get Food Item by ID
+GET {{host}}/food-items/{{foodItemId1}}
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Food item retrieved by ID", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+%}
+
+###############################################################################
+# STEP 5: WORKOUTS - Create Test Data
+###############################################################################
+
+### 5.1 Create Workout
+POST {{host}}/workouts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Upper Body Strength",
+  "description": "Chest, shoulders, and triceps workout",
+  "durationMinutes": 60,
+  "caloriesBurned": 300,
+  "exercises": "[{\"name\": \"Bench Press\", \"sets\": 4, \"reps\": 10}]",
+  "scheduledFor": "2024-12-02T10:00:00Z"
+}
+
+> {%
+    client.test("Workout created", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("workoutId", response.body.data.id);
+        client.log("✅ Workout created. ID: " + response.body.data.id);
     }
 %}
+
+### 5.2 Get My Workouts
+GET {{host}}/workouts/me
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Workouts retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Workouts list retrieved");
+%}
+
+### 5.3 Get Workout by ID
+GET {{host}}/workouts/{{workoutId}}
+Authorization: Bearer {{token}}
+
+###############################################################################
+# STEP 6: PROGRESS TRACKING
+###############################################################################
+
+### 6.1 Create Progress Entry - Weight
+POST {{host}}/progress
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "weight",
+  "value": 70.5,
+  "unit": "kg",
+  "notes": "Morning weight after workout",
+  "recordedAt": "2024-12-01T08:00:00Z"
+}
+
+> {%
+    client.test("Progress entry created", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("progressId", response.body.data.id);
+        client.log("✅ Progress entry created. ID: " + response.body.data.id);
+    }
+%}
+
+### 6.2 Get My Progress Entries
+GET {{host}}/progress/me
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Progress entries retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Progress entries retrieved");
+%}
+
+###############################################################################
+# STEP 7: CHALLENGES
+###############################################################################
+
+### 7.1 Create Challenge
+POST {{host}}/challenges
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "30-Day Plank Challenge",
+  "description": "Build core strength with daily planks",
+  "type": "fitness",
+  "goal": "Hold plank for 5 minutes",
+  "startDate": "2024-12-01T00:00:00Z",
+  "endDate": "2024-12-31T23:59:59Z",
+  "rules": "{\"daily_target\": \"60 seconds\", \"progression\": \"increase 5s daily\"}"
+}
+
+> {%
+    client.test("Challenge created", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("challengeId", response.body.data.id);
+        client.log("✅ Challenge created. ID: " + response.body.data.id);
+    }
+%}
+
+### 7.2 Get All Challenges
+GET {{host}}/challenges?PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+### 7.3 Join Challenge
+POST {{host}}/challenges/{{challengeId}}/join
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Joined challenge", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Joined challenge");
+%}
+
+### 7.4 Get My Challenges
+GET {{host}}/challenges/me
+Authorization: Bearer {{token}}
+
+###############################################################################
+# STEP 8: SOCIAL FEATURES - Need Second User
+###############################################################################
+
+### 8.1 Create Second User Account
+POST {{host}}/account
+Content-Type: application/json
+
+{
+  "username": "user2{{$timestamp}}",
+  "email": "test2{{$timestamp}}@example.com",
+  "password": "{{password}}"
+}
+
+> {%
+    if (response.body.success && response.body.data) {
+        client.global.set("user2Id", response.body.data.id);
+        client.log("✅ Second user created. ID: " + response.body.data.id);
+    }
+%}
+
+### 8.2 Follow Second User
+POST {{host}}/api/followers/{{user2Id}}/follow
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Followed user", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Followed user");
+%}
+
+### 8.3 Get My Followers
+GET {{host}}/api/followers/followers?page=1&pageSize=20
+Authorization: Bearer {{token}}
+
+### 8.4 Get My Following
+GET {{host}}/api/followers/following?page=1&pageSize=20
+Authorization: Bearer {{token}}
+
+### 8.5 Get Follower Stats
+GET {{host}}/api/followers/stats
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Follower stats retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Follower stats retrieved");
+%}
+
+### 8.6 Get Follow Suggestions
+GET {{host}}/api/followers/suggestions?limit=10
+Authorization: Bearer {{token}}
+
+###############################################################################
+# STEP 9: AI RECOMMENDATIONS (Requires BMI Record)
+###############################################################################
+
+### 9.1 Get Personalized Plan
+GET {{host}}/api/recommendations/personalized-plan
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Personalized plan generated", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.log("✅ Personalized plan generated");
+        client.log("   BMI: " + response.body.data.currentBMI);
+        client.log("   Target Calories: " + response.body.data.targetCalories);
+    }
+%}
+
+### 9.2 Get Meal Recommendations
+GET {{host}}/api/recommendations/meals?targetCalories=2000&mealType=breakfast&limit=10
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Meal recommendations retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Meal recommendations retrieved");
+%}
+
+### 9.3 Get Workout Recommendations
+GET {{host}}/api/recommendations/workouts?bmi=22.5&goal=muscle_gain&fitnessLevel=intermediate&limit=5
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Workout recommendations retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Workout recommendations retrieved");
+%}
+
+### 9.4 Get Daily Tip
+GET {{host}}/api/recommendations/daily-tip
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Daily tip retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.log("✅ Daily tip: " + response.body.data.tip);
+    }
+%}
+
+###############################################################################
+# STEP 10: POSTS (Social)
+###############################################################################
+
+### 10.1 Create Post
+POST {{host}}/posts
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "content": "Just completed my first 5K run! 🏃‍♂️",
+  "media": "https://example.com/run-photo.jpg"
+}
+
+> {%
+    client.test("Post created", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("postId", response.body.data.id);
+        client.log("✅ Post created. ID: " + response.body.data.id);
+    }
+%}
+
+### 10.2 Get All Posts
+GET {{host}}/posts?PageNumber=1&PageSize=20
+Authorization: Bearer {{token}}
+
+### 10.3 Get Post by ID
+GET {{host}}/posts/{{postId}}
+Authorization: Bearer {{token}}
+
+###############################################################################
+# STEP 11: EXERCISE LIBRARY
+###############################################################################
+
+### 11.1 Get All Exercises
+GET {{host}}/exercise-library?PageNumber=1&PageSize=20
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Exercises retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data && response.body.data.length > 0) {
+        client.global.set("exerciseId", response.body.data[0].id);
+        client.log("✅ Exercises retrieved. First exercise ID: " + response.body.data[0].id);
+    }
+%}
+
+### 11.2 Search Exercises
+GET {{host}}/exercise-library/search?query=bench&PageNumber=1&PageSize=10
+Authorization: Bearer {{token}}
+
+###############################################################################
+# STEP 12: WORKOUT SCHEDULES
+###############################################################################
+
+### 12.1 Create Workout Schedule
+POST {{host}}/workout-schedules
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "workoutId": "{{workoutId}}",
+  "scheduledFor": "2024-12-05T10:00:00Z",
+  "isRecurring": true,
+  "recurrencePattern": "weekly"
+}
+
+> {%
+    client.test("Workout schedule created", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    if (response.body.success && response.body.data) {
+        client.global.set("scheduleId", response.body.data.id);
+        client.log("✅ Workout schedule created. ID: " + response.body.data.id);
+    }
+%}
+
+### 12.2 Get My Workout Schedules
+GET {{host}}/workout-schedules/me
+Authorization: Bearer {{token}}
+
+###############################################################################
+# STEP 13: NOTIFICATIONS
+###############################################################################
+
+### 13.1 Get My Notifications
+GET {{host}}/notifications/me?PageNumber=1&PageSize=20
+Authorization: Bearer {{token}}
+
+> {%
+    client.test("Notifications retrieved", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Notifications retrieved");
+%}
+
+###############################################################################
+# STEP 14: ADMIN ENDPOINTS (Requires Admin Role)
+###############################################################################
+
+### 14.1 Seed Nutrition Data (Admin Only - May Fail if Not Admin)
+POST {{host}}/api/admin/seed/nutrition-data
+Authorization: Bearer {{token}}
+
+> {%
+    if (response.status === 200 && response.body.success) {
+        client.log("✅ Nutrition data seeded: " + response.body.data.itemsSeeded + " items");
+    } else if (response.status === 403) {
+        client.log("ℹ️ Admin endpoint - requires admin role");
+    }
+%}
+
+###############################################################################
+# STEP 15: UPDATE & DELETE OPERATIONS
+###############################################################################
+
+### 15.1 Update Food Item
+PUT {{host}}/food-items/{{foodItemId1}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Grilled Chicken Breast (Updated)",
+  "servingSize": "150g",
+  "servingAmount": 1,
+  "caloriesKcal": 248,
+  "proteinG": 46.5,
+  "carbsG": 0,
+  "fatG": 5.4,
+  "fiberG": 0,
+  "sodiumMg": 111,
+  "micronutrients": "{}"
+}
+
+> {%
+    client.test("Food item updated", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Food item updated");
+%}
+
+### 15.2 Update Workout
+PUT {{host}}/workouts/{{workoutId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Upper Body Strength (Updated)",
+  "description": "Added back exercises",
+  "durationMinutes": 75,
+  "caloriesBurned": 350,
+  "exercises": "[{\"name\": \"Bench Press\", \"sets\": 4, \"reps\": 10}, {\"name\": \"Pull-ups\", \"sets\": 3, \"reps\": 8}]",
+  "scheduledFor": "2024-12-02T10:00:00Z"
+}
+
+> {%
+    client.test("Workout updated", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Workout updated");
+%}
+
+### 15.3 Update Progress Entry
+PUT {{host}}/progress/{{progressId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "weight",
+  "value": 70.3,
+  "unit": "kg",
+  "notes": "Corrected measurement",
+  "recordedAt": "2024-12-01T08:00:00Z"
+}
+
+> {%
+    client.test("Progress entry updated", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Progress entry updated");
+%}
+
+### 15.4 Update Post
+PUT {{host}}/posts/{{postId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "content": "Just completed my first 5K run! 🏃‍♂️ New personal best: 25:30!",
+  "media": "https://example.com/run-photo.jpg"
+}
+
+> {%
+    client.test("Post updated", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Post updated");
+%}
+
+###############################################################################
+# STEP 16: HEALTH CHECK
+###############################################################################
+
+### 16.1 Health Check (No Auth Required)
+GET {{host}}/health
+
+> {%
+    client.test("Health check passed", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+    client.log("✅ Health check passed");
+%}
+
+###############################################################################
+# STEP 17: CLEANUP (Optional - Delete Test Data)
+###############################################################################
+
+### 17.1 Delete Post
+DELETE {{host}}/posts/{{postId}}
+Authorization: Bearer {{token}}
+
+> {%
+    if (response.status === 200) {
+        client.log("✅ Post deleted");
+    }
+%}
+
+### 17.2 Delete Progress Entry
+DELETE {{host}}/progress/{{progressId}}
+Authorization: Bearer {{token}}
+
+> {%
+    if (response.status === 200) {
+        client.log("✅ Progress entry deleted");
+    }
+%}
+
+### 17.3 Delete Workout
+DELETE {{host}}/workouts/{{workoutId}}
+Authorization: Bearer {{token}}
+
+> {%
+    if (response.status === 200) {
+        client.log("✅ Workout deleted");
+    }
+%}
+
+### 17.4 Delete Food Items
+DELETE {{host}}/food-items/{{foodItemId1}}
+Authorization: Bearer {{token}}
+
+> {%
+    if (response.status === 200) {
+        client.log("✅ Food item 1 deleted");
+    }
+%}
+
+###
+DELETE {{host}}/food-items/{{foodItemId2}}
+Authorization: Bearer {{token}}
+
+> {%
+    if (response.status === 200) {
+        client.log("✅ Food item 2 deleted");
+    }
+%}
+
+### 17.5 Unfollow User
+DELETE {{host}}/api/followers/{{user2Id}}/unfollow
+Authorization: Bearer {{token}}
+
+> {%
+    if (response.status === 200) {
+        client.log("✅ Unfollowed user");
+    }
+%}
+
+###############################################################################
+# TEST COMPLETE
+# Check the console for ✅ success messages
+# All tests should pass if backend is running correctly
+###############################################################################

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using fitlife_planner_back_end.Api.Enums;
 namespace fitlife_planner_back_end.Api.Configurations
 {
-    public class AppDbContext : DbContext
+    public partial class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -48,6 +48,11 @@ namespace fitlife_planner_back_end.Api.Configurations
 
         // Statistics
         public DbSet<StatsUserWeekly> StatsUserWeekly { get; set; }
+
+        // Gamification
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<UserAchievement> UserAchievements { get; set; }
+        public DbSet<Streak> Streaks { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -435,7 +440,74 @@ namespace fitlife_planner_back_end.Api.Configurations
                 entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
             });
+
+            // Achievement configuration
+            modelBuilder.Entity<Achievement>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Name).HasMaxLength(100).IsRequired();
+                entity.Property(e => e.Description).HasMaxLength(500);
+                entity.Property(e => e.Category).HasMaxLength(50).IsRequired();
+                entity.Property(e => e.BadgeIcon).HasMaxLength(10);
+                entity.Property(e => e.Tier).HasMaxLength(20);
+                entity.Property(e => e.Criteria).HasColumnType("text");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+            });
+
+            // UserAchievement configuration
+            modelBuilder.Entity<UserAchievement>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.AchievementId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.UnlockedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                // Relationships
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.Achievement)
+                    .WithMany()
+                    .HasForeignKey(e => e.AchievementId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Prevent duplicate achievements
+                entity.HasIndex(e => new { e.UserId, e.AchievementId }).IsUnique();
+            });
+
+            // Streak configuration
+            modelBuilder.Entity<Streak>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Type).HasMaxLength(50).IsRequired();
+                entity.Property(e => e.LastActivityDate).HasColumnType("datetime");
+                entity.Property(e => e.CreatedAt)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                // Relationships
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // One streak per user per type
+                entity.HasIndex(e => new { e.UserId, e.Type }).IsUnique();
+            });
+
+            OnModelCreatingPartial(modelBuilder);
         }
 
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

@@ -22,6 +22,54 @@ namespace fitlife_planner_back_end.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Achievement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("BadgeIcon")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Criteria")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("varchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tier")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Achievements");
+                });
+
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.BMIRecord", b =>
                 {
                     b.Property<Guid>("BmiRecordId")
@@ -71,9 +119,6 @@ namespace fitlife_planner_back_end.Migrations
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("ProfileId1")
-                        .HasColumnType("char(36)");
-
                     b.Property<double>("WeightKg")
                         .HasColumnType("double");
 
@@ -81,9 +126,377 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.HasIndex("ProfileId1");
-
                     b.ToTable("BmiRecords");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Challenge", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Reward")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Rules")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("Strike")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Challenges");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ChallengeParticipant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ChallengeId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("FinalResult")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("JoinedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Progress")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("active");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChallengeId");
+
+                    b.ToTable("ChallengeParticipants");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ExerciseLibrary", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Difficulty")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Equipment")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Images")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PrimaryMuscle")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("SecondaryMuscles")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("VideoUrl")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ExerciseLibrary");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ExerciseTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("ExerciseTags");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.FoodItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int?>("CaloriesKcal")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("CarbsG")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<decimal?>("FatG")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal?>("FiberG")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("Micronutrients")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<decimal?>("ProteinG")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int?>("ServingAmount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ServingSize")
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("SodiumMg")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FoodItems");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Message", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Attachments")
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("ChannelId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContentType")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("SenderId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Notification", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsRead")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("tinyint(1)")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("ReadAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.NutritionPlan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int?>("CaloriesTargetKcal")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Macros")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("OwnerUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Visibility")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("private");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NutritionPlans");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.NutritionPlanItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("FoodItemId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("MealTime")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal?>("ServingCount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FoodItemId");
+
+                    b.HasIndex("PlanId");
+
+                    b.ToTable("NutritionPlanItems");
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Post", b =>
@@ -118,6 +531,11 @@ namespace fitlife_planner_back_end.Migrations
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("char(36)");
 
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2);
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -132,6 +550,59 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("ProfileId");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.PostComment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostComments");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.PostLike", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("PostLikes");
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Profile", b =>
@@ -172,6 +643,9 @@ namespace fitlife_planner_back_end.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("char(36)");
+
                     b.Property<int>("Version")
                         .HasColumnType("int");
 
@@ -180,7 +654,147 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
+                    b.HasIndex("UserId1")
+                        .IsUnique();
+
                     b.ToTable("Profiles");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ProgressEntry", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<decimal?>("NumericValue")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("PhotoUrl")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
+
+                    b.Property<DateTime>("RecordedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("TextValue")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProgressEntries");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ReviewerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("TargetUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.StatsUserWeekly", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int?>("CaloriesBurnedEst")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int?>("Steps")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("WeekStart")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("WorkoutsCompleted")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StatsUserWeekly");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Streak", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<int>("CurrentStreak")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastActivityDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("LongestStreak")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId", "Type")
+                        .IsUnique();
+
+                    b.ToTable("Streaks");
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Token", b =>
@@ -269,21 +883,265 @@ namespace fitlife_planner_back_end.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.UserAchievement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("AchievementId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsNotified")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Progress")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UnlockedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AchievementId");
+
+                    b.HasIndex("UserId", "AchievementId")
+                        .IsUnique();
+
+                    b.ToTable("UserAchievements");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.UserFollower", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<Guid>("FollowerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowerId");
+
+                    b.HasIndex("UserId", "FollowerId")
+                        .IsUnique();
+
+                    b.ToTable("UserFollowers");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.UserSettings", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("NotificationPrefs")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Preferences")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserSettings");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Workout", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("DurationMin")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Intensity")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid>("OwnerUserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Workouts");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.WorkoutExercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("OrderIndex")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Reps")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int?>("RestSeconds")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Sets")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Tempo")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<Guid>("WorkoutId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WorkoutExercises");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.WorkoutSchedule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime?>("ScheduledDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<TimeSpan?>("ScheduledTime")
+                        .HasColumnType("time(6)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)")
+                        .HasDefaultValue("planned");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("WorkoutId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WorkoutSchedules");
+                });
+
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.BMIRecord", b =>
                 {
-                    b.HasOne("fitlife_planner_back_end.Api.Models.Profile", null)
-                        .WithMany()
+                    b.HasOne("fitlife_planner_back_end.Api.Models.Profile", "Profile")
+                        .WithMany("BmiRecords")
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("fitlife_planner_back_end.Api.Models.Profile", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId1")
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ChallengeParticipant", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.Challenge", "Challenge")
+                        .WithMany("Participants")
+                        .HasForeignKey("ChallengeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Profile");
+                    b.Navigation("Challenge");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ExerciseTag", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.ExerciseLibrary", "Exercise")
+                        .WithMany("Tags")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.NutritionPlanItem", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.FoodItem", "FoodItem")
+                        .WithMany()
+                        .HasForeignKey("FoodItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("fitlife_planner_back_end.Api.Models.NutritionPlan", "NutritionPlan")
+                        .WithMany("Items")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FoodItem");
+
+                    b.Navigation("NutritionPlan");
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Post", b =>
@@ -297,6 +1155,28 @@ namespace fitlife_planner_back_end.Migrations
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.PostComment", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.PostLike", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Profile", b =>
                 {
                     b.HasOne("fitlife_planner_back_end.Api.Models.User", null)
@@ -304,6 +1184,21 @@ namespace fitlife_planner_back_end.Migrations
                         .HasForeignKey("fitlife_planner_back_end.Api.Models.Profile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("fitlife_planner_back_end.Api.Models.User", null)
+                        .WithOne("Profile")
+                        .HasForeignKey("fitlife_planner_back_end.Api.Models.Profile", "UserId1");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Streak", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Token", b =>
@@ -317,9 +1212,104 @@ namespace fitlife_planner_back_end.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.UserAchievement", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.Achievement", "Achievement")
+                        .WithMany()
+                        .HasForeignKey("AchievementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fitlife_planner_back_end.Api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Achievement");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.UserFollower", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.User", "Follower")
+                        .WithMany()
+                        .HasForeignKey("FollowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fitlife_planner_back_end.Api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Follower");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.WorkoutExercise", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.ExerciseLibrary", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("fitlife_planner_back_end.Api.Models.Workout", "Workout")
+                        .WithMany("Exercises")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.WorkoutSchedule", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.Workout", "Workout")
+                        .WithMany()
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Workout");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Challenge", b =>
+                {
+                    b.Navigation("Participants");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ExerciseLibrary", b =>
+                {
+                    b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.NutritionPlan", b =>
+                {
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Profile", b =>
                 {
+                    b.Navigation("BmiRecords");
+
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.User", b =>
+                {
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Workout", b =>
+                {
+                    b.Navigation("Exercises");
                 });
 #pragma warning restore 612, 618
         }

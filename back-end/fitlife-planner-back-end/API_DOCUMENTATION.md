@@ -2,8 +2,9 @@
 
 ## Base URL
 ```
-http://localhost:5000
+https://alaca.onrender.com
 ```
+
 
 ## Authentication
 
@@ -813,6 +814,300 @@ async function createWorkout(workoutData) {
 ```
 
 ---
+
+## Social Features - Followers
+
+### 28. Follow a User
+**POST** `/api/followers/{userId}/follow`
+
+**Headers:**
+```
+Authorization: Bearer {access_token}
+```
+
+**Path Parameters:**
+- `userId` - UUID of the user to follow
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully followed user",
+  "data": true,
+  "statusCode": 200
+}
+```
+
+**Error Cases:**
+- `400` - Cannot follow yourself
+- `404` - User not found
+- Already following returns `data: false`
+
+---
+
+### 29. Unfollow a User
+**DELETE** `/api/followers/{userId}/unfollow`
+
+**Headers:**
+```
+Authorization: Bearer {access_token}
+```
+
+**Path Parameters:**
+- `userId` - UUID of the user to unfollow
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully unfollowed user",
+  "data": true,
+  "statusCode": 200
+}
+```
+
+---
+
+### 30. Get Followers List
+**GET** `/api/followers/followers`
+
+Get list of users who follow you (or specified user).
+
+**Headers:**
+```
+Authorization: Bearer {access_token}
+```
+
+**Query Parameters:**
+- `userId` (optional) - Get followers of specific user (defaults to current user)
+- `page` (optional, default: 1) - Page number
+- `pageSize` (optional, default: 20) - Items per page
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully retrieved followers",
+  "data": [
+    {
+      "id": "uuid",
+      "userId": "uuid",
+      "followerId": "uuid",
+      "username": "johndoe",
+      "displayName": "John Doe",
+      "avatarUrl": "https://...",
+      "followedAt": "2024-01-15T10:30:00Z"
+    }
+  ],
+  "statusCode": 200
+}
+```
+
+---
+
+### 31. Get Following List
+**GET** `/api/followers/following`
+
+Get list of users that you (or specified user) follow.
+
+**Headers:**
+```
+Authorization: Bearer {access_token}
+```
+
+**Query Parameters:**
+- `userId` (optional) - Get following list of specific user (defaults to current user)
+- `page` (optional, default: 1)
+- `pageSize` (optional, default: 20)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully retrieved following list",
+  "data": [
+    {
+      "id": "uuid",
+      "userId": "uuid",
+      "followerId": "uuid",
+      "username": "janedoe",
+      "displayName": "Jane Doe",
+      "avatarUrl": "https://...",
+      "followedAt": "2024-01-10T14:20:00Z"
+    }
+  ],
+  "statusCode": 200
+}
+```
+
+---
+
+### 32. Get Follower Statistics
+**GET** `/api/followers/stats`
+
+Get follower/following counts and relationship status.
+
+**Headers:**
+```
+Authorization: Bearer {access_token}
+```
+
+**Query Parameters:**
+- `userId` (optional) - Get stats for specific user (defaults to current user)
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully retrieved follower stats",
+  "data": {
+    "followersCount": 150,
+    "followingCount": 75,
+    "isFollowing": true,
+    "isFollowedBy": false
+  },
+  "statusCode": 200
+}
+```
+
+**Fields:**
+- `followersCount` - Number of followers
+- `followingCount` - Number of users being followed
+- `isFollowing` - Whether current user follows the target user
+- `isFollowedBy` - Whether target user follows current user
+
+---
+
+### 33. Get Mutual Followers
+**GET** `/api/followers/{userId}/mutual`
+
+Get users that both you and the target user follow.
+
+**Headers:**
+```
+Authorization: Bearer {access_token}
+```
+
+**Path Parameters:**
+- `userId` - UUID of the user to compare with
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully retrieved mutual followers",
+  "data": [
+    {
+      "id": "uuid",
+      "userId": "uuid",
+      "followerId": "uuid",
+      "username": "mutualfriend",
+      "displayName": "Mutual Friend",
+      "avatarUrl": "https://...",
+      "followedAt": "2024-01-05T09:15:00Z"
+    }
+  ],
+  "statusCode": 200
+}
+```
+
+---
+
+### 34. Get Follow Suggestions
+**GET** `/api/followers/suggestions`
+
+Get smart follow suggestions based on mutual connections and popularity.
+
+**Headers:**
+```
+Authorization: Bearer {access_token}
+```
+
+**Query Parameters:**
+- `limit` (optional, default: 10) - Number of suggestions to return
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Successfully retrieved follow suggestions",
+  "data": [
+    {
+      "userId": "uuid",
+      "username": "fitnessguru",
+      "displayName": "Fitness Guru",
+      "avatarUrl": "https://...",
+      "mutualFollowersCount": 5,
+      "suggestionReason": "Followed by 5 people you follow"
+    },
+    {
+      "userId": "uuid",
+      "username": "gymrat",
+      "displayName": "Gym Rat",
+      "avatarUrl": "https://...",
+      "mutualFollowersCount": 0,
+      "suggestionReason": "Popular in community (250 followers)"
+    }
+  ],
+  "statusCode": 200
+}
+```
+
+**Algorithm:**
+- Prioritizes users followed by people you follow (friends-of-friends)
+- Falls back to popular users if not enough suggestions
+- Excludes users you already follow
+
+---
+
+## Frontend Integration Examples - Followers
+
+### Follow/Unfollow Button Component
+
+```javascript
+async function toggleFollow(userId, isFollowing) {
+  try {
+    if (isFollowing) {
+      await api.delete(`/api/followers/${userId}/unfollow`);
+      return false; // Now unfollowed
+    } else {
+      await api.post(`/api/followers/${userId}/follow`);
+      return true; // Now following
+    }
+  } catch (error) {
+    console.error('Follow/unfollow error:', error);
+    throw error;
+  }
+}
+```
+
+### Get User Profile with Stats
+
+```javascript
+async function getUserProfile(userId) {
+  const [profile, stats] = await Promise.all([
+    api.get(`/profile/${userId}`),
+    api.get(`/api/followers/stats?userId=${userId}`)
+  ]);
+
+  return {
+    ...profile.data.data,
+    ...stats.data.data
+  };
+}
+```
+
+### Load Follow Suggestions
+
+```javascript
+async function loadFollowSuggestions() {
+  const response = await api.get('/api/followers/suggestions?limit=10');
+  return response.data.data;
+}
+```
+
+---
+
 
 ## Notes for Frontend Developers
 
