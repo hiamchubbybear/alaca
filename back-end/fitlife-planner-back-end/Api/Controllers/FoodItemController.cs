@@ -5,6 +5,8 @@ using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using fitlife_planner_back_end.Api.Extensions;
+
 
 namespace fitlife_planner_back_end.Api.Controllers;
 
@@ -23,97 +25,113 @@ public class FoodItemController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<ApiResponse<List<GetFoodItemResponseDTO>>> GetAllFoodItems()
+    public async Task<IActionResult> GetAllFoodItems()
     {
         try
         {
             var foodItems = await _foodItemService.GetAllFoodItems();
-            return new ApiResponse<List<GetFoodItemResponseDTO>>(
+            var response = new ApiResponse<List<GetFoodItemResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved food items",
                 data: foodItems,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<List<GetFoodItemResponseDTO>>(
+            var response = new ApiResponse<List<GetFoodItemResponseDTO>>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpGet("{id:guid}")]
-    public async Task<ApiResponse<GetFoodItemResponseDTO>> GetFoodItemById(Guid id)
+    public async Task<IActionResult> GetFoodItemById(Guid id)
     {
         try
         {
             var foodItem = await _foodItemService.GetFoodItemById(id);
-            return new ApiResponse<GetFoodItemResponseDTO>(
+            var response = new ApiResponse<GetFoodItemResponseDTO>(
                 success: true,
                 message: "Successfully retrieved food item",
                 data: foodItem,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetFoodItemResponseDTO>(
+            var response = new ApiResponse<GetFoodItemResponseDTO>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.NotFound
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpPost]
-    public async Task<ApiResponse<GetFoodItemResponseDTO>> CreateFoodItem([FromBody] CreateFoodItemRequestDTO dto)
+    public async Task<IActionResult> CreateFoodItem([FromBody] CreateFoodItemRequestDTO dto)
     {
         try
         {
             var foodItem = await _foodItemService.CreateFoodItem(dto);
-            return new ApiResponse<GetFoodItemResponseDTO>(
+            var response = new ApiResponse<GetFoodItemResponseDTO>(
                 success: true,
                 message: "Successfully created food item",
                 data: foodItem,
                 statusCode: HttpStatusCode.Created
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetFoodItemResponseDTO>(
+            var response = new ApiResponse<GetFoodItemResponseDTO>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpDelete("{id:guid}")]
-    public async Task<ApiResponse<bool>> DeleteFoodItem(Guid id)
+    public async Task<IActionResult> DeleteFoodItem(Guid id)
     {
         try
         {
             var result = await _foodItemService.DeleteFoodItem(id);
-            return new ApiResponse<bool>(
+            var response = new ApiResponse<bool>(
                 success: true,
                 message: "Successfully deleted food item",
                 data: result,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<bool>(
+            var response = new ApiResponse<bool>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 }

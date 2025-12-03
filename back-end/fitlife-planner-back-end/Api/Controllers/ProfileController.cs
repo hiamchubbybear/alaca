@@ -2,6 +2,7 @@ using System.Net;
 using APIResponseWrapper;
 using fitlife_planner_back_end.Api.DTOs.Responses;
 using fitlife_planner_back_end.Api.DTOs.Resquests;
+using fitlife_planner_back_end.Api.Extensions;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -15,18 +16,20 @@ public class ProfileController(ILogger<ProfileController> logger, ProfileService
 {
     [Authorize]
     [HttpGet]
-    public async Task<ApiResponse<GetProfileResponseDto>> GetProfile()
+    public async Task<IActionResult> GetProfile()
     {
         try
         {
             var profileResponse = await profileService.GetMyProfile();
-            return new ApiResponse<GetProfileResponseDto>(success: true, message: "Successfully retrieved Profile",
-                statusCode: HttpStatusCode.Found, data: profileResponse);
+            var response = new ApiResponse<GetProfileResponseDto>(success: true, message: "Successfully retrieved Profile",
+                statusCode: HttpStatusCode.OK, data: profileResponse);
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetProfileResponseDto>(success: true, message: e.Message,
+            var response = new ApiResponse<GetProfileResponseDto>(success: false, message: e.Message,
                 statusCode: HttpStatusCode.BadRequest);
+            return response.ToActionResult();
         }
     }
 
@@ -53,36 +56,38 @@ public class ProfileController(ILogger<ProfileController> logger, ProfileService
     // [Authorize(Roles = "Admin")]
     [Authorize]
     [HttpGet("all")]
-    public async Task<ApiResponse<PaginatedList<Profile>>> GetAllProfile([FromQuery] PaginationParameters pagination)
+    public async Task<IActionResult> GetAllProfile([FromQuery] PaginationParameters pagination)
     {
         var profiles = await profileService.GetAllProfilesAsync(pagination);
-
-        return await Task.FromResult(new ApiResponse<PaginatedList<Profile>>(
+        var response = new ApiResponse<PaginatedList<Profile>>(
             success: true,
             message: "Successfully retrieved profiles",
             data: profiles,
             statusCode: HttpStatusCode.OK
-        ));
+        );
+        return response.ToActionResult();
     }
 
 
     [HttpPut()]
-    public async Task<ApiResponse<UpdateProfileResponseDto>> UpdateProfile(
+    public async Task<IActionResult> UpdateProfile(
         [FromBody] UpdateProfileRequestDto dto)
     {
         try
         {
             var result = await profileService.UpdateProfile( dto);
-            return new ApiResponse<UpdateProfileResponseDto>(
+            var response = new ApiResponse<UpdateProfileResponseDto>(
                 success: true,
                 message: "Successfully updated Profile",
                 data: result,
                 statusCode: HttpStatusCode.OK);
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<UpdateProfileResponseDto>(success: false, message: e.Message,
+            var errorResponse = new ApiResponse<UpdateProfileResponseDto>(success: false, message: e.Message,
                 statusCode: HttpStatusCode.BadRequest);
+            return errorResponse.ToActionResult();
         }
     }
 }

@@ -3,6 +3,7 @@ using APIResponseWrapper;
 using fitlife_planner_back_end.Api.Configurations;
 using fitlife_planner_back_end.Api.DTOs;
 using fitlife_planner_back_end.Api.DTOs.Resquests;
+using fitlife_planner_back_end.Api.Extensions;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Util;
 using fitlife_planner_back_end.Application.Services;
@@ -17,38 +18,45 @@ public class AccountController(ILogger<AccountController> logger, UserService us
 {
     [Authorize]
     [HttpGet]
-    public async Task<ApiResponse<User>> GetUser()
+    public async Task<IActionResult> GetUser()
     {
         try
         {
             var userResponse = await userService.GetUser();
             if (userResponse != null)
-                return new ApiResponse<User>(success: true, message: "Successfully retrieved user",
-                    statusCode: HttpStatusCode.Found, data: userResponse);
-            return new ApiResponse<User>(success: true, message: "Failed to find user",
+            {
+                var response = new ApiResponse<User>(success: true, message: "Successfully retrieved user",
+                    statusCode: HttpStatusCode.OK, data: userResponse);
+                return response.ToActionResult();
+            }
+            var errorResponse = new ApiResponse<User>(success: false, message: "Failed to find user",
                 statusCode: HttpStatusCode.BadRequest);
+            return errorResponse.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<User>(success: true, message: e.Message,
+            var response = new ApiResponse<User>(success: false, message: e.Message,
                 statusCode: HttpStatusCode.BadRequest);
+            return response.ToActionResult();
         }
     }
 
     [HttpPost]
-    public async Task<ApiResponse<CreateAccountRequestDto>> CreateUser([FromBody] CreateAccountRequestDto user)
+    public async Task<IActionResult> CreateUser([FromBody] CreateAccountRequestDto user)
     {
         try
         {
             var userResponse = await userService.CreateUser(user);
-            return new ApiResponse<CreateAccountRequestDto>(success: true, message: "Successfully retrieved user",
+            var response = new ApiResponse<CreateAccountRequestDto>(success: true, message: "Successfully created user",
                 data: userResponse,
-                statusCode: HttpStatusCode.Found);
+                statusCode: HttpStatusCode.Created);
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<CreateAccountRequestDto>(success: true, message: e.Message,
+            var response = new ApiResponse<CreateAccountRequestDto>(success: false, message: e.Message,
                 statusCode: HttpStatusCode.BadRequest);
+            return response.ToActionResult();
         }
     }
 }

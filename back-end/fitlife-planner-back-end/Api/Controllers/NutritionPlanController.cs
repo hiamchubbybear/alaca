@@ -5,6 +5,8 @@ using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using fitlife_planner_back_end.Api.Extensions;
+
 
 namespace fitlife_planner_back_end.Api.Controllers;
 
@@ -23,121 +25,141 @@ public class NutritionPlanController : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<ApiResponse<List<GetNutritionPlanResponseDTO>>> GetMyNutritionPlans()
+    public async Task<IActionResult> GetMyNutritionPlans()
     {
         try
         {
             var plans = await _nutritionPlanService.GetMyNutritionPlans();
-            return new ApiResponse<List<GetNutritionPlanResponseDTO>>(
+            var response = new ApiResponse<List<GetNutritionPlanResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved nutrition plans",
                 data: plans,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<List<GetNutritionPlanResponseDTO>>(
+            var response = new ApiResponse<List<GetNutritionPlanResponseDTO>>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpGet("{id:guid}")]
-    public async Task<ApiResponse<GetNutritionPlanResponseDTO>> GetNutritionPlanById(Guid id)
+    public async Task<IActionResult> GetNutritionPlanById(Guid id)
     {
         try
         {
             var plan = await _nutritionPlanService.GetNutritionPlanById(id);
-            return new ApiResponse<GetNutritionPlanResponseDTO>(
+            var response = new ApiResponse<GetNutritionPlanResponseDTO>(
                 success: true,
                 message: "Successfully retrieved nutrition plan",
                 data: plan,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetNutritionPlanResponseDTO>(
+            var response = new ApiResponse<GetNutritionPlanResponseDTO>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.NotFound
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpPost]
-    public async Task<ApiResponse<GetNutritionPlanResponseDTO>> CreateNutritionPlan([FromBody] CreateNutritionPlanRequestDTO dto)
+    public async Task<IActionResult> CreateNutritionPlan([FromBody] CreateNutritionPlanRequestDTO dto)
     {
         try
         {
             var plan = await _nutritionPlanService.CreateNutritionPlan(dto);
-            return new ApiResponse<GetNutritionPlanResponseDTO>(
+            var response = new ApiResponse<GetNutritionPlanResponseDTO>(
                 success: true,
                 message: "Successfully created nutrition plan",
                 data: plan,
                 statusCode: HttpStatusCode.Created
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetNutritionPlanResponseDTO>(
+            var response = new ApiResponse<GetNutritionPlanResponseDTO>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpPost("{id:guid}/items")]
-    public async Task<ApiResponse<GetNutritionPlanItemResponseDTO>> AddItemToPlan(Guid id, [FromBody] AddNutritionPlanItemRequestDTO dto)
+    public async Task<IActionResult> AddItemToPlan(Guid id, [FromBody] AddNutritionPlanItemRequestDTO dto)
     {
         try
         {
             var item = await _nutritionPlanService.AddItemToPlan(id, dto);
-            return new ApiResponse<GetNutritionPlanItemResponseDTO>(
+            var response = new ApiResponse<GetNutritionPlanItemResponseDTO>(
                 success: true,
                 message: "Successfully added item to nutrition plan",
                 data: item,
                 statusCode: HttpStatusCode.Created
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetNutritionPlanItemResponseDTO>(
+            var response = new ApiResponse<GetNutritionPlanItemResponseDTO>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpDelete("{id:guid}")]
-    public async Task<ApiResponse<bool>> DeleteNutritionPlan(Guid id)
+    public async Task<IActionResult> DeleteNutritionPlan(Guid id)
     {
         try
         {
             var result = await _nutritionPlanService.DeleteNutritionPlan(id);
-            return new ApiResponse<bool>(
+            var response = new ApiResponse<bool>(
                 success: true,
                 message: "Successfully deleted nutrition plan",
                 data: result,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<bool>(
+            var response = new ApiResponse<bool>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 }

@@ -5,6 +5,8 @@ using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using fitlife_planner_back_end.Api.Extensions;
+
 
 namespace fitlife_planner_back_end.Api.Controllers;
 
@@ -23,97 +25,113 @@ public class ExerciseLibraryController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<ApiResponse<List<GetExerciseResponseDTO>>> GetAllExercises([FromQuery] string? muscleGroup = null)
+    public async Task<IActionResult> GetAllExercises([FromQuery] string? muscleGroup = null)
     {
         try
         {
             var exercises = await _exerciseService.GetAllExercises(muscleGroup);
-            return new ApiResponse<List<GetExerciseResponseDTO>>(
+            var response = new ApiResponse<List<GetExerciseResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved exercises",
                 data: exercises,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<List<GetExerciseResponseDTO>>(
+            var response = new ApiResponse<List<GetExerciseResponseDTO>>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpGet("{id:guid}")]
-    public async Task<ApiResponse<GetExerciseResponseDTO>> GetExerciseById(Guid id)
+    public async Task<IActionResult> GetExerciseById(Guid id)
     {
         try
         {
             var exercise = await _exerciseService.GetExerciseById(id);
-            return new ApiResponse<GetExerciseResponseDTO>(
+            var response = new ApiResponse<GetExerciseResponseDTO>(
                 success: true,
                 message: "Successfully retrieved exercise",
                 data: exercise,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetExerciseResponseDTO>(
+            var response = new ApiResponse<GetExerciseResponseDTO>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.NotFound
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<ApiResponse<GetExerciseResponseDTO>> CreateExercise([FromBody] CreateExerciseRequestDTO dto)
+    public async Task<IActionResult> CreateExercise([FromBody] CreateExerciseRequestDTO dto)
     {
         try
         {
             var exercise = await _exerciseService.CreateExercise(dto);
-            return new ApiResponse<GetExerciseResponseDTO>(
+            var response = new ApiResponse<GetExerciseResponseDTO>(
                 success: true,
                 message: "Successfully created exercise",
                 data: exercise,
                 statusCode: HttpStatusCode.Created
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetExerciseResponseDTO>(
+            var response = new ApiResponse<GetExerciseResponseDTO>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
-    public async Task<ApiResponse<bool>> DeleteExercise(Guid id)
+    public async Task<IActionResult> DeleteExercise(Guid id)
     {
         try
         {
             var result = await _exerciseService.DeleteExercise(id);
-            return new ApiResponse<bool>(
+            var response = new ApiResponse<bool>(
                 success: true,
                 message: "Successfully deleted exercise",
                 data: result,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<bool>(
+            var response = new ApiResponse<bool>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 }

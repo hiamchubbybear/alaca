@@ -5,6 +5,8 @@ using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using fitlife_planner_back_end.Api.Extensions;
+
 
 namespace fitlife_planner_back_end.Api.Controllers;
 
@@ -23,73 +25,85 @@ public class ProgressController : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<ApiResponse<List<GetProgressEntryResponseDTO>>> GetMyProgress([FromQuery] string? type = null)
+    public async Task<IActionResult> GetMyProgress([FromQuery] string? type = null)
     {
         try
         {
             var entries = await _progressService.GetMyProgress(type);
-            return new ApiResponse<List<GetProgressEntryResponseDTO>>(
+            var response = new ApiResponse<List<GetProgressEntryResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved progress entries",
                 data: entries,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<List<GetProgressEntryResponseDTO>>(
+            var response = new ApiResponse<List<GetProgressEntryResponseDTO>>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpPost]
-    public async Task<ApiResponse<GetProgressEntryResponseDTO>> CreateProgressEntry([FromBody] CreateProgressEntryRequestDTO dto)
+    public async Task<IActionResult> CreateProgressEntry([FromBody] CreateProgressEntryRequestDTO dto)
     {
         try
         {
             var entry = await _progressService.CreateProgressEntry(dto);
-            return new ApiResponse<GetProgressEntryResponseDTO>(
+            var response = new ApiResponse<GetProgressEntryResponseDTO>(
                 success: true,
                 message: "Successfully created progress entry",
                 data: entry,
                 statusCode: HttpStatusCode.Created
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetProgressEntryResponseDTO>(
+            var response = new ApiResponse<GetProgressEntryResponseDTO>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpDelete("{id:guid}")]
-    public async Task<ApiResponse<bool>> DeleteProgressEntry(Guid id)
+    public async Task<IActionResult> DeleteProgressEntry(Guid id)
     {
         try
         {
             var result = await _progressService.DeleteProgressEntry(id);
-            return new ApiResponse<bool>(
+            var response = new ApiResponse<bool>(
                 success: true,
                 message: "Successfully deleted progress entry",
                 data: result,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<bool>(
+            var response = new ApiResponse<bool>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 }
