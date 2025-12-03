@@ -1,0 +1,54 @@
+### Test HTTP Status Codes
+
+# Test 1: Successful Login - Should return 200 OK
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+###
+
+# Test 2: Failed Login - Should return 401 Unauthorized
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": "wrong@example.com",
+  "password": "wrongpassword"
+}
+
+###
+
+# Test 3: Invalid Request - Should return 400 Bad Request
+POST http://localhost:5000/auth/login
+Content-Type: application/json
+
+{
+  "email": ""
+}
+
+###
+
+# Test 4: Create Account - Should return 201 Created
+POST http://localhost:5000/account
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com",
+  "password": "password123",
+  "username": "newuser"
+}
+
+###
+
+# Test 5: Get Profile (with auth) - Should return 200 OK
+GET http://localhost:5000/profile
+Authorization: Bearer YOUR_TOKEN_HERE
+
+###
+
+# Test 6: Get Profile (without auth) - Should return 401 Unauthorized
+GET http://localhost:5000/profile

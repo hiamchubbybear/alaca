@@ -6,6 +6,8 @@ using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using fitlife_planner_back_end.Api.Extensions;
+
 
 namespace fitlife_planner_back_end.Api.Controllers;
 
@@ -15,103 +17,117 @@ public class BmiController(ILogger<BmiController> logger, BMIService bmiService)
 {
     [Authorize]
     [HttpPost("calculate")]
-    public async Task<ApiResponse<CreateBMIResponseDto>> CalculateBmi(
+    public async Task<IActionResult> CalculateBmi(
         [FromBody] CreateBMIRecordRequestDto dto)
     {
         try
         {
             var bmiResult = await bmiService.CreateBMIRecord(dto);
 
-            return new ApiResponse<CreateBMIResponseDto>(
+            var response = new ApiResponse<CreateBMIResponseDto>(
                 success: true,
                 message: "BMI calculated successfully",
                 data: bmiResult,
                 statusCode: HttpStatusCode.Created
-            );
+            );;
+
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<CreateBMIResponseDto>(
+            var response = new ApiResponse<CreateBMIResponseDto>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     [Authorize]
     [HttpPost("me")]
-    public async Task<ApiResponse<ChoosePlanResponseDto>> GetMyLatestBmi([FromBody] ChoosePlanRequestDto requestDto)
+    public async Task<IActionResult> GetMyLatestBmi([FromBody] ChoosePlanRequestDto requestDto)
     {
         try
         {
             var result = await bmiService.ChoosePlan(requestDto);
 
-            return new ApiResponse<ChoosePlanResponseDto>(
+            var response = new ApiResponse<ChoosePlanResponseDto>(
                 success: true,
                 message: "Successfully retrieved BMI",
                 data: result,
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<ChoosePlanResponseDto>(
+            var response = new ApiResponse<ChoosePlanResponseDto>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 
     // [Authorize(Roles = "Admin")]
     // [HttpGet("user/{userId}")]
-    // public async Task<ApiResponse<List<GetBmiResponseDto>>> GetBMIByUserId(Guid userId)
+    // public async Task<IActionResult> GetBMIByUserId(Guid userId)
     // {
     //     try
     //     {
     //         var result = await _bmiService.GetBMIsByUserId(userId);
     //
-    //         return new ApiResponse<List<GetBmiResponseDto>>(
+    //         var response = new ApiResponse<List<GetBmiResponseDto>>(
     //             success: true,
     //             message: "Successfully retrieved BMI records",
     //             data: result,
     //             statusCode: HttpStatusCode.OK
     //         );
+    //         return response.ToActionResult();
     //     }
     //     catch (Exception e)
     //     {
-    //         return new ApiResponse<List<GetBmiResponseDto>>(
+    //         var response = new ApiResponse<List<GetBmiResponseDto>>(
     //             success: false,
     //             message: e.Message,
     //             statusCode: HttpStatusCode.BadRequest
     //         );
+    //         return response.ToActionResult();
     //     }
     // }
 
     // [Authorize(Roles = "Admin")]
     // [HttpGet("all")]
-    // public async Task<ApiResponse<PaginatedList<BmiRecord>>> GetAllBMI(
+    // public async Task<IActionResult> GetAllBMI(
     //     [FromQuery] PaginationParameters pagination)
     // {
     //     try
     //     {
     //         var result = await _bmiService.GetAllBMI(pagination);
     //
-    //         return new ApiResponse<PaginatedList<BmiRecord>>(
+    //         var response = new ApiResponse<PaginatedList<BmiRecord>>(
     //             success: true,
     //             message: "Successfully retrieved BMI records",
     //             data: result,
     //             statusCode: HttpStatusCode.OK
     //         );
+    //         return response.ToActionResult();
     //     }
     //     catch (Exception e)
     //     {
-    //         return new ApiResponse<PaginatedList<BmiRecord>>(
+    //         var response = new ApiResponse<PaginatedList<BmiRecord>>(
     //             success: false,
     //             message: e.Message,
     //             statusCode: HttpStatusCode.BadRequest
     //         );
+    //         return response.ToActionResult();
     //     }
     // }
 }

@@ -29,49 +29,36 @@ public class PostService(
 
     public async Task<GetPostResponseDto> GetPostById(Guid postId)
     {
-        try
+        if (string.IsNullOrWhiteSpace(postId.ToString()))
         {
-            if (string.IsNullOrWhiteSpace(postId.ToString()))
-            {
-                throw new Exception("Invalid post id ");
-            }
-
-            var post = await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == postId) ??
-                       throw new Exception("Post not found");
-
-            var response = mapping.GetPostMapper(post);
-            return response ?? throw new Exception("Post not found");
+            throw new ArgumentException("Invalid post id");
         }
-        catch (Exception e)
-        {
-            logger.LogError(e, e.Message);
-            throw new Exception("Get Post By Id Failed");
-        }
+
+        var post = await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == postId)
+                   ?? throw new KeyNotFoundException("Post not found");
+
+        var response = mapping.GetPostMapper(post);
+        return response ?? throw new InvalidOperationException("Failed to map post data");
     }
 
     public async Task<List<GetPostResponseDto>> GetMyPost()
     {
-        try
-        {
-            var userId = userContext.User.userId;
-            var profile = await dbContext.Profiles
-                .FirstOrDefaultAsync(p => p.UserId == userId);
-            if (profile == null)
-                throw new Exception("Profile not found");
-            var posts = await dbContext.Posts
-                .Where(p => p.ProfileId == profile.ProfileId)
-                .OrderByDescending(p => p.CreatedAt)
-                .ToListAsync();
-            if (posts == null || posts.Count == 0)
-                return new List<GetPostResponseDto>();
-            var result = posts.Select(p => mapping.GetPostMapper(p)).ToList();
-            return result;
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, e.Message);
-            throw new Exception("Get My Post Failed");
-        }
+        var userId = userContext.User.userId;
+        var profile = await dbContext.Profiles
+            .FirstOrDefaultAsync(p => p.UserId == userId);
+        if (profile == null)
+            throw new KeyNotFoundException("Profile not found");
+
+        var posts = await dbContext.Posts
+            .Where(p => p.ProfileId == profile.ProfileId)
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+
+        if (posts == null || posts.Count == 0)
+            return new List<GetPostResponseDto>();
+
+        var result = posts.Select(p => mapping.GetPostMapper(p)).ToList();
+        return result;
     }
 
     /*public async Task<List<GetPostResponseDto>> GetAllPosts()
@@ -111,80 +98,57 @@ public class PostService(
     // }
     public async Task<UpdatePostResponseDto> UpdatePost(Guid postId, UpdatePostRequestDto dto)
     {
-        try
-        {
-            var currentProfileId = userContext.User.profileId;
-            var currentUserRole = userContext.User.role;
-            var post = await dbContext.Posts
-                .FirstOrDefaultAsync<Post>(p => p.PostId == postId);
+        var currentProfileId = userContext.User.profileId;
+        var currentUserRole = userContext.User.role;
+        var post = await dbContext.Posts
+            .FirstOrDefaultAsync<Post>(p => p.PostId == postId);
 
-            if (post == null)
-                throw new Exception("Post not found");
+        if (post == null)
+            throw new KeyNotFoundException("Post not found");
 
-            bool isOwner = post.ProfileId == currentProfileId;
-            bool isAdmin = currentUserRole == Role.Admin;
-            if (!isOwner || isAdmin)
-                throw new UnauthorizedAccessException("You do not have permission to update this post.");
+        bool isOwner = post.ProfileId == currentProfileId;
+        bool isAdmin = currentUserRole == Role.Admin;
+        if (!isOwner && !isAdmin)
+            throw new UnauthorizedAccessException("You do not have permission to update this post");
 
-            post.Media = dto.Media;
-            post.Content = dto.Content;
-            post.Title = dto.Title;
+        post.Media = dto.Media;
+        post.Content = dto.Content;
+        post.Title = dto.Title;
 
-            await dbContext.SaveChangesAsync();
-            return mapping.UpdatePostMapper(post);
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, e.Message);
-            throw new Exception("Updated Post Failed");
-        }
+        await dbContext.SaveChangesAsync();
+        return mapping.UpdatePostMapper(post);
     }
 
     public async Task<bool> DeletePost(Guid postId)
     {
-        try
+        var post = await dbContext.Posts.FindAsync(postId)
+                   ?? throw new KeyNotFoundException("Post not found");
+
+        var user = userContext.User;
+        if (post.ProfileId != user.profileId)
         {
-            var post = await dbContext.Posts.FindAsync(postId)
-                       ?? throw new Exception("Post not found");
-
-            var user = userContext.User;
-            if (post.ProfileId != user.profileId)
-            {
-                throw new Exception("Forbidden");
-            }
-
-            dbContext.Posts.Remove(post);
-            await dbContext.SaveChangesAsync();
-
-            return true;
+            throw new UnauthorizedAccessException("You do not have permission to delete this post");
         }
-        catch (Exception e)
-        {
-            logger.LogError(e, e.Message);
-            throw new Exception("Deleted Post Failed");
-        }
+
+        dbContext.Posts.Remove(post);
+        await dbContext.SaveChangesAsync();
+
+        return true;
     }
 
     public async Task<CreatePostResponseDto> CreatePost( CreatePostRequestDto dto)
     {
-        try
-        {
-            var profileId = userContext.User.profileId;
-            var post = mapping.InsertPostMapper(dto, profileId);
-            var createdPost = await dbContext.Posts.AddAsync(post) ??
-                              throw new Exception("Failed to create post");
-            ;
-            await dbContext.SaveChangesAsync();
+        var profileId = userContext.User.profileId;
+        var post = mapping.InsertPostMapper(dto, profileId);
+        var createdPost = await dbContext.Posts.AddAsync(post);
 
+        if (createdPost == null || createdPost.Entity == null)
+            throw new InvalidOperationException("Failed to create post");
 
-            var response = mapping.InsertPostResponseMapper(createdPost.Entity);
-            return response;
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e, e.Message);
-            throw new Exception("Created Post Failed");
-        }
+        await dbContext.SaveChangesAsync();
+
+        var response = mapping.InsertPostResponseMapper(createdPost.Entity);
+        return response;
     }
 
 

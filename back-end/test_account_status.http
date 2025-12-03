@@ -1,0 +1,34 @@
+### Test AccountController HTTP Status Codes
+
+# Test 1: Create account with duplicate email (should return 400 Bad Request)
+POST http://localhost:5000/account
+Content-Type: application/json
+
+{
+  "email": "existing@example.com",
+  "password": "password123",
+  "username": "testuser"
+}
+
+###
+
+# Test 2: Create account with invalid data (should return 400 Bad Request)
+POST http://localhost:5000/account
+Content-Type: application/json
+
+{
+  "email": "",
+  "password": ""
+}
+
+###
+
+# Test 3: Create account successfully (should return 201 Created)
+POST http://localhost:5000/account
+Content-Type: application/json
+
+{
+  "email": "newuser{{$timestamp}}@example.com",
+  "password": "password123",
+  "username": "newuser{{$timestamp}}"
+}

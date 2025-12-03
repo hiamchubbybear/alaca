@@ -3,6 +3,8 @@ using APIResponseWrapper;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using fitlife_planner_back_end.Api.Extensions;
+
 
 namespace fitlife_planner_back_end.Api.Controllers;
 
@@ -29,7 +31,7 @@ public class AdminController : ControllerBase
     /// Seed nutrition data from JSON file (Admin only)
     /// </summary>
     [HttpPost("seed/nutrition-data")]
-    public async Task<ApiResponse<object>> SeedNutritionData()
+    public async Task<IActionResult> SeedNutritionData()
     {
         try
         {
@@ -37,30 +39,37 @@ public class AdminController : ControllerBase
 
             var count = await _nutritionDataSeeder.SeedFromJsonFile(jsonFilePath);
 
-            return new ApiResponse<object>(
+            var response = new ApiResponse<object>(
                 success: true,
                 message: $"Successfully seeded {count} food items",
                 data: new { itemsSeeded = count },
                 statusCode: HttpStatusCode.OK
-            );
+            );;
+
+
+            return response.ToActionResult();
         }
         catch (FileNotFoundException ex)
         {
             _logger.LogError(ex, "Nutrition data file not found");
-            return new ApiResponse<object>(
+            var response = new ApiResponse<object>(
                 success: false,
                 message: "Nutrition data file not found",
                 statusCode: HttpStatusCode.NotFound
-            );
+            );;
+
+            return response.ToActionResult();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error seeding nutrition data");
-            return new ApiResponse<object>(
+            var response = new ApiResponse<object>(
                 success: false,
                 message: "Failed to seed nutrition data",
                 statusCode: HttpStatusCode.InternalServerError
-            );
+            );;
+
+            return response.ToActionResult();
         }
     }
 }

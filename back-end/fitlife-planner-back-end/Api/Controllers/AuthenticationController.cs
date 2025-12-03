@@ -2,6 +2,8 @@ using System.Net;
 using fitlife_planner_back_end.Api.Configurations;
 using fitlife_planner_back_end.Api.Middlewares;
 using Microsoft.AspNetCore.Mvc;
+using fitlife_planner_back_end.Api.Extensions;
+
 using Microsoft.EntityFrameworkCore;
 using APIResponseWrapper;
 using fitlife_planner_back_end.Application.Services;
@@ -16,68 +18,74 @@ public class AuthenticationController(AuthenticationService authService, ILogger
     : ControllerBase
 {
     [HttpPost("login")]
-    public async Task<ApiResponse<AuthenticationResponseDto>> Login([FromBody] LoginRequestDto loginRequest)
+    public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequest)
     {
         if (!ModelState.IsValid)
         {
-            return new ApiResponse<AuthenticationResponseDto>(
+            var validationResponse = new ApiResponse<AuthenticationResponseDto>(
                 success: false,
                 statusCode: HttpStatusCode.BadRequest,
                 message: "Email and password are required"
             );
+            return validationResponse.ToActionResult();
         }
 
         try
         {
             var token = await authService.Authenticate(loginRequest);
-            return new ApiResponse<AuthenticationResponseDto>(
+            var response = new ApiResponse<AuthenticationResponseDto>(
                 success: true,
                 statusCode: HttpStatusCode.OK,
                 data: token,
                 message: "Login successful"
             );
+            return response.ToActionResult();
         }
         catch (UnauthorizedAccessException ex)
         {
-            return new ApiResponse<AuthenticationResponseDto>(
+            var response = new ApiResponse<AuthenticationResponseDto>(
                 success: false,
                 statusCode: HttpStatusCode.Unauthorized,
                 message: ex.Message
             );
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<AuthenticationResponseDto>(
+            var response = new ApiResponse<AuthenticationResponseDto>(
                 success: false,
                 statusCode: HttpStatusCode.InternalServerError,
                 message: "Unknown error " + e.Message
             );
+            return response.ToActionResult();
         }
     }
 
     [HttpPost("refresh")]
-    public async Task<ApiResponse<AuthenticationResponseDto>> Refresh(
+    public async Task<IActionResult> Refresh(
         [FromBody] RefreshTokenRequestDto refreshTokenRequestDto)
     {
         try
         {
             logger.LogInformation("Refreshing token");
             var refreshToken = await authService.RefreshToken(refreshTokenRequestDto);
-            return new ApiResponse<AuthenticationResponseDto>(
+            var response = new ApiResponse<AuthenticationResponseDto>(
                 success: true,
                 statusCode: HttpStatusCode.Created,
                 message: "Successfully refreshed the token"
                 , data: refreshToken
             );
+            return response.ToActionResult();
         }
         catch (Exception e)
         {
             logger.LogInformation(e.StackTrace);
-            return new ApiResponse<AuthenticationResponseDto>(
+            var response = new ApiResponse<AuthenticationResponseDto>(
                 success: false,
                 statusCode: HttpStatusCode.InternalServerError,
                 message: e.Message
             );
+            return response.ToActionResult();
         }
     }
 }
