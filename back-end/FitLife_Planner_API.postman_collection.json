@@ -1,0 +1,1933 @@
+{
+    "info": {
+        "_postman_id": "fitlife-planner-api-collection",
+        "name": "FitLife Planner API - Complete Collection",
+        "description": "Comprehensive API collection for FitLife Planner backend with all endpoints and variables",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "http://localhost:5000",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "refreshToken",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "userId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "profileId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "bmiRecordId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "postId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "foodItemId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "workoutId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "challengeId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "exerciseId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "scheduleId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "nutritionPlanId",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "progressId",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "1. Authentication & Account",
+            "item": [
+                {
+                    "name": "Register Account",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.success && response.data) {",
+                                    "        pm.collectionVariables.set('userId', response.data.id);",
+                                    "        console.log('✓ Account created - User ID:', response.data.id);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"testuser_{{$timestamp}}\",\n  \"email\": \"test{{$timestamp}}@example.com\",\n  \"password\": \"Password123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/account",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.success && response.data) {",
+                                    "        pm.collectionVariables.set('token', response.data.token);",
+                                    "        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+                                    "        console.log('✓ Login successful - Token saved');",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"Password123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/login",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Refresh Token",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data && response.data.token) {",
+                                    "        pm.collectionVariables.set('token', response.data.token);",
+                                    "        console.log('✓ Token refreshed');",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/auth/refresh",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "refresh"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Account Info",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/account",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Profile",
+            "item": [
+                {
+                    "name": "Get My Profile",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('profileId', response.data.profileId);",
+                                    "        console.log('✓ Profile ID:', response.data.profileId);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/profile",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Profile",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"displayName\": \"Test User\",\n  \"avatarUrl\": \"https://i.pravatar.cc/150\",\n  \"birthDate\": \"1995-05-15T00:00:00Z\",\n  \"gender\": 0,\n  \"bio\": \"Fitness enthusiast\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/profile",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "profile"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Profiles",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/profile/all?PageNumber=1&PageSize=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "all"
+                            ],
+                            "query": [
+                                {
+                                    "key": "PageNumber",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "PageSize",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. BMI & Nutrition",
+            "item": [
+                {
+                    "name": "Calculate BMI",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('bmiRecordId', response.data.bmiRecordID);",
+                                    "        console.log('✓ BMI:', response.data.bmi, '-', response.data.assessment);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"heightCm\": 175,\n  \"weightKg\": 70\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/bmi/calculate",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "bmi",
+                                "calculate"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Choose Fitness Plan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"practiceLevel\": 2,\n  \"activityFactor\": 1.55\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/bmi/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "bmi",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get My BMI Records",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/bmi/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "bmi",
+                                "me"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Food Items",
+            "item": [
+                {
+                    "name": "Get All Food Items",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/food-items?PageNumber=1&PageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "food-items"
+                            ],
+                            "query": [
+                                {
+                                    "key": "PageNumber",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "PageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Food Item by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/food-items/{{foodItemId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "food-items",
+                                "{{foodItemId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Food Item",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('foodItemId', response.data.id);",
+                                    "        console.log('✓ Food item created:', response.data.name);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Grilled Chicken Breast\",\n  \"servingSize\": \"100g\",\n  \"servingAmount\": 1,\n  \"caloriesKcal\": 165,\n  \"proteinG\": 31,\n  \"carbsG\": 0,\n  \"fatG\": 3.6,\n  \"fiberG\": 0,\n  \"sodiumMg\": 74,\n  \"micronutrients\": \"{}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/food-items",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "food-items"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Food Item",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Grilled Chicken Breast (Updated)\",\n  \"servingSize\": \"150g\",\n  \"servingAmount\": 1,\n  \"caloriesKcal\": 248,\n  \"proteinG\": 46.5,\n  \"carbsG\": 0,\n  \"fatG\": 5.4,\n  \"fiberG\": 0,\n  \"sodiumMg\": 111,\n  \"micronutrients\": \"{}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/food-items/{{foodItemId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "food-items",
+                                "{{foodItemId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Food Item",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/food-items/{{foodItemId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "food-items",
+                                "{{foodItemId}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "5. Workouts",
+            "item": [
+                {
+                    "name": "Get My Workouts",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/workouts/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workouts",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Workout by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/workouts/{{workoutId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workouts",
+                                "{{workoutId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Workout",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('workoutId', response.data.id);",
+                                    "        console.log('✓ Workout created:', response.data.id);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Upper Body Strength\",\n  \"description\": \"Chest and triceps workout\",\n  \"durationMinutes\": 60,\n  \"caloriesBurned\": 300,\n  \"exercises\": \"[{\\\"name\\\": \\\"Bench Press\\\", \\\"sets\\\": 4, \\\"reps\\\": 10}]\",\n  \"scheduledFor\": \"2024-12-06T10:00:00Z\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/workouts",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workouts"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Workout",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Upper Body Strength (Enhanced)\",\n  \"description\": \"Added back exercises\",\n  \"durationMinutes\": 75,\n  \"caloriesBurned\": 350,\n  \"exercises\": \"[{\\\"name\\\": \\\"Bench Press\\\", \\\"sets\\\": 4, \\\"reps\\\": 10}]\",\n  \"scheduledFor\": \"2024-12-06T10:00:00Z\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/workouts/{{workoutId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workouts",
+                                "{{workoutId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Workout",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/workouts/{{workoutId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workouts",
+                                "{{workoutId}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "6. Progress Tracking",
+            "item": [
+                {
+                    "name": "Get My Progress",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/progress/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "progress",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Progress Entry",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('progressId', response.data.id);",
+                                    "        console.log('✓ Progress entry created');",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"type\": \"weight\",\n  \"value\": 70.5,\n  \"unit\": \"kg\",\n  \"notes\": \"Morning weight\",\n  \"recordedAt\": \"2024-12-05T08:00:00Z\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/progress",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "progress"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Progress Entry",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"type\": \"weight\",\n  \"value\": 70.3,\n  \"unit\": \"kg\",\n  \"notes\": \"Corrected measurement\",\n  \"recordedAt\": \"2024-12-05T08:00:00Z\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/progress/{{progressId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "progress",
+                                "{{progressId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Progress Entry",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/progress/{{progressId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "progress",
+                                "{{progressId}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "7. Challenges",
+            "item": [
+                {
+                    "name": "Get All Challenges",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges?PageNumber=1&PageSize=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges"
+                            ],
+                            "query": [
+                                {
+                                    "key": "PageNumber",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "PageSize",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get My Challenges",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Challenge",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('challengeId', response.data.id);",
+                                    "        console.log('✓ Challenge created');",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"30-Day Plank Challenge\",\n  \"description\": \"Build core strength\",\n  \"type\": \"fitness\",\n  \"goal\": \"Hold plank for 5 minutes\",\n  \"startDate\": \"2024-12-01T00:00:00Z\",\n  \"endDate\": \"2024-12-31T23:59:59Z\",\n  \"rules\": \"{\\\"daily_target\\\": \\\"60 seconds\\\"}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Join Challenge",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/{{challengeId}}/join",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "{{challengeId}}",
+                                "join"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "8. Posts (Social)",
+            "item": [
+                {
+                    "name": "Get My Posts",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/post",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "post"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get All Posts",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/post/all?PageNumber=1&PageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "post",
+                                "all"
+                            ],
+                            "query": [
+                                {
+                                    "key": "PageNumber",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "PageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Posts by Like",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/post/all-by-like?PageNumber=1&PageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "post",
+                                "all-by-like"
+                            ],
+                            "query": [
+                                {
+                                    "key": "PageNumber",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "PageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Post by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/post/{{postId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "post",
+                                "{{postId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Post",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('postId', response.data.postId || response.data.id);",
+                                    "        console.log('✓ Post created');",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"First 5K Run!\",\n  \"content\": \"Just completed my first 5K run! 🏃‍♂️\",\n  \"media\": \"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/post",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "post"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Post",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"First 5K Run - New PR!\",\n  \"content\": \"Just completed my first 5K run! New personal best: 25:30! 🏃‍♂️🎉\",\n  \"media\": \"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/post/{{postId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "post",
+                                "{{postId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Post",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/post/{{postId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "post",
+                                "{{postId}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "9. Followers (Social)",
+            "item": [
+                {
+                    "name": "Follow User",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/followers/{{userId}}/follow",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "followers",
+                                "{{userId}}",
+                                "follow"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Unfollow User",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/followers/{{userId}}/unfollow",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "followers",
+                                "{{userId}}",
+                                "unfollow"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get My Followers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/followers/followers?page=1&pageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "followers",
+                                "followers"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get My Following",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/followers/following?page=1&pageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "followers",
+                                "following"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Follower Stats",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/followers/stats",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "followers",
+                                "stats"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Follow Suggestions",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/followers/suggestions?limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "followers",
+                                "suggestions"
+                            ],
+                            "query": [
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Mutual Friends",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/followers/mutual/{{userId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "followers",
+                                "mutual",
+                                "{{userId}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "10. Notifications",
+            "item": [
+                {
+                    "name": "Get My Notifications",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/me?PageNumber=1&PageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "me"
+                            ],
+                            "query": [
+                                {
+                                    "key": "PageNumber",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "PageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "11. AI Recommendations",
+            "item": [
+                {
+                    "name": "Get Personalized Plan",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/recommendations/personalized-plan",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "recommendations",
+                                "personalized-plan"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Meal Recommendations",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/recommendations/meals?targetCalories=2000&mealType=breakfast&limit=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "recommendations",
+                                "meals"
+                            ],
+                            "query": [
+                                {
+                                    "key": "targetCalories",
+                                    "value": "2000"
+                                },
+                                {
+                                    "key": "mealType",
+                                    "value": "breakfast"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Workout Recommendations",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/recommendations/workouts?bmi=22.5&goal=muscle_gain&fitnessLevel=intermediate&limit=5",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "recommendations",
+                                "workouts"
+                            ],
+                            "query": [
+                                {
+                                    "key": "bmi",
+                                    "value": "22.5"
+                                },
+                                {
+                                    "key": "goal",
+                                    "value": "muscle_gain"
+                                },
+                                {
+                                    "key": "fitnessLevel",
+                                    "value": "intermediate"
+                                },
+                                {
+                                    "key": "limit",
+                                    "value": "5"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Daily Tip",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/recommendations/daily-tip",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "recommendations",
+                                "daily-tip"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "12. Exercise Library",
+            "item": [
+                {
+                    "name": "Get All Exercises",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data && response.data.length > 0) {",
+                                    "        pm.collectionVariables.set('exerciseId', response.data[0].id);",
+                                    "        console.log('✓ Exercise ID:', response.data[0].id);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/exercise-library?PageNumber=1&PageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "exercise-library"
+                            ],
+                            "query": [
+                                {
+                                    "key": "PageNumber",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "PageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search Exercises",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/exercise-library/search?query=bench&PageNumber=1&PageSize=10",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "exercise-library",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "bench"
+                                },
+                                {
+                                    "key": "PageNumber",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "PageSize",
+                                    "value": "10"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Exercise by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/exercise-library/{{exerciseId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "exercise-library",
+                                "{{exerciseId}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "13. Workout Schedules",
+            "item": [
+                {
+                    "name": "Get My Schedules",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/workout-schedules/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Schedule",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200 || pm.response.code === 201) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('scheduleId', response.data.id);",
+                                    "        console.log('✓ Schedule created');",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"workoutId\": \"{{workoutId}}\",\n  \"scheduledFor\": \"2024-12-06T10:00:00Z\",\n  \"isRecurring\": true,\n  \"recurrencePattern\": \"weekly\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/workout-schedules",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workout-schedules"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Schedule",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"workoutId\": \"{{workoutId}}\",\n  \"scheduledFor\": \"2024-12-07T10:00:00Z\",\n  \"isRecurring\": true,\n  \"recurrencePattern\": \"daily\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/workout-schedules/{{scheduleId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                "{{scheduleId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Schedule",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/workout-schedules/{{scheduleId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                "{{scheduleId}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "14. Nutrition Plans",
+            "item": [
+                {
+                    "name": "Get My Nutrition Plan",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    const response = pm.response.json();",
+                                    "    if (response.data) {",
+                                    "        pm.collectionVariables.set('nutritionPlanId', response.data.id);",
+                                    "        console.log('✓ Nutrition Plan ID:', response.data.id);",
+                                    "    }",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/nutrition-plans/me",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "me"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Nutrition Plan by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/nutrition-plans/{{nutritionPlanId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{nutritionPlanId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Add Food to Plan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"foodItemId\": \"{{foodItemId}}\",\n  \"servings\": 1.5,\n  \"mealType\": \"lunch\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/nutrition-plans/{{nutritionPlanId}}/foods",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{nutritionPlanId}}",
+                                "foods"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "15. Admin",
+            "item": [
+                {
+                    "name": "Seed Nutrition Data",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/api/admin/seed/nutrition-data",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "api",
+                                "admin",
+                                "seed",
+                                "nutrition-data"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
