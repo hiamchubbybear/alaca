@@ -1,4 +1,4 @@
-import type { LogoItem } from '../constants/logos'
+import type { LogoItem } from '../../../shared/constants/logos'
 
 type Props = {
   logos: LogoItem[]

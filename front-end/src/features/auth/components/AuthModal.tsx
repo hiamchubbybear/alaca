@@ -1,6 +1,6 @@
 import type React from 'react'
 import { useState } from 'react'
-import { login, registerUser } from '../apiClient'
+import { login, registerUser } from '../api/authApi'
 
 export type AuthMode = 'login' | 'signup'
 
@@ -36,11 +36,12 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
 
       if (mode === 'login') {
         const res = await login(email, password)
-        if (!res.success || !res.data || !(res as any).data.accessToken) {
+        // Backend returns token in data.token (not data.accessToken)
+        if (!res.success || !res.data || !(res as any).data.token) {
           setError(res.message || 'Login failed')
           return
         }
-        const token = (res as any).data.accessToken as string
+        const token = (res as any).data.token as string
         localStorage.setItem('accessToken', token)
         onLoginSuccess()
         onClose()
@@ -57,8 +58,8 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
 
       // auto-login after signup
       const loginRes = await login(email, password)
-      if (loginRes.success && (loginRes as any).data?.accessToken) {
-        const token = (loginRes as any).data.accessToken as string
+      if (loginRes.success && (loginRes as any).data?.token) {
+        const token = (loginRes as any).data.token as string
         localStorage.setItem('accessToken', token)
       }
       onLoginSuccess()

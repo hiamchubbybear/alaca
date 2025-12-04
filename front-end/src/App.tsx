@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
-import { AuthModal, type AuthMode } from "./components/AuthModal"
-import { BmiModal } from "./components/BmiModal"
-import { HomePage } from "./components/HomePage"
-import { LoggedInLayout, type MainSection } from "./components/LoggedInLayout"
-import { MuscleWikiPage } from "./components/MuscleWikiPage"
-import { logos } from "./constants/logos"
-import { getProfile } from "./apiClient"
+import { AuthModal, type AuthMode } from "./features/auth/components/AuthModal"
+import { BmiModal } from "./shared/components/BmiModal"
+import { HomePage } from "./features/landing/components/HomePage"
+import { LoggedInLayout, type MainSection } from "./features/dashboard/components/LoggedInLayout"
+import { MuscleWikiPage } from "./features/muscleWiki/components/MuscleWikiPage"
+import { WeekStreak } from "./features/dashboard/components/WeekStreak"
+import { logos } from "./shared/constants/logos"
+import { getProfile } from "./features/profile/api/profileApi"
 import "./App.css"
 
 function App() {
@@ -16,13 +17,13 @@ function App() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>("login")
   const [showBmiModal, setShowBmiModal] = useState(false)
-  const [mainSection, setMainSection] = useState<MainSection>("training")
+  const [mainSection, setMainSection] = useState<MainSection>("social")
   const [userName, setUserName] = useState("User")
 
   const handleLogoClick = () => {
     setCurrentPage("home")
     if (isLoggedIn) {
-      setMainSection("training")
+      setMainSection("social")
     }
   }
 
@@ -42,78 +43,86 @@ function App() {
     ;(async () => {
       const res = await getProfile()
       if (res.success && res.data) {
-        setUserName(res.data.displayName || "User")
+        const data: any = res.data
+        const nameFromProfile = data.displayName || data.DisplayName || data.username || data.userName || data.email
+        setUserName(nameFromProfile || "User")
       }
     })()
   }, [isLoggedIn])
 
   return (
     <div className="app">
-      <nav className="navbar">
-        <div className="nav-container">
-          <div className="nav-left">
-            <button type="button" className="logo-container" onClick={handleLogoClick}>
-              <img src="/alaca_logo.png" alt="Alaca Logo" className="logo-image" />
-            </button>
-          </div>
-          <div className="nav-right">
-            {!isLoggedIn && (
-              <>
-                <button type="button" className="nav-link nav-link-button" onClick={openLogin}>
-                  Training Now
-                </button>
-                <button
-                  type="button"
-                  className="nav-link nav-link-button"
-                  onClick={() => setShowBmiModal(true)}
+      {!isLoggedIn && (
+        <nav className="navbar">
+          <div className="nav-container">
+            <div className="nav-left">
+              <button type="button" className="logo-container" onClick={handleLogoClick}>
+                <img src="/alaca_logo.png" alt="Alaca Logo" className="logo-image" />
+              </button>
+            </div>
+            <div className="nav-right">
+              <button type="button" className="nav-link nav-link-button" onClick={openLogin}>
+                Training Now
+              </button>
+              <button
+                type="button"
+                className="nav-link nav-link-button"
+                onClick={() => setShowBmiModal(true)}
+              >
+                Calculate your BMI
+              </button>
+              <a
+                href="#muscle-wiki"
+                className="nav-link"
+                onClick={(e) => {
+                  e.preventDefault()
+                  setCurrentPage("muscle-wiki")
+                }}
+              >
+                Muscle Wiki
+              </a>
+              <button className="login-btn" type="button" onClick={openLogin}>
+                <svg
+                  className="login-icon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  Calculate your BMI
-                </button>
-            <a 
-              href="#muscle-wiki" 
-              className="nav-link"
-              onClick={(e) => {
-                e.preventDefault()
-                    setCurrentPage("muscle-wiki")
-              }}
-            >
-              Muscle Wiki
-            </a>
-                <button className="login-btn" type="button" onClick={openLogin}>
-                <svg className="login-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <circle
-                      cx="12"
-                      cy="7"
-                      r="4"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                  <path
+                    d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle
+                    cx="12"
+                    cy="7"
+                    r="4"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
                 <span>Login</span>
               </button>
-              </>
-            )}
+            </div>
           </div>
-      </div>
-      </nav>
+        </nav>
+      )}
 
       {isLoggedIn && (
-        <LoggedInLayout
-          activeSection={mainSection}
-          onSelectSection={setMainSection}
-          onProfile={() => setMainSection("training")}
-          onLogout={handleLogout}
-          userName={userName}
-        />
+        <>
+          <LoggedInLayout
+            activeSection={mainSection}
+            onSelectSection={setMainSection}
+            onProfile={() => setMainSection("profile")}
+            onLogout={handleLogout}
+            userName={userName}
+          />
+          <WeekStreak />
+        </>
       )}
 
       {!isLoggedIn && currentPage === "muscle-wiki" && (
@@ -132,6 +141,7 @@ function App() {
         onLoginSuccess={() => {
           setIsLoggedIn(true)
           setCurrentPage("home")
+          setMainSection("social")
         }}
       />
     </div>

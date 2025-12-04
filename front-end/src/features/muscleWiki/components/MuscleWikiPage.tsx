@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { muscleGroups, type MuscleKey } from '../constants/muscleGroups'
+import { muscleGroups, type MuscleKey } from '../../../shared/constants/muscleGroups'
 
 type Props = {
   onBack: () => void
