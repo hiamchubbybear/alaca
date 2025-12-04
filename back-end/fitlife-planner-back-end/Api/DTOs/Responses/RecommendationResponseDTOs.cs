@@ -38,6 +38,10 @@ public class PersonalizedPlanDTO
     public string Goal { get; set; } = string.Empty;
     public double CurrentBMI { get; set; }
     public double TargetCalories { get; set; }
+    public double ConsumedCalories { get; set; } // New: calories consumed today
+    public double RemainingCalories { get; set; } // New: remaining calories for today
+    public string GoalPlan { get; set; } = string.Empty; // New: WeightLoss, MuscleGain, Maintenance
+    public int PracticeLevel { get; set; } // New: 0=Beginner, 1=Intermediate, 2=Advanced
     public MacroTargetsDTO MacroTargets { get; set; } = new();
     public List<FoodRecommendationDTO> BreakfastSuggestions { get; set; } = new();
     public List<FoodRecommendationDTO> LunchSuggestions { get; set; } = new();

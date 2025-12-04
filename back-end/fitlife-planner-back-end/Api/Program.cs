@@ -89,7 +89,8 @@ builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<Authe
     .AddScoped<NotificationService>()
     .AddScoped<FollowerService>()
     .AddScoped<NutritionDataSeeder>()
-    .AddScoped<RecommendationService>();
+    .AddScoped<RecommendationService>()
+    .AddScoped<DataSeederService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connString = $"Server={host};Port={port};Database={db};User={user};Password={pass};SslMode={ssl};";
@@ -119,6 +120,21 @@ using (var scope = app.Services.CreateScope())
     {
         // Log error instead of crashing
         Console.WriteLine($"Database initialization error: {ex.Message}");
+    }
+}
+
+// Auto-seed data on startup
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeederService>();
+    try
+    {
+        await seeder.SeedAllDataAsync();
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"⚠ Data seeding error: {ex.Message}");
+        // Don't crash the app, just log the error
     }
 }
 

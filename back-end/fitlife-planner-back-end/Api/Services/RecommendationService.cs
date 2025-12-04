@@ -129,11 +129,12 @@ public class RecommendationService
     }
 
     /// <summary>
-    /// Get personalized daily plan based on user profile
+    /// Get personalized daily plan based on user profile, BMI record, and current nutrition plan
     /// </summary>
     public virtual async Task<PersonalizedPlanDTO> GetPersonalizedPlan()
     {
         var userId = _userContext.User.userId;
+        var profileId = _userContext.User.profileId;
 
         // Get user profile
         var profile = await _dbContext.Profiles
@@ -141,44 +142,87 @@ public class RecommendationService
 
         if (profile == null)
         {
-            throw new Exception("User profile not found");
+            throw new Exception("User profile not found. Please create a profile first.");
         }
 
-        // Get latest BMI record for height/weight
+        // Get latest BMI record
         var latestBMI = await _dbContext.BmiRecords
-            .Where(b => b.ProfileId == profile.ProfileId)
+            .Where(b => b.ProfileId == profileId && b.IsCurrent)
             .OrderByDescending(b => b.MeasuredAt)
             .FirstOrDefaultAsync();
 
-        var heightCm = latestBMI?.HeightCm ?? 170;
-        var weightKg = (double)(latestBMI?.WeightKg ?? 70);
+        if (latestBMI == null)
+        {
+            throw new Exception("No BMI record found. Please calculate your BMI first.");
+        }
 
-        // Calculate BMI and macros
-        var bmi = _bmiUtil.CalculateBMI(heightCm, weightKg);
-        var goalPlan = _bmiUtil.GetGoalPlanByBmi(bmi);
+        // Calculate daily calories based on BMI record
         var dailyCalories = _bmiUtil.CalculateDailyCalories(
-            weightKg,
-            heightCm,
-            1.5, // Moderate activity
-            goalPlan.WeeklyTargetKg
+            latestBMI.WeightKg,
+            latestBMI.HeightCm,
+            latestBMI.ActivityFactor,
+            0 // weeklyTargetKg - get from goal if available
         );
-        var macros = _bmiUtil.MapCaloriesToMacros(dailyCalories, bmi);
 
-        // Get meal recommendations
-        var breakfast = await RecommendMeals(dailyCalories, "breakfast", 5);
-        var lunch = await RecommendMeals(dailyCalories, "lunch", 5);
-        var dinner = await RecommendMeals(dailyCalories, "dinner", 5);
-        var snacks = await RecommendMeals(dailyCalories, "snack", 3);
+        // Get macros
+        var macros = _bmiUtil.MapCaloriesToMacros(dailyCalories, latestBMI.BMI);
 
-        // Get workout recommendations
-        var goal = bmi > 25 ? "weight_loss" : bmi < 18.5 ? "muscle_gain" : "maintenance";
-        var workouts = await RecommendWorkouts(bmi, goal, "intermediate", 5);
+        // Get today's consumed calories from nutrition plan
+        var today = DateTime.UtcNow.Date;
+        var nutritionPlan = await _dbContext.NutritionPlans
+            .Where(np => np.OwnerUserId == userId)
+            .OrderByDescending(np => np.CreatedAt)
+            .FirstOrDefaultAsync();
+
+        double consumedCalories = 0;
+        if (nutritionPlan != null)
+        {
+            var todayItems = await _dbContext.Set<NutritionPlanItem>()
+                .Where(npi => npi.PlanId == nutritionPlan.Id
+                           && npi.CreatedAt.Date == today)
+                .Include(npi => npi.FoodItem)
+                .ToListAsync();
+
+            consumedCalories = todayItems
+                .Where(item => item.FoodItem != null)
+                .Sum(item => (item.FoodItem.CaloriesKcal ?? 0) * (double)(item.ServingCount ?? 1));
+        }
+
+        var remainingCalories = dailyCalories - consumedCalories;
+
+        // Determine goal based on BMI
+        var goalPlan = latestBMI.BMI > 25 ? "WeightLoss"
+                     : latestBMI.BMI < 18.5 ? "MuscleGain"
+                     : "Maintenance";
+
+        // Get smart meal recommendations based on remaining calories and goal
+        var breakfast = await RecommendMealsForGoal(remainingCalories, "breakfast", goalPlan, 5);
+        var lunch = await RecommendMealsForGoal(remainingCalories, "lunch", goalPlan, 5);
+        var dinner = await RecommendMealsForGoal(remainingCalories, "dinner", goalPlan, 5);
+        var snacks = await RecommendMealsForGoal(remainingCalories, "snack", goalPlan, 3);
+
+        // Get smart workout recommendations based on practice level and goal
+        var difficulty = latestBMI.PracticeLevel switch
+        {
+            PracticeLevel.PRO => "advanced",
+            PracticeLevel.HARD => "advanced",
+            PracticeLevel.MEDIUM => "intermediate",
+            PracticeLevel.EASY => "beginner",
+            PracticeLevel.NEWBIE => "beginner",
+            _ => "beginner"
+        };
+
+        var workouts = await RecommendWorkoutsForGoal(latestBMI.BMI, goalPlan, difficulty, 5);
 
         return new PersonalizedPlanDTO
         {
-            Goal = goalPlan.Assessment,
-            CurrentBMI = bmi,
+            Goal = latestBMI.Assessment,
+            CurrentBMI = latestBMI.BMI,
             TargetCalories = dailyCalories,
+            ConsumedCalories = consumedCalories,
+            RemainingCalories = remainingCalories,
+            GoalPlan = goalPlan,
+            PracticeLevel = (int)latestBMI.PracticeLevel,
             MacroTargets = new MacroTargetsDTO
             {
                 Calories = macros.Calories,
@@ -192,6 +236,181 @@ public class RecommendationService
             SnackSuggestions = snacks,
             WorkoutSuggestions = workouts
         };
+    }
+
+    /// <summary>
+    /// Recommend meals based on goal plan (smart filtering)
+    /// </summary>
+    private async Task<List<FoodRecommendationDTO>> RecommendMealsForGoal(
+        double remainingCalories,
+        string mealType,
+        string goalPlan,
+        int limit)
+    {
+        // Calculate calorie allocation by meal type
+        var mealCalories = mealType.ToLower() switch
+        {
+            "breakfast" => remainingCalories * 0.25, // 25% of remaining calories
+            "lunch" => remainingCalories * 0.35,     // 35%
+            "dinner" => remainingCalories * 0.30,    // 30%
+            "snack" => remainingCalories * 0.10,     // 10%
+            _ => remainingCalories * 0.25
+        };
+
+        // Query food items within calorie range (±30%)
+        var minCalories = mealCalories * 0.7;
+        var maxCalories = mealCalories * 1.3;
+
+        var query = _dbContext.FoodItems
+            .Where(f => f.CaloriesKcal >= minCalories && f.CaloriesKcal <= maxCalories);
+
+        // Smart filtering based on goal
+        List<FoodItem> foodItems;
+        if (goalPlan == "WeightLoss")
+        {
+            // Prefer high protein, low carb
+            foodItems = await query
+                .OrderByDescending(f => f.ProteinG)
+                .ThenBy(f => f.CarbsG)
+                .Take(limit)
+                .ToListAsync();
+        }
+        else if (goalPlan == "MuscleGain")
+        {
+            // Prefer high protein, moderate carbs
+            foodItems = await query
+                .OrderByDescending(f => f.ProteinG)
+                .ThenByDescending(f => f.CarbsG)
+                .Take(limit)
+                .ToListAsync();
+        }
+        else // Maintenance
+        {
+            // Balanced - closest to target calories
+            foodItems = await query
+                .OrderBy(f => Math.Abs((f.CaloriesKcal ?? 0) - mealCalories))
+                .Take(limit)
+                .ToListAsync();
+        }
+
+        return foodItems.Select(f => new FoodRecommendationDTO
+        {
+            Id = f.Id,
+            Name = f.Name,
+            CaloriesKcal = f.CaloriesKcal ?? 0,
+            ProteinG = (double)(f.ProteinG ?? 0),
+            CarbsG = (double)(f.CarbsG ?? 0),
+            FatG = (double)(f.FatG ?? 0),
+            ServingSize = f.ServingSize ?? "100g",
+            MatchScore = CalculateMatchScore(f.CaloriesKcal ?? 0, mealCalories),
+            Reason = GenerateFoodReasonForGoal(f, goalPlan, mealType)
+        }).ToList();
+    }
+
+    /// <summary>
+    /// Recommend workouts based on goal plan and difficulty
+    /// </summary>
+    private async Task<List<WorkoutRecommendationDTO>> RecommendWorkoutsForGoal(
+        double bmi,
+        string goalPlan,
+        string difficulty,
+        int limit)
+    {
+        var query = _dbContext.ExerciseLibrary
+            .Where(e => e.Difficulty.ToLower() == difficulty.ToLower());
+
+        var exercises = await query.ToListAsync();
+
+        if (!exercises.Any())
+        {
+            // Fallback to all exercises if no match
+            exercises = await _dbContext.ExerciseLibrary.Take(limit).ToListAsync();
+        }
+
+        // Filter and prioritize by goal
+        var recommendations = exercises.Select(e => new
+        {
+            Exercise = e,
+            Priority = CalculateWorkoutPriority(e, goalPlan)
+        })
+        .OrderByDescending(x => x.Priority)
+        .Take(limit)
+        .Select(x => new WorkoutRecommendationDTO
+        {
+            Id = x.Exercise.Id,
+            Title = x.Exercise.Title,
+            Description = x.Exercise.Description,
+            PrimaryMuscle = x.Exercise.PrimaryMuscle,
+            SecondaryMuscles = string.IsNullOrEmpty(x.Exercise.SecondaryMuscles)
+                ? new List<string>()
+                : x.Exercise.SecondaryMuscles.Split(',').Select(m => m.Trim()).ToList(),
+            Difficulty = x.Exercise.Difficulty,
+            DurationMin = 30,
+            EstimatedCaloriesBurned = EstimateCaloriesBurned(x.Exercise.Difficulty, 30),
+            Reason = GenerateWorkoutReasonForGoal(x.Exercise, goalPlan, bmi)
+        })
+        .ToList();
+
+        return recommendations;
+    }
+
+    private int CalculateWorkoutPriority(ExerciseLibrary exercise, string goalPlan)
+    {
+        var priority = 50; // Base priority
+
+        if (goalPlan == "WeightLoss")
+        {
+            // Prefer full-body and cardio
+            if (exercise.PrimaryMuscle?.ToLower().Contains("full") == true) priority += 30;
+            if (exercise.PrimaryMuscle?.ToLower().Contains("cardio") == true) priority += 30;
+            if (exercise.PrimaryMuscle?.ToLower().Contains("legs") == true) priority += 20;
+        }
+        else if (goalPlan == "MuscleGain")
+        {
+            // Prefer compound movements
+            if (exercise.PrimaryMuscle?.ToLower().Contains("chest") == true) priority += 25;
+            if (exercise.PrimaryMuscle?.ToLower().Contains("back") == true) priority += 25;
+            if (exercise.PrimaryMuscle?.ToLower().Contains("legs") == true) priority += 25;
+        }
+
+        return priority;
+    }
+
+    private string GenerateFoodReasonForGoal(FoodItem food, string goalPlan, string mealType)
+    {
+        var protein = (double)(food.ProteinG ?? 0);
+        var carbs = (double)(food.CarbsG ?? 0);
+        var calories = food.CaloriesKcal ?? 0;
+
+        if (goalPlan == "WeightLoss")
+        {
+            if (protein > 20)
+                return $"High protein ({protein:F1}g) keeps you full longer - perfect for weight loss";
+            if (calories < 200)
+                return $"Low calorie ({calories} kcal) option for weight loss";
+            return $"Balanced option for {mealType} with {calories} kcal";
+        }
+        else if (goalPlan == "MuscleGain")
+        {
+            if (protein > 20 && carbs > 30)
+                return $"Great for muscle building: {protein:F1}g protein + {carbs:F1}g carbs";
+            if (protein > 20)
+                return $"High protein ({protein:F1}g) supports muscle growth";
+            return $"Good energy source with {carbs:F1}g carbs for workouts";
+        }
+        else // Maintenance
+        {
+            return $"Balanced meal for {mealType} with {calories} kcal";
+        }
+    }
+
+    private string GenerateWorkoutReasonForGoal(ExerciseLibrary exercise, string goalPlan, double bmi)
+    {
+        if (goalPlan == "WeightLoss")
+            return $"Burns calories effectively, targets {exercise.PrimaryMuscle} - great for fat loss";
+        if (goalPlan == "MuscleGain")
+            return $"Builds {exercise.PrimaryMuscle} strength and muscle mass";
+        return $"Maintains {exercise.PrimaryMuscle} fitness and overall health";
     }
 
     /// <summary>
