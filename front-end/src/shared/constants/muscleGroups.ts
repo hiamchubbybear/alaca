@@ -1,23 +1,14 @@
-export type MuscleKey =
-  | 'chest'
-  | 'back'
-  | 'shoulders'
-  | 'biceps'
-  | 'triceps'
-  | 'abs'
-  | 'legs'
-  | 'glutes'
+export type MuscleKey = 'chest' | 'back' | 'shoulders' | 'biceps' | 'triceps' | 'abs' | 'legs' | 'glutes'
 
-export const muscleGroups: Record<
-  MuscleKey,
-  {
-    name: string
-    description: string
-    functions: string[]
-    exercises: string[]
-    location: string
-  }
-> = {
+export type MuscleGroup = {
+  name: string
+  description: string
+  functions: string[]
+  exercises: string[]
+  location: string
+}
+
+export const muscleGroups: Record<MuscleKey, MuscleGroup> = {
   chest: {
     name: 'Chest',
     description:
@@ -83,5 +74,3 @@ export const muscleGroups: Record<
     location: 'Buttocks area'
   }
 }
-
-

@@ -82,7 +82,6 @@ export function WeekStreak() {
 
   const workoutStreak = streaks.find((s) => s.type === 'workout')
   const currentStreak = workoutStreak ? workoutStreak.currentStreak : weekStreak * 7
-  const longestStreak = workoutStreak ? workoutStreak.longestStreak : 0
 
   // Get current week days
   const getWeekDays = () => {
@@ -93,7 +92,7 @@ export function WeekStreak() {
 
     const days = []
     const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    
+
     for (let i = 0; i < 7; i++) {
       const date = new Date(startOfWeek)
       date.setDate(startOfWeek.getDate() + i)
@@ -105,7 +104,7 @@ export function WeekStreak() {
         isCompleted: i < (currentStreak % 7)
       })
     }
-    
+
     return days
   }
 
@@ -124,7 +123,7 @@ export function WeekStreak() {
       <div className="week-streak-header">
         <div className="week-streak-title">Healthy Habits</div>
       </div>
-      
+
       {loading ? (
         <div className="week-streak-loading">Loading...</div>
       ) : (
@@ -192,4 +191,3 @@ export function WeekStreak() {
     </div>
   )
 }
-

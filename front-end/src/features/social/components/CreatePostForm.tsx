@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react'
-import { createPost, type CreatePostRequest } from '../api/postApi'
 import { uploadImage } from '../../../shared/services/cloudinaryService'
-import { getUserInitials } from '../utils/userUtils'
 import type { ProfileResponse } from '../../profile/api/profileApi'
+import { createPost } from '../api/postApi'
+import { getUserInitials } from '../utils/userUtils'
 import './CreatePostForm.css'
 
 type Props = {
@@ -122,4 +122,3 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
     </div>
   )
 }
-

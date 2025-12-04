@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getAllPosts } from '../api/postApi'
-import type { Post, PaginatedPosts } from '../types/post.types'
+import type { Post } from '../types/post.types'
 
 export function usePosts() {
   const [posts, setPosts] = useState<Post[]>([])
@@ -71,4 +71,3 @@ export function usePosts() {
     removePost
   }
 }
-

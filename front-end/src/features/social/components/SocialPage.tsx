@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import { deletePost } from '../api/postApi'
 import { getProfile, type ProfileResponse } from '../../profile/api/profileApi'
-import { usePosts } from '../hooks/usePosts'
+import { deletePost } from '../api/postApi'
 import { usePostInteractions } from '../hooks/usePostInteractions'
+import { usePosts } from '../hooks/usePosts'
 import { CreatePostForm } from './CreatePostForm'
 import { PostCard } from './PostCard'
 import './SocialPage.css'
 
 export function SocialPage() {
   const [currentUser, setCurrentUser] = useState<ProfileResponse | null>(null)
-  const { posts, loading, error, pageNumber, hasMore, loadPosts, updatePost, addPost, removePost } = usePosts()
+  const { posts, loading, error, pageNumber, hasMore, loadPosts, updatePost, removePost } = usePosts()
   const { likedPosts, handleLike } = usePostInteractions(posts, updatePost)
 
   useEffect(() => {
@@ -57,22 +57,22 @@ export function SocialPage() {
         <CreatePostForm currentUser={currentUser} onPostCreated={handlePostCreated} />
 
         {error && (
-          <div className="error-message" style={{ 
-            padding: '1rem', 
-            background: '#fee', 
-            color: '#c33', 
+          <div className="error-message" style={{
+            padding: '1rem',
+            background: '#fee',
+            color: '#c33',
             borderRadius: '8px',
             marginBottom: '1rem'
           }}>
             Error: {error}
-            <button 
-              onClick={() => loadPosts(1)} 
-              style={{ 
-                marginLeft: '1rem', 
-                padding: '0.5rem 1rem', 
-                background: '#c33', 
-                color: 'white', 
-                border: 'none', 
+            <button
+              onClick={() => loadPosts(1)}
+              style={{
+                marginLeft: '1rem',
+                padding: '0.5rem 1rem',
+                background: '#c33',
+                color: 'white',
+                border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer'
               }}
@@ -113,4 +113,3 @@ export function SocialPage() {
     </div>
   )
 }
-

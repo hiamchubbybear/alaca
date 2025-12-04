@@ -1,8 +1,7 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { getProfile, updateProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { uploadImage } from '../../../shared/services/cloudinaryService'
+import { getProfile, updateProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { SocialPage } from '../../social/components/SocialPage'
-import { WeekStreak } from './WeekStreak'
 
 export type MainSection = 'training' | 'nutrition' | 'progress' | 'challenge' | 'social' | 'profile'
 
@@ -72,7 +71,7 @@ export function LoggedInLayout({
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   // Get avatar URL from profile or form, fallback to empty string
   const currentAvatarUrl = profile?.avatarUrl || profileForm.avatarUrl || ''
-  
+
   const initials = userName
     .split(' ')
     .map((part) => part[0])
@@ -139,7 +138,7 @@ export function LoggedInLayout({
     if (file) {
       // Store the file for later upload
       setAvatarFile(file)
-      
+
       // Create preview URL for immediate display
       const reader = new FileReader()
       reader.onloadend = () => {
@@ -166,7 +165,7 @@ export function LoggedInLayout({
         try {
           setUploadingAvatar(true)
           const uploadResult = await uploadImage(avatarFile)
-          
+
           if (!uploadResult.success || !uploadResult.url) {
             setProfileError(uploadResult.error || 'Failed to upload avatar image')
             setUploadingAvatar(false)
@@ -588,4 +587,3 @@ export function LoggedInLayout({
     </main>
   )
 }
-

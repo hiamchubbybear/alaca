@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { deletePost, likePost } from '../api/postApi'
-import { formatTimeAgo } from '../utils/formatTime'
-import type { Post } from '../types/post.types'
 import type { ProfileResponse } from '../../profile/api/profileApi'
+import type { Post } from '../types/post.types'
+import { formatTimeAgo } from '../utils/formatTime'
 import { CommentSection } from './CommentSection'
 import './PostCard.css'
 
@@ -116,4 +115,3 @@ export function PostCard({ post, currentUser, isLiked, onLike, onDelete, onComme
     </div>
   )
 }
-

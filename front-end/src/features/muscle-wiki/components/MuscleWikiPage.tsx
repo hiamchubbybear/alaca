@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { muscleGroups, type MuscleKey } from '../../../constants/muscleGroups'
+import type { MuscleGroup } from '../../../shared/constants/muscleGroups'
+import { muscleGroups, type MuscleKey } from '../../../shared/constants/muscleGroups'
 
 type Props = {
   onBack: () => void
@@ -36,6 +37,7 @@ export function MuscleWikiPage({ onBack }: Props) {
             <div className="muscle-list">
               {Object.entries(muscleGroups).map(([key, group]) => {
                 const muscleKey = key as MuscleKey
+                const muscleGroup = group as MuscleGroup
                 const isSelected = selectedMuscle === muscleKey
 
                 return (
@@ -47,8 +49,8 @@ export function MuscleWikiPage({ onBack }: Props) {
                       onChange={() => setSelectedMuscle(isSelected ? null : muscleKey)}
                     />
                     <div className="muscle-list-text">
-                      <span className="muscle-list-name">{group.name}</span>
-                      <span className="muscle-list-location">{group.location}</span>
+                      <span className="muscle-list-name">{muscleGroup.name}</span>
+                      <span className="muscle-list-location">{muscleGroup.location}</span>
                     </div>
                   </label>
                 )
@@ -70,7 +72,7 @@ export function MuscleWikiPage({ onBack }: Props) {
                 <div className="muscle-info-section">
                   <h3 className="muscle-info-heading">Functions</h3>
                   <ul className="muscle-info-list">
-                    {muscleGroups[selectedMuscle].functions.map((func, index) => (
+                    {muscleGroups[selectedMuscle].functions.map((func: string, index: number) => (
                       <li key={index}>{func}</li>
                     ))}
                   </ul>
@@ -79,7 +81,7 @@ export function MuscleWikiPage({ onBack }: Props) {
                 <div className="muscle-info-section">
                   <h3 className="muscle-info-heading">Recommended Exercises</h3>
                   <ul className="muscle-info-list">
-                    {muscleGroups[selectedMuscle].exercises.map((exercise, index) => (
+                    {muscleGroups[selectedMuscle].exercises.map((exercise: string, index: number) => (
                       <li key={index}>{exercise}</li>
                     ))}
                   </ul>
