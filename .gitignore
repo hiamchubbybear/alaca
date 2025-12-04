@@ -53,3 +53,10 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 .env
+
+# Sensitive files
+passwords.txt
+*.key
+*.pem
+secrets.txt
+credentials.txt
