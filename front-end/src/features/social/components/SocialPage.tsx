@@ -5,7 +5,6 @@ import { useVote } from '../hooks/useVote'
 import { usePosts } from '../hooks/usePosts'
 import { CreatePostForm } from './CreatePostForm'
 import { PostCard } from './PostCard'
-import type { Post } from '../types/post.types'
 import './SocialPage.css'
 
 export function SocialPage() {

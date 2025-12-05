@@ -19,7 +19,6 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
   })
   const [uploading, setUploading] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -40,7 +39,6 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
     // Create preview URL
     const previewUrl = URL.createObjectURL(file)
     setImagePreview(previewUrl)
-    setSelectedFile(file)
 
     // Auto upload after selection
     handleImageUpload(file)
@@ -59,13 +57,11 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
       } else {
         alert(result.error || 'Failed to upload image')
         setImagePreview(null)
-        setSelectedFile(null)
       }
     } catch (error) {
       console.error('Failed to upload image:', error)
       alert('Failed to upload image. Please try again.')
       setImagePreview(null)
-      setSelectedFile(null)
     } finally {
       setUploading(false)
     }
@@ -85,7 +81,6 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
       if (res.success && res.data) {
         setNewPost({ title: '', content: '', media: '' })
         setImagePreview(null)
-        setSelectedFile(null)
         setShowForm(false)
         onPostCreated()
       }
@@ -139,7 +134,6 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
                     URL.revokeObjectURL(imagePreview)
                     setImagePreview(null)
                   }
-                  setSelectedFile(null)
                 }}
                 className="remove-media-btn"
               >

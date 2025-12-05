@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import type { ProfileResponse } from '../../profile/api/profileApi'
 import type { Post } from '../types/post.types'
 import { formatTimeAgo } from '../utils/formatTime'

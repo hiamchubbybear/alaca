@@ -1,4 +1,4 @@
-import axios, { type AxiosError, type AxiosInstance } from 'axios'
+import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from 'axios'
 import { API_BASE_URL, type ApiResponse } from '../shared/types/api'
 
 // Create axios instance with base configuration
@@ -11,24 +11,27 @@ const api: AxiosInstance = axios.create({
 
 // Request interceptor to add JWT token
 api.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('accessToken')
-    if (token) {
+    if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },
-  (error) => Promise.reject(error)
+  (error: unknown) => Promise.reject(error)
 )
 
 // Response interceptor for error handling
 api.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError) => {
-    if (error.response?.status === 401) {
-      // Unauthorized - clear token and redirect to login
-      localStorage.removeItem('accessToken')
-      window.location.href = '/'
+  (response: AxiosResponse) => response,
+  (error: unknown) => {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError
+      if (axiosError.response?.status === 401) {
+        // Unauthorized - clear token and redirect to login
+        localStorage.removeItem('accessToken')
+        window.location.href = '/'
+      }
     }
     return Promise.reject(error)
   }
@@ -47,9 +50,12 @@ export async function apiRequest<TData = unknown>(
       data
     })
     return response.data
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
-      return error.response.data as ApiResponse<TData>
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError
+      if (axiosError.response) {
+        return axiosError.response.data as ApiResponse<TData>
+      }
     }
     return {
       success: false,
