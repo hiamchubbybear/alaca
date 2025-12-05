@@ -1,10 +1,43 @@
+import { useState, useEffect } from 'react'
 import type { LogoItem } from '../../../shared/constants/logos'
 
 type Props = {
   logos: LogoItem[]
 }
 
+// Hero images - bạn có thể thêm ảnh vào đây
+const heroImages = [
+  '/slides/slide1.jpg',
+  '/slides/slide2.jpg',
+  '/slides/slide3.jpg',
+  '/slides/slide4.jpg',
+]
+
 export function HomePage({ logos }: Props) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  useEffect(() => {
+    if (heroImages.length <= 1) return
+
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length)
+    }, 3000) // Chuyển ảnh mỗi 3 giây
+
+    return () => clearInterval(interval)
+  }, [])
+
+  const goToSlide = (index: number) => {
+    setCurrentImageIndex(index)
+  }
+
+  const nextSlide = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length)
+  }
+
+  const prevSlide = () => {
+    setCurrentImageIndex((prevIndex) => (prevIndex - 1 + heroImages.length) % heroImages.length)
+  }
+
   return (
     <>
       <section className="hero">
@@ -22,20 +55,83 @@ export function HomePage({ logos }: Props) {
             </div>
           </div>
           <div className="hero-image">
-            <div className="hero-image-placeholder">
-              <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="400" height="400" rx="20" fill="url(#gradient)" />
-                <defs>
-                  <linearGradient id="gradient" x1="0" y1="0" x2="400" y2="400">
-                    <stop offset="0%" stopColor="#667eea" />
-                    <stop offset="100%" stopColor="#764ba2" />
-                  </linearGradient>
-                </defs>
-                <circle cx="200" cy="150" r="40" fill="white" opacity="0.3" />
-                <rect x="160" y="200" width="80" height="120" rx="10" fill="white" opacity="0.3" />
-                <circle cx="180" cy="190" r="15" fill="white" opacity="0.4" />
-                <circle cx="220" cy="190" r="15" fill="white" opacity="0.4" />
-              </svg>
+            <div className="hero-carousel">
+              {heroImages.length > 1 && (
+                <>
+                  <button
+                    className="hero-carousel-arrow hero-carousel-arrow-prev"
+                    onClick={prevSlide}
+                    aria-label="Previous slide"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15 18L9 12L15 6"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    className="hero-carousel-arrow hero-carousel-arrow-next"
+                    onClick={nextSlide}
+                    aria-label="Next slide"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9 18L15 12L9 6"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </>
+              )}
+              <div className="hero-carousel-container">
+                {heroImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className={`hero-carousel-slide ${index === currentImageIndex ? 'active' : ''}`}
+                  >
+                    <img
+                      src={image}
+                      alt={`Hero image ${index + 1}`}
+                      className="hero-carousel-image"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.style.display = 'none'
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+              {heroImages.length > 1 && (
+                <div className="hero-carousel-dots">
+                  {heroImages.map((_, index) => (
+                    <button
+                      key={index}
+                      className={`hero-carousel-dot ${index === currentImageIndex ? 'active' : ''}`}
+                      onClick={() => goToSlide(index)}
+                      aria-label={`Go to slide ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -68,54 +164,73 @@ export function HomePage({ logos }: Props) {
         <div className="tabs-container">
           <h2 className="section-title">Explore Our Features</h2>
           <div className="tabs-wrapper">
-            <div className="tab-item active">
+            <div className="tab-item">
               <div className="tab-image">
-                <div className="tab-image-placeholder">
-                  <svg viewBox="0 0 300 200" fill="none">
-                    <rect width="300" height="200" rx="10" fill="#667eea" opacity="0.2" />
-                    <circle cx="150" cy="100" r="30" fill="#667eea" />
-                  </svg>
-                </div>
+                <img
+                  src="/feature/workout.jpg"
+                  alt="Workout Plans"
+                  className="tab-image-content"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.style.display = 'none'
+                  }}
+                />
               </div>
-              <h3>Workout Plans</h3>
-              <p>Personalized training routines</p>
+              <div>
+                <h3>Workout Plans</h3>
+                <p>Personalized training routines</p>
+              </div>
             </div>
             <div className="tab-item">
               <div className="tab-image">
-                <div className="tab-image-placeholder">
-                  <svg viewBox="0 0 300 200" fill="none">
-                    <rect width="300" height="200" rx="10" fill="#f093fb" opacity="0.2" />
-                    <rect x="100" y="70" width="100" height="60" rx="5" fill="#f093fb" />
-                  </svg>
-                </div>
+                <img
+                  src="/feature/nutrition.jpg"
+                  alt="Nutrition Plans"
+                  className="tab-image-content"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.style.display = 'none'
+                  }}
+                />
               </div>
-              <h3>Nutrition Plans</h3>
-              <p>Smart meal planning</p>
+              <div>
+                <h3>Nutrition Plans</h3>
+                <p>Smart meal planning</p>
+              </div>
             </div>
             <div className="tab-item">
               <div className="tab-image">
-                <div className="tab-image-placeholder">
-                  <svg viewBox="0 0 300 200" fill="none">
-                    <rect width="300" height="200" rx="10" fill="#4facfe" opacity="0.2" />
-                    <path d="M150 70 L180 130 L120 130 Z" fill="#4facfe" />
-                  </svg>
-                </div>
+                <img
+                  src="/feature/progress.jpg"
+                  alt="Progress Tracking"
+                  className="tab-image-content"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.style.display = 'none'
+                  }}
+                />
               </div>
-              <h3>Progress Tracking</h3>
-              <p>Monitor your journey</p>
+              <div>
+                <h3>Progress Tracking</h3>
+                <p>Monitor your journey</p>
+              </div>
             </div>
             <div className="tab-item">
               <div className="tab-image">
-                <div className="tab-image-placeholder">
-                  <svg viewBox="0 0 300 200" fill="none">
-                    <rect width="300" height="200" rx="10" fill="#43e97b" opacity="0.2" />
-                    <circle cx="150" cy="100" r="25" fill="#43e97b" />
-                    <circle cx="150" cy="100" r="15" fill="white" />
-                  </svg>
-                </div>
+                <img
+                  src="/feature/challenge.jpg"
+                  alt="Challenges"
+                  className="tab-image-content"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement
+                    target.style.display = 'none'
+                  }}
+                />
               </div>
-              <h3>Challenges</h3>
-              <p>Join fitness challenges</p>
+              <div>
+                <h3>Challenges</h3>
+                <p>Join fitness challenges</p>
+              </div>
             </div>
           </div>
         </div>
@@ -177,13 +292,13 @@ export function HomePage({ logos }: Props) {
               <li>
                 <div className="social-links">
                   <a href="#" aria-label="Facebook">
-                    FB
+                    <img src="/social-link/fb.png" alt="Facebook" className="social-icon" />
                   </a>
                   <a href="#" aria-label="Twitter">
-                    TW
+                    <img src="/social-link/x.png" alt="Twitter" className="social-icon" />
                   </a>
                   <a href="#" aria-label="Instagram">
-                    IG
+                    <img src="/social-link/ig.png" alt="Instagram" className="social-icon" />
                   </a>
                 </div>
               </li>
@@ -191,7 +306,7 @@ export function HomePage({ logos }: Props) {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2024 Alaca. All rights reserved.</p>
+          <p>&copy; 2025 Alaca. All rights reserved.</p>
         </div>
       </footer>
     </>

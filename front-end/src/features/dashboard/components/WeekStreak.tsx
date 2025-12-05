@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { request } from '../../../shared/api/apiClient'
 import './WeekStreak.css'
 
@@ -17,14 +17,146 @@ export interface UserStats {
   recentAchievements: any[]
 }
 
+interface Position {
+  x: number
+  y: number
+}
+
 export function WeekStreak() {
   const [streaks, setStreaks] = useState<StreakData[]>([])
   const [loading, setLoading] = useState(true)
   const [weekStreak, setWeekStreak] = useState(0)
+  
+  // Drag and resize state
+  const [position, setPosition] = useState<Position>(() => {
+    const saved = localStorage.getItem('weekStreak_position')
+    return saved ? JSON.parse(saved) : { x: 1.5, y: 1.5 }
+  })
+  
+  const [size, setSize] = useState(() => {
+    const saved = localStorage.getItem('weekStreak_size')
+    return saved ? JSON.parse(saved) : { width: 260, height: 'auto' }
+  })
+  
+  const [isDragging, setIsDragging] = useState(false)
+  const [isResizing, setIsResizing] = useState(false)
+  const [dragStart, setDragStart] = useState<Position>({ x: 0, y: 0 })
+  const [resizeStart, setResizeStart] = useState<{ pos: Position; size: { width: number; height: number } }>({ 
+    pos: { x: 0, y: 0 },
+    size: { width: 260, height: 400 }
+  })
+  
+  const containerRef = useRef<HTMLDivElement>(null)
+  const dragHandleRef = useRef<HTMLDivElement>(null)
+  const resizeHandleRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     loadStreaks()
   }, [])
+
+  // Save position and size to localStorage
+  useEffect(() => {
+    localStorage.setItem('weekStreak_position', JSON.stringify(position))
+  }, [position])
+
+  useEffect(() => {
+    localStorage.setItem('weekStreak_size', JSON.stringify(size))
+  }, [size])
+
+  // Drag handlers
+  const handleDragStart = (e: React.MouseEvent) => {
+    if (e.target === dragHandleRef.current || dragHandleRef.current?.contains(e.target as Node)) {
+      setIsDragging(true)
+      setDragStart({
+        x: e.clientX - position.x,
+        y: e.clientY - position.y
+      })
+    }
+  }
+
+  const handleDrag = (e: MouseEvent) => {
+    if (isDragging) {
+      const newX = e.clientX - dragStart.x
+      const newY = e.clientY - dragStart.y
+      
+      // Constrain to viewport
+      const maxX = window.innerWidth - (typeof size.width === 'number' ? size.width : 260)
+      const maxY = window.innerHeight - 200 // Approximate height
+      
+      setPosition({
+        x: Math.max(0, Math.min(newX, maxX)),
+        y: Math.max(0, Math.min(newY, maxY))
+      })
+    }
+  }
+
+  const handleDragEnd = () => {
+    setIsDragging(false)
+  }
+
+  // Resize handlers
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsResizing(true)
+    const currentWidth = typeof size.width === 'number' ? size.width : 260
+    const currentHeight = typeof size.height === 'number' ? size.height : 400
+    setResizeStart({
+      pos: { x: e.clientX, y: e.clientY },
+      size: { width: currentWidth, height: currentHeight }
+    })
+  }
+
+  const handleResize = (e: MouseEvent) => {
+    if (isResizing) {
+      const deltaX = e.clientX - resizeStart.pos.x
+      const deltaY = e.clientY - resizeStart.pos.y
+      
+      // Min and max constraints
+      const minWidth = 200
+      const maxWidth = 500
+      const minHeight = 300
+      const maxHeight = 800
+      
+      const newWidth = resizeStart.size.width + deltaX
+      const newHeight = resizeStart.size.height + deltaY
+      
+      setSize({
+        width: Math.max(minWidth, Math.min(newWidth, maxWidth)),
+        height: Math.max(minHeight, Math.min(newHeight, maxHeight))
+      })
+    }
+  }
+
+  const handleResizeEnd = () => {
+    setIsResizing(false)
+  }
+
+  // Event listeners for drag and resize
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleDrag)
+      document.addEventListener('mouseup', handleDragEnd)
+      return () => {
+        document.removeEventListener('mousemove', handleDrag)
+        document.removeEventListener('mouseup', handleDragEnd)
+      }
+    }
+  }, [isDragging, dragStart])
+
+  useEffect(() => {
+    if (isResizing) {
+      const handleResizeMove = (e: MouseEvent) => handleResize(e)
+      const handleResizeUp = () => handleResizeEnd()
+      
+      document.addEventListener('mousemove', handleResizeMove)
+      document.addEventListener('mouseup', handleResizeUp)
+      return () => {
+        document.removeEventListener('mousemove', handleResizeMove)
+        document.removeEventListener('mouseup', handleResizeUp)
+      }
+    }
+  }, [isResizing, resizeStart])
 
   const loadStreaks = async () => {
     try {
@@ -119,9 +251,25 @@ export function WeekStreak() {
   const motivationalMessage = motivationalMessages[currentStreak % motivationalMessages.length]
 
   return (
-    <div className="week-streak-container">
-      <div className="week-streak-header">
+    <div 
+      ref={containerRef}
+      className="week-streak-container"
+      style={{
+        left: `${position.x}px`,
+        bottom: 'auto',
+        top: `${position.y}px`,
+        width: typeof size.width === 'number' ? `${size.width}px` : size.width,
+        height: typeof size.height === 'number' ? `${size.height}px` : size.height,
+        cursor: isDragging ? 'grabbing' : 'default'
+      }}
+    >
+      <div 
+        ref={dragHandleRef}
+        className="week-streak-header week-streak-drag-handle"
+        onMouseDown={handleDragStart}
+      >
         <div className="week-streak-title">Healthy Habits</div>
+        <div className="week-streak-drag-icon">⋮⋮</div>
       </div>
 
       {loading ? (
@@ -188,6 +336,11 @@ export function WeekStreak() {
           <button className="week-streak-claim-btn">Claim</button>
         </>
       )}
+      <div 
+        ref={resizeHandleRef}
+        className="week-streak-resize-handle"
+        onMouseDown={handleResizeStart}
+      />
     </div>
   )
 }

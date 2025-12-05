@@ -8,6 +8,13 @@ export interface Post {
   commentCount: number
   createdAt: string
   updatedAt: string
+  // Author info (optional, will be populated from profile)
+  authorName?: string
+  authorAvatar?: string
+  // Vote info
+  upvoteCount?: number
+  downvoteCount?: number
+  userVote?: 'upvote' | 'downvote' | null
 }
 
 export interface CreatePostRequest {

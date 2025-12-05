@@ -1,7 +1,5 @@
 .week-streak-container {
   position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
   background: #ffffff;
   color: #1a202c;
   padding: 1.25rem 1rem;
@@ -11,14 +9,66 @@
   border-radius: 1.5rem;
   box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
   border: 1px solid rgba(148, 163, 184, 0.25);
-  width: 260px;
   z-index: 100;
   box-sizing: border-box;
+  user-select: none;
+  resize: none;
+  overflow: hidden;
 }
 
 .week-streak-header {
   width: 100%;
   margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.week-streak-drag-handle {
+  cursor: grab;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+}
+
+.week-streak-drag-handle:active {
+  cursor: grabbing;
+}
+
+.week-streak-drag-icon {
+  color: #cbd5e1;
+  font-size: 1rem;
+  line-height: 0.5;
+  letter-spacing: -0.2em;
+  user-select: none;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.week-streak-drag-handle:hover .week-streak-drag-icon {
+  opacity: 1;
+  color: #94a3b8;
+}
+
+.week-streak-resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  cursor: nwse-resize;
+  background: linear-gradient(135deg, transparent 0%, transparent 40%, #cbd5e1 40%, #cbd5e1 45%, transparent 45%, transparent 55%, #cbd5e1 55%, #cbd5e1 60%, transparent 60%);
+  border-radius: 0 0 1.5rem 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.week-streak-container:hover .week-streak-resize-handle {
+  opacity: 0.6;
+}
+
+.week-streak-resize-handle:hover {
+  opacity: 1 !important;
+  background: linear-gradient(135deg, transparent 0%, transparent 40%, #667eea 40%, #667eea 45%, transparent 45%, transparent 55%, #667eea 55%, #667eea 60%, transparent 60%);
 }
 
 .week-streak-title {

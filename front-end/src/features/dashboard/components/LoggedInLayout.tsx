@@ -228,12 +228,6 @@ export function LoggedInLayout({
   return (
     <main className="main-layout">
       <aside className="sidebar">
-        <div className="sidebar-brand">
-          <div className="sidebar-logo">
-            <img src="/alaca_logo.png" alt="Alaca Logo" />
-          </div>
-          <p className="sidebar-tagline">Personal Fitness OS</p>
-        </div>
         <ul className="sidebar-list">
           {sections.map((section) => (
             <li key={section}>

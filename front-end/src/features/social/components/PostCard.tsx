@@ -2,54 +2,39 @@ import { useState } from 'react'
 import type { ProfileResponse } from '../../profile/api/profileApi'
 import type { Post } from '../types/post.types'
 import { formatTimeAgo } from '../utils/formatTime'
-import { CommentSection } from './CommentSection'
+import { getUserInitials } from '../utils/userUtils'
 import './PostCard.css'
 
 type Props = {
   post: Post
   currentUser: ProfileResponse | null
-  isLiked: boolean
-  onLike: (postId: string) => void
+  onUpvote: (postId: string) => void
+  onDownvote: (postId: string) => void
   onDelete: (postId: string) => void
-  onCommentAdded: () => void
 }
 
-export function PostCard({ post, currentUser, isLiked, onLike, onDelete, onCommentAdded }: Props) {
-  const [showComments, setShowComments] = useState(false)
+export function PostCard({ post, currentUser, onUpvote, onDownvote, onDelete }: Props) {
+  const upvoteCount = post.upvoteCount ?? 0
+  const downvoteCount = post.downvoteCount ?? 0
+  const userVote = post.userVote ?? null
 
-  const handleShare = async () => {
-    const shareText = `${post.title || 'Check out this post'}\n${post.content || ''}`
-    const shareUrl = window.location.href
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: post.title || 'Post',
-          text: shareText,
-          url: shareUrl
-        })
-      } catch (error) {
-        console.error('Error sharing:', error)
-      }
-    } else {
-      try {
-        await navigator.clipboard.writeText(`${shareText}\n${shareUrl}`)
-        alert('Link copied to clipboard!')
-      } catch (error) {
-        console.error('Failed to copy:', error)
-      }
-    }
-  }
+  const authorName = post.authorName || 'User'
+  const authorAvatar = post.authorAvatar
+  const authorInitials = getUserInitials(authorName)
 
   return (
     <div className="post-card">
       <div className="post-header">
         <div className="post-author">
           <div className="post-avatar">
-            <span>U</span>
+            {authorAvatar ? (
+              <img src={authorAvatar} alt={authorName} />
+            ) : (
+              <span>{authorInitials}</span>
+            )}
           </div>
           <div className="post-author-info">
-            <div className="post-author-name">User</div>
+            <div className="post-author-name">{authorName}</div>
             <div className="post-time">{formatTimeAgo(post.createdAt)}</div>
           </div>
         </div>
@@ -71,47 +56,34 @@ export function PostCard({ post, currentUser, isLiked, onLike, onDelete, onComme
           <img src={post.media} alt="Post media" />
         </div>
       )}
-      <div className="post-stats">
-        <span className="post-likes">{post.likeCount} likes</span>
-        <span className="post-comments">{post.commentCount} comments</span>
-      </div>
-      <div className="post-actions">
-        <button
-          type="button"
-          className={`post-action-btn like-btn ${isLiked ? 'liked' : ''}`}
-          onClick={() => onLike(post.postId)}
-        >
-          <svg
-            className="like-icon"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill={isLiked ? 'currentColor' : 'none'}
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+      <div className="post-vote-section">
+        <div className="post-vote-stats">
+          <span className="vote-count upvote-count">▲ {upvoteCount}</span>
+          <span className="vote-count downvote-count">▼ {downvoteCount}</span>
+        </div>
+        <div className="post-vote-actions">
+          <button
+            type="button"
+            className={`vote-btn upvote-btn ${userVote === 'upvote' ? 'active' : ''}`}
+            onClick={() => onUpvote(post.postId)}
           >
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-          </svg>
-          Like
-        </button>
-        <button
-          type="button"
-          className={`post-action-btn comment-btn ${showComments ? 'active' : ''}`}
-          onClick={() => setShowComments(!showComments)}
-        >
-          💬 Comment
-        </button>
-        <button type="button" className="post-action-btn share-btn" onClick={handleShare}>
-          🔗 Share
-        </button>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 15l-6-6-6 6" />
+            </svg>
+            Upvote
+          </button>
+          <button
+            type="button"
+            className={`vote-btn downvote-btn ${userVote === 'downvote' ? 'active' : ''}`}
+            onClick={() => onDownvote(post.postId)}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+            Downvote
+          </button>
+        </div>
       </div>
-      <CommentSection
-        postId={post.postId}
-        isOpen={showComments}
-        onCommentAdded={onCommentAdded}
-      />
     </div>
   )
 }

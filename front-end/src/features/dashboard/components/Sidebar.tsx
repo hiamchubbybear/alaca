@@ -34,10 +34,6 @@ export function Sidebar({
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-brand">
-        <div className="sidebar-logo">Alaca</div>
-        <p className="sidebar-tagline">Personal Fitness OS</p>
-      </div>
       <ul className="sidebar-list">
         {sections.map((section) => (
           <li key={section.id}>

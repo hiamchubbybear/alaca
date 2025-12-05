@@ -1,6 +1,6 @@
 .social-page {
   width: 100%;
-  max-width: 680px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 0;
 }
@@ -48,10 +48,12 @@
 @media (max-width: 768px) {
   .social-page {
     padding: 0.5rem;
+    max-width: 100%;
   }
 
   .post-media img {
-    max-height: 300px;
+    max-height: 400px;
+    min-height: 200px;
   }
 }
 

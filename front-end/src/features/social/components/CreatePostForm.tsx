@@ -18,19 +18,54 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
     media: ''
   })
   const [uploading, setUploading] = useState(false)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file')
+      return
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Image size should be less than 10MB')
+      return
+    }
+
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file)
+    setImagePreview(previewUrl)
+    setSelectedFile(file)
+
+    // Auto upload after selection
+    handleImageUpload(file)
+  }
+
+  const handleImageUpload = async (file: File) => {
     try {
       setUploading(true)
       const result = await uploadImage(file)
       if (result.success && result.url) {
         setNewPost((prev) => ({ ...prev, media: result.url! }))
+        // Clean up preview URL after upload
+        if (imagePreview) {
+          URL.revokeObjectURL(imagePreview)
+        }
+      } else {
+        alert(result.error || 'Failed to upload image')
+        setImagePreview(null)
+        setSelectedFile(null)
       }
     } catch (error) {
       console.error('Failed to upload image:', error)
+      alert('Failed to upload image. Please try again.')
+      setImagePreview(null)
+      setSelectedFile(null)
     } finally {
       setUploading(false)
     }
@@ -49,6 +84,8 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
 
       if (res.success && res.data) {
         setNewPost({ title: '', content: '', media: '' })
+        setImagePreview(null)
+        setSelectedFile(null)
         setShowForm(false)
         onPostCreated()
       }
@@ -91,16 +128,29 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
             className="post-content-input"
             rows={4}
           />
-          {newPost.media && (
+          {(imagePreview || newPost.media) && (
             <div className="post-media-preview">
-              <img src={newPost.media} alt="Preview" />
+              <img src={imagePreview || newPost.media} alt="Preview" />
               <button
                 type="button"
-                onClick={() => setNewPost((prev) => ({ ...prev, media: '' }))}
+                onClick={() => {
+                  setNewPost((prev) => ({ ...prev, media: '' }))
+                  if (imagePreview) {
+                    URL.revokeObjectURL(imagePreview)
+                    setImagePreview(null)
+                  }
+                  setSelectedFile(null)
+                }}
                 className="remove-media-btn"
               >
                 ×
               </button>
+              {uploading && (
+                <div className="upload-progress">
+                  <div className="upload-progress-bar"></div>
+                  <span>Uploading...</span>
+                </div>
+              )}
             </div>
           )}
           <div className="create-post-actions">
@@ -108,7 +158,7 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleImageUpload}
+                onChange={handleImageSelect}
                 style={{ display: 'none' }}
               />
               {uploading ? 'Uploading...' : '📷 Photo'}
