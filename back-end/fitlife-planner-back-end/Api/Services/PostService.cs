@@ -17,14 +17,62 @@ public class PostService(
     PostRepository postRepository,
     UserContext userContext)
 {
-    public Task<PaginatedList<Post>> GetAllPostsAsync(PaginationParameters paginationParameters)
+    public async Task<PaginatedList<GetPostResponseDto>> GetAllPostsAsync(PaginationParameters paginationParameters)
     {
-        return Task.FromResult(postRepository.GetAll(paginationParameters));
+        var posts = postRepository.GetAll(paginationParameters);
+
+        var postDtos = new List<GetPostResponseDto>();
+
+        foreach (var post in posts.Items)
+        {
+            var profile = await dbContext.Profiles
+                .FirstOrDefaultAsync(p => p.ProfileId == post.ProfileId);
+
+            if (profile != null)
+            {
+                var user = await dbContext.Users.FindAsync(profile.UserId);
+                if (user != null)
+                {
+                    postDtos.Add(mapping.GetPostMapper(post, profile, user));
+                }
+            }
+        }
+
+        return new PaginatedList<GetPostResponseDto>(
+            postDtos,
+            posts.TotalCount,
+            posts.PageNumber,
+            posts.PageSize
+        );
     }
 
-    public async Task<PaginatedList<Post>> GetAllPostsByLikeAsync(PaginationParameters paginationParameters)
+    public async Task<PaginatedList<GetPostResponseDto>> GetAllPostsByLikeAsync(PaginationParameters paginationParameters)
     {
-        return postRepository.GetAllByLike(paginationParameters);
+        var posts = postRepository.GetAllByLike(paginationParameters);
+
+        var postDtos = new List<GetPostResponseDto>();
+
+        foreach (var post in posts.Items)
+        {
+            var profile = await dbContext.Profiles
+                .FirstOrDefaultAsync(p => p.ProfileId == post.ProfileId);
+
+            if (profile != null)
+            {
+                var user = await dbContext.Users.FindAsync(profile.UserId);
+                if (user != null)
+                {
+                    postDtos.Add(mapping.GetPostMapper(post, profile, user));
+                }
+            }
+        }
+
+        return new PaginatedList<GetPostResponseDto>(
+            postDtos,
+            posts.TotalCount,
+            posts.PageNumber,
+            posts.PageSize
+        );
     }
 
     public async Task<GetPostResponseDto> GetPostById(Guid postId)

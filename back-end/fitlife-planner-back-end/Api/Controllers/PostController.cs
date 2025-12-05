@@ -43,7 +43,7 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
     public async Task<IActionResult> GetAllPost([FromQuery] PaginationParameters pagination)
     {
         var posts = await postService.GetAllPostsAsync(pagination);
-        var response = new ApiResponse<PaginatedList<Post>>(
+        var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
             success: true,
             message: "Successfully retrieved posts",
             data: posts,
@@ -58,7 +58,7 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
     public async Task<IActionResult> GetAllPostByLike([FromQuery] PaginationParameters pagination)
     {
         var posts = await postService.GetAllPostsByLikeAsync(pagination);
-        var response = new ApiResponse<PaginatedList<Post>>(
+        var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
             success: true,
             message: "Successfully retrieved posts",
             data: posts,
