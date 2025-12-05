@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { request } from '../../../shared/api/apiClient'
 import './WeekStreak.css'
 
@@ -26,26 +26,26 @@ export function WeekStreak() {
   const [streaks, setStreaks] = useState<StreakData[]>([])
   const [loading, setLoading] = useState(true)
   const [weekStreak, setWeekStreak] = useState(0)
-  
+
   // Drag and resize state
   const [position, setPosition] = useState<Position>(() => {
     const saved = localStorage.getItem('weekStreak_position')
     return saved ? JSON.parse(saved) : { x: 1.5, y: 1.5 }
   })
-  
+
   const [size, setSize] = useState(() => {
     const saved = localStorage.getItem('weekStreak_size')
     return saved ? JSON.parse(saved) : { width: 260, height: 'auto' }
   })
-  
+
   const [isDragging, setIsDragging] = useState(false)
   const [isResizing, setIsResizing] = useState(false)
   const [dragStart, setDragStart] = useState<Position>({ x: 0, y: 0 })
-  const [resizeStart, setResizeStart] = useState<{ pos: Position; size: { width: number; height: number } }>({ 
+  const [resizeStart, setResizeStart] = useState<{ pos: Position; size: { width: number; height: number } }>({
     pos: { x: 0, y: 0 },
     size: { width: 260, height: 400 }
   })
-  
+
   const containerRef = useRef<HTMLDivElement>(null)
   const dragHandleRef = useRef<HTMLDivElement>(null)
   const resizeHandleRef = useRef<HTMLDivElement>(null)
@@ -78,11 +78,11 @@ export function WeekStreak() {
     if (isDragging) {
       const newX = e.clientX - dragStart.x
       const newY = e.clientY - dragStart.y
-      
+
       // Constrain to viewport
       const maxX = window.innerWidth - (typeof size.width === 'number' ? size.width : 260)
       const maxY = window.innerHeight - 200 // Approximate height
-      
+
       setPosition({
         x: Math.max(0, Math.min(newX, maxX)),
         y: Math.max(0, Math.min(newY, maxY))
@@ -111,16 +111,16 @@ export function WeekStreak() {
     if (isResizing) {
       const deltaX = e.clientX - resizeStart.pos.x
       const deltaY = e.clientY - resizeStart.pos.y
-      
+
       // Min and max constraints
       const minWidth = 200
       const maxWidth = 500
       const minHeight = 300
       const maxHeight = 800
-      
+
       const newWidth = resizeStart.size.width + deltaX
       const newHeight = resizeStart.size.height + deltaY
-      
+
       setSize({
         width: Math.max(minWidth, Math.min(newWidth, maxWidth)),
         height: Math.max(minHeight, Math.min(newHeight, maxHeight))
@@ -148,7 +148,7 @@ export function WeekStreak() {
     if (isResizing) {
       const handleResizeMove = (e: MouseEvent) => handleResize(e)
       const handleResizeUp = () => handleResizeEnd()
-      
+
       document.addEventListener('mousemove', handleResizeMove)
       document.addEventListener('mouseup', handleResizeUp)
       return () => {
@@ -223,7 +223,7 @@ export function WeekStreak() {
     startOfWeek.setDate(today.getDate() - dayOfWeek + 1) // Monday as start
 
     const days = []
-    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    const dayNames = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN']
 
     for (let i = 0; i < 7; i++) {
       const date = new Date(startOfWeek)
@@ -242,16 +242,16 @@ export function WeekStreak() {
 
   const weekDays = getWeekDays()
   const motivationalMessages = [
-    'You are on the right track',
-    'Keep up the great work!',
-    'Amazing progress!',
-    'You\'re doing fantastic!',
-    'Stay consistent!'
+    'Bạn đang đi đúng hướng',
+    'Tiếp tục phát huy!',
+    'Tiến độ tuyệt vời!',
+    'Bạn đang làm rất tốt!',
+    'Hãy kiên trì!'
   ]
   const motivationalMessage = motivationalMessages[currentStreak % motivationalMessages.length]
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="week-streak-container"
       style={{
@@ -263,17 +263,17 @@ export function WeekStreak() {
         cursor: isDragging ? 'grabbing' : 'default'
       }}
     >
-      <div 
+      <div
         ref={dragHandleRef}
         className="week-streak-header week-streak-drag-handle"
         onMouseDown={handleDragStart}
       >
-        <div className="week-streak-title">Healthy Habits</div>
+        <div className="week-streak-title">Thói Quen Lành Mạnh</div>
         <div className="week-streak-drag-icon">⋮⋮</div>
       </div>
 
       {loading ? (
-        <div className="week-streak-loading">Loading...</div>
+        <div className="week-streak-loading">Đang tải...</div>
       ) : (
         <>
           <div className="week-streak-badge-container">
@@ -298,7 +298,7 @@ export function WeekStreak() {
 
           <div className="week-streak-main">
             <div className="week-streak-number">{currentStreak}</div>
-            <div className="week-streak-label">Day Streak!</div>
+            <div className="week-streak-label">Ngày Streak!</div>
           </div>
 
           <div className="week-streak-message">{motivationalMessage}</div>
@@ -333,10 +333,10 @@ export function WeekStreak() {
             ))}
           </div>
 
-          <button className="week-streak-claim-btn">Claim</button>
+          <button className="week-streak-claim-btn">Nhận Thưởng</button>
         </>
       )}
-      <div 
+      <div
         ref={resizeHandleRef}
         className="week-streak-resize-handle"
         onMouseDown={handleResizeStart}

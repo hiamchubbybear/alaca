@@ -13,8 +13,8 @@ export function MuscleWikiPage({ onBack }: Props) {
     <section className="muscle-wiki-page">
       <div className="muscle-wiki-container">
         <div className="muscle-wiki-header">
-          <h1 className="muscle-wiki-title">Muscle Wiki</h1>
-          <p className="muscle-wiki-subtitle">Click on a muscle group to learn more</p>
+          <h1 className="muscle-wiki-title">Bách Khoa Cơ</h1>
+          <p className="muscle-wiki-subtitle">Nhấp vào nhóm cơ để tìm hiểu thêm</p>
           <button
             className="back-to-home-btn"
             onClick={() => {
@@ -22,7 +22,7 @@ export function MuscleWikiPage({ onBack }: Props) {
               onBack()
             }}
           >
-            ← Back to Home
+            ← Trở về Trang chủ
           </button>
         </div>
 
@@ -65,12 +65,12 @@ export function MuscleWikiPage({ onBack }: Props) {
                 <p className="muscle-info-description">{muscleGroups[selectedMuscle].description}</p>
 
                 <div className="muscle-info-section">
-                  <h3 className="muscle-info-heading">Location</h3>
+                  <h3 className="muscle-info-heading">Vị trí</h3>
                   <p className="muscle-info-text">{muscleGroups[selectedMuscle].location}</p>
                 </div>
 
                 <div className="muscle-info-section">
-                  <h3 className="muscle-info-heading">Functions</h3>
+                  <h3 className="muscle-info-heading">Chức năng</h3>
                   <ul className="muscle-info-list">
                     {muscleGroups[selectedMuscle].functions.map((func: string, index: number) => (
                       <li key={index}>{func}</li>
@@ -79,7 +79,7 @@ export function MuscleWikiPage({ onBack }: Props) {
                 </div>
 
                 <div className="muscle-info-section">
-                  <h3 className="muscle-info-heading">Recommended Exercises</h3>
+                  <h3 className="muscle-info-heading">Bài tập đề xuất</h3>
                   <ul className="muscle-info-list">
                     {muscleGroups[selectedMuscle].exercises.map((exercise: string, index: number) => (
                       <li key={index}>{exercise}</li>
@@ -89,10 +89,10 @@ export function MuscleWikiPage({ onBack }: Props) {
               </div>
             ) : (
               <div className="muscle-info-placeholder">
-                <h2 className="muscle-info-placeholder-title">Select a Muscle Group</h2>
+                <h2 className="muscle-info-placeholder-title">Chọn Nhóm Cơ</h2>
                 <p className="muscle-info-placeholder-text">
-                  Choose a muscle group from the checklist in the middle column to see its functions,
-                  location, and recommended exercises here.
+                  Chọn một nhóm cơ từ danh sách ở cột giữa để xem chức năng,
+                  vị trí và bài tập đề xuất tại đây.
                 </p>
               </div>
             )}

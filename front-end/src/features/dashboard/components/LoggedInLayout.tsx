@@ -7,24 +7,24 @@ export type MainSection = 'training' | 'nutrition' | 'progress' | 'challenge' | 
 
 const sectionContent: Record<Exclude<MainSection, 'profile'>, { title: string; subtitle: string }> = {
   training: {
-    title: 'Training',
-    subtitle: 'Here you will see your personalized workout plans and schedules.'
+    title: 'Luyện Tập',
+    subtitle: 'Xem các kế hoạch tập luyện và lịch trình được cá nhân hóa của bạn.'
   },
   nutrition: {
-    title: 'Nutrition Plans',
-    subtitle: 'View and manage your meal plans and daily calorie targets.'
+    title: 'Dinh Dưỡng',
+    subtitle: 'Quản lý kế hoạch ăn uống và mục tiêu calo hàng ngày.'
   },
   progress: {
-    title: 'Your Progress',
-    subtitle: 'Track your weight, BMI, and workout history over time.'
+    title: 'Tiến Độ',
+    subtitle: 'Theo dõi cân nặng, BMI và lịch sử tập luyện theo thời gian.'
   },
   challenge: {
-    title: 'Challenge',
-    subtitle: 'Join fitness challenges to keep yourself motivated.'
+    title: 'Thử Thách',
+    subtitle: 'Tham gia các thử thách thể hình để duy trì động lực.'
   },
   social: {
-    title: 'Social',
-    subtitle: 'Connect with other users, share posts, and stay inspired.'
+    title: 'Cộng Đồng',
+    subtitle: 'Kết nối với người dùng khác, chia sẻ bài viết và truyền cảm hứng.'
   }
 }
 
@@ -47,7 +47,7 @@ export function LoggedInLayout({
   onLogout,
   userName = 'User'
 }: Props) {
-  const { title, subtitle } = activeSection === 'profile' ? { title: 'Profile', subtitle: '' } : sectionContent[activeSection as NavSection]
+  const { title, subtitle } = activeSection === 'profile' ? { title: 'Hồ Sơ', subtitle: '' } : sectionContent[activeSection as NavSection]
   const [showMenu, setShowMenu] = useState(false)
   // Store profile data including avatarUrl for sidebar display
   const [profile, setProfile] = useState<ProfileResponse | null>(null)
@@ -236,7 +236,7 @@ export function LoggedInLayout({
                 className={`sidebar-item ${activeSection === section ? 'active' : ''}`}
                 onClick={() => onSelectSection(section)}
               >
-                {section === 'nutrition' ? 'Nutrition Plans' : section === 'progress' ? 'Your Progress' : section.charAt(0).toUpperCase() + section.slice(1)}
+                {section === 'nutrition' ? 'Dinh Dưỡng' : section === 'progress' ? 'Tiến Độ' : section === 'training' ? 'Luyện Tập' : section === 'challenge' ? 'Thử Thách' : section === 'social' ? 'Cộng Đồng' : section === 'notifications' ? 'Thông Báo' : section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             </li>
           ))}
@@ -252,7 +252,7 @@ export function LoggedInLayout({
             </div>
             <div>
               <p className="sidebar-user-name">{userName}</p>
-              <span className="sidebar-user-role">Ready to train</span>
+              <span className="sidebar-user-role">Sẵn sàng luyện tập</span>
             </div>
           </div>
           <button
@@ -304,7 +304,7 @@ export function LoggedInLayout({
                   setShowMenu(false)
                 }}
               >
-                Profile
+                Hồ Sơ
               </button>
               <button
                 type="button"
@@ -313,7 +313,7 @@ export function LoggedInLayout({
                   setShowMenu(false)
                 }}
               >
-                Logout
+                Đăng Xuất
               </button>
             </div>
           )}
@@ -334,20 +334,20 @@ export function LoggedInLayout({
                     className={`profile-tab ${activeProfileTab === 'info' ? 'active' : ''}`}
                     onClick={() => setActiveProfileTab('info')}
                   >
-                    Profile information
+                    Thông tin cá nhân
                   </button>
                   <button
                     type="button"
                     className={`profile-tab ${activeProfileTab === 'social' ? 'active' : ''}`}
                     onClick={() => setActiveProfileTab('social')}
                   >
-                    Social integrated
+                    Mạng xã hội
                   </button>
                 </div>
 
                 {activeProfileTab === 'info' && (
                   <>
-                    <h2 className="profile-section-title">Profile information</h2>
+                    <h2 className="profile-section-title">Thông tin cá nhân</h2>
                     <div className="profile-avatar-upload">
                       <div className="profile-avatar-preview">
                         {(avatarPreview || profileForm.avatarUrl) ? (
@@ -398,21 +398,21 @@ export function LoggedInLayout({
                     </div>
                     <div className="profile-grid">
                       <div className="profile-field">
-                        <label htmlFor="displayName">Display name</label>
+                        <label htmlFor="displayName">Tên hiển thị</label>
                         <input
                           id="displayName"
                           name="displayName"
                           type="text"
                           value={profileForm.displayName}
                           onChange={handleProfileChange}
-                          placeholder="Your name"
+                          placeholder="Tên của bạn"
                         />
                       </div>
                     </div>
 
                     <div className="profile-grid">
                       <div className="profile-field">
-                        <label htmlFor="birthDate">Birth date</label>
+                        <label htmlFor="birthDate">Ngày sinh</label>
                         <input
                           id="birthDate"
                           name="birthDate"
@@ -422,31 +422,31 @@ export function LoggedInLayout({
                         />
                       </div>
                       <div className="profile-field">
-                        <label htmlFor="gender">Gender</label>
+                        <label htmlFor="gender">Giới tính</label>
                         <select
                           id="gender"
                           name="gender"
                           value={profileForm.gender}
                           onChange={handleProfileChange}
                         >
-                          <option value="">Select gender</option>
-                          <option value="Male">Male</option>
-                          <option value="Female">Female</option>
-                          <option value="Other">Other</option>
+                          <option value="">Chọn giới tính</option>
+                          <option value="Male">Nam</option>
+                          <option value="Female">Nữ</option>
+                          <option value="Other">Khác</option>
                         </select>
                       </div>
                     </div>
 
-                    <h2 className="profile-section-title">About you</h2>
+                    <h2 className="profile-section-title">Về bạn</h2>
                     <div className="profile-field">
-                      <label htmlFor="bio">Bio</label>
+                      <label htmlFor="bio">Tiểu sử</label>
                       <textarea
                         id="bio"
                         name="bio"
                         rows={3}
                         value={profileForm.bio}
                         onChange={handleProfileChange}
-                        placeholder="Tell us a little about yourself"
+                        placeholder="Hãy chia sẻ một chút về bản thân bạn"
                       />
                     </div>
                   </>
@@ -454,7 +454,7 @@ export function LoggedInLayout({
 
                 {activeProfileTab === 'social' && (
                   <>
-                    <h2 className="profile-section-title">Social integrated</h2>
+                    <h2 className="profile-section-title">Mạng xã hội</h2>
                     <div className="profile-grid">
                       <div className="profile-field">
                         <label htmlFor="facebook">Facebook</label>
@@ -495,10 +495,10 @@ export function LoggedInLayout({
 
                 <div className="profile-actions">
                   <button type="submit" className="btn-primary" disabled={profileSaving || uploadingAvatar}>
-                    {uploadingAvatar ? 'Uploading image…' : profileSaving ? 'Saving…' : 'Save changes'}
+                    {uploadingAvatar ? 'Đang tải ảnh lên...' : profileSaving ? 'Đang lưu...' : 'Lưu thay đổi'}
                   </button>
-                  {profileLoading && <span className="profile-status">Loading profile…</span>}
-                  {uploadingAvatar && <span className="profile-status">Uploading avatar to Cloudinary…</span>}
+                  {profileLoading && <span className="profile-status">Đang tải hồ sơ...</span>}
+                  {uploadingAvatar && <span className="profile-status">Đang tải avatar lên Cloudinary...</span>}
                   {profileMessage && <span className="profile-status success">{profileMessage}</span>}
                   {profileError && <span className="profile-status error">{profileError}</span>}
                 </div>
@@ -521,46 +521,46 @@ export function LoggedInLayout({
                     <h3 className="profile-summary-name">
                       {profileForm.displayName || userName}
                     </h3>
-                    <p className="profile-summary-role">Alaca user · Social overview</p>
+                    <p className="profile-summary-role">Người dùng Alaca · Tổng quan mạng xã hội</p>
                   </div>
                 </div>
 
                 <div className="profile-summary-section">
-                  <h4>Profile information</h4>
+                  <h4>Thông tin cá nhân</h4>
                   <ul>
                     <li>
-                      <span>Birth date</span>
-                      <strong>{profileForm.birthDate || 'Not set'}</strong>
+                      <span>Ngày sinh</span>
+                      <strong>{profileForm.birthDate || 'Chưa thiết lập'}</strong>
                     </li>
                     <li>
-                      <span>Gender</span>
-                      <strong>{profileForm.gender || 'Not set'}</strong>
+                      <span>Giới tính</span>
+                      <strong>{profileForm.gender || 'Chưa thiết lập'}</strong>
                     </li>
                   </ul>
                 </div>
 
                 <div className="profile-summary-section">
-                  <h4>Social integrated</h4>
+                  <h4>Mạng xã hội</h4>
                   <ul className="profile-summary-social">
                     <li className={!profileForm.facebook ? 'muted' : ''}>
                       <span>Facebook</span>
-                      <strong>{profileForm.facebook || 'Not connected'}</strong>
+                      <strong>{profileForm.facebook || 'Chưa kết nối'}</strong>
                     </li>
                     <li className={!profileForm.instagram ? 'muted' : ''}>
                       <span>Instagram</span>
-                      <strong>{profileForm.instagram || 'Not connected'}</strong>
+                      <strong>{profileForm.instagram || 'Chưa kết nối'}</strong>
                     </li>
                     <li className={!profileForm.twitter ? 'muted' : ''}>
                       <span>Twitter / X</span>
-                      <strong>{profileForm.twitter || 'Not connected'}</strong>
+                      <strong>{profileForm.twitter || 'Chưa kết nối'}</strong>
                     </li>
                   </ul>
                 </div>
 
                 <div className="profile-summary-section">
-                  <h4>Bio</h4>
+                  <h4>Tiểu sử</h4>
                   <p className="profile-summary-bio">
-                    {profileForm.bio || 'You have not added a bio yet.'}
+                    {profileForm.bio || 'Bạn chưa thêm tiểu sử.'}
                   </p>
                 </div>
               </aside>

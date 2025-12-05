@@ -27,7 +27,7 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
     setError(null)
 
     if (mode === 'signup' && password !== confirm) {
-      setError('Passwords do not match')
+      setError('Mật khẩu không khớp')
       return
     }
 
@@ -38,7 +38,7 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
         const res = await login(email, password)
         // Backend returns token in data.token (not data.accessToken)
         if (!res.success || !res.data || !(res as any).data.token) {
-          setError(res.message || 'Login failed')
+          setError(res.message || 'Đăng nhập thất bại')
           return
         }
         const token = (res as any).data.token as string
@@ -52,7 +52,7 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
       const username = name || email.split('@')[0]
       const res = await registerUser(username, email, password)
       if (!res.success) {
-        setError(res.message || 'Sign up failed')
+        setError(res.message || 'Đăng ký thất bại')
         return
       }
 
@@ -65,7 +65,7 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
       onLoginSuccess()
       onClose()
     } catch {
-      setError('Unable to reach server. Please try again.')
+      setError('Không thể kết nối máy chủ. Vui lòng thử lại.')
     } finally {
       setLoading(false)
     }
@@ -80,24 +80,24 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
         }}
       >
         <div className="auth-modal-header">
-          <h2>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h2>
+          <h2>{mode === 'login' ? 'Chào mừng trở lại' : 'Tạo tài khoản'}</h2>
           <button type="button" className="auth-modal-close" onClick={onClose}>
             ×
           </button>
         </div>
         <p className="auth-modal-subtitle">
           {mode === 'login'
-            ? 'Log in to access your personalized workouts and nutrition plans.'
-            : 'Sign up to start your fitness journey with Alaca.'}
+            ? 'Đăng nhập để truy cập kế hoạch tập luyện và dinh dưỡng cá nhân hóa.'
+            : 'Đăng ký để bắt đầu hành trình thể hình với Alaca.'}
         </p>
         <form className="auth-form" onSubmit={handleSubmit}>
           {mode === 'signup' && (
             <div className="auth-form-group">
-              <label htmlFor="auth-name">Full name</label>
+              <label htmlFor="auth-name">Họ và tên</label>
               <input
                 id="auth-name"
                 type="text"
-                placeholder="Enter your full name"
+                placeholder="Nhập họ và tên của bạn"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
               />
@@ -115,7 +115,7 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
             />
           </div>
           <div className="auth-form-group">
-            <label htmlFor="auth-password">Password</label>
+            <label htmlFor="auth-password">Mật khẩu</label>
             <input
               id="auth-password"
               type="password"
@@ -127,11 +127,11 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
           </div>
           {mode === 'signup' && (
             <div className="auth-form-group">
-              <label htmlFor="auth-confirm">Confirm password</label>
+              <label htmlFor="auth-confirm">Xác nhận mật khẩu</label>
               <input
                 id="auth-confirm"
                 type="password"
-                placeholder="Repeat your password"
+                placeholder="Nhập lại mật khẩu"
                 required
                 value={confirm}
                 onChange={(event) => setConfirm(event.target.value)}
@@ -141,35 +141,35 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
           <button type="submit" className="auth-submit-btn">
             {loading
               ? mode === 'login'
-                ? 'Logging in...'
-                : 'Signing up...'
+                ? 'Đang đăng nhập...'
+                : 'Đang đăng ký...'
               : mode === 'login'
-                ? 'Log In'
-                : 'Sign Up'}
+                ? 'Đăng Nhập'
+                : 'Đăng Ký'}
           </button>
         </form>
         {error && <p className="auth-error">{error}</p>}
         <div className="auth-switch">
           {mode === 'login' ? (
             <p>
-              Don&apos;t have an account?{' '}
+              Chưa có tài khoản?{' '}
               <button
                 type="button"
                 onClick={() => onModeChange('signup')}
                 className="auth-switch-link"
               >
-                Sign up
+                Đăng ký
               </button>
             </p>
           ) : (
             <p>
-              Already have an account?{' '}
+              Đã có tài khoản?{' '}
               <button
                 type="button"
                 onClick={() => onModeChange('login')}
                 className="auth-switch-link"
               >
-                Log in
+                Đăng nhập
               </button>
             </p>
           )}
@@ -178,5 +178,3 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
     </div>
   )
 }
-
-

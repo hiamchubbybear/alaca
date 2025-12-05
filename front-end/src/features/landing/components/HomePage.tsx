@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { LogoItem } from '../../../shared/constants/logos'
 
 type Props = {
@@ -43,15 +43,15 @@ export function HomePage({ logos }: Props) {
       <section className="hero">
         <div className="hero-container">
           <div className="hero-content">
-            <h1 className="hero-title">Transform Your Body, Transform Your Life</h1>
+            <h1 className="hero-title">Biến Đổi Cơ Thể, Biến Đổi Cuộc Sống</h1>
             <p className="hero-description">
-              Alaca is your personal fitness and nutrition companion. Get personalized workout
-              plans, nutrition guidance, and track your progress all in one place. Start your
-              journey to a healthier, stronger you today.
+              Alaca là người bạn đồng hành thể hình và dinh dưỡng của bạn. Nhận kế hoạch tập luyện
+              cá nhân hóa, hướng dẫn dinh dưỡng và theo dõi tiến độ tất cả ở một nơi. Bắt đầu
+              hành trình đến một phiên bản khỏe mạnh, mạnh mẽ hơn của bạn hôm nay.
             </p>
             <div className="hero-buttons">
-              <button className="btn-primary">Get Started</button>
-              <button className="btn-secondary">Learn More</button>
+              <button className="btn-primary">Bắt Đầu</button>
+              <button className="btn-secondary">Tìm Hiểu Thêm</button>
             </div>
           </div>
           <div className="hero-image">
@@ -162,7 +162,7 @@ export function HomePage({ logos }: Props) {
 
       <section className="tabs-section">
         <div className="tabs-container">
-          <h2 className="section-title">Explore Our Features</h2>
+          <h2 className="section-title">Khám Phá Tính Năng</h2>
           <div className="tabs-wrapper">
             <div className="tab-item">
               <div className="tab-image">
@@ -177,8 +177,8 @@ export function HomePage({ logos }: Props) {
                 />
               </div>
               <div>
-                <h3>Workout Plans</h3>
-                <p>Personalized training routines</p>
+                <h3>Kế Hoạch Tập Luyện</h3>
+                <p>Chương trình tập luyện cá nhân hóa</p>
               </div>
             </div>
             <div className="tab-item">
@@ -194,8 +194,8 @@ export function HomePage({ logos }: Props) {
                 />
               </div>
               <div>
-                <h3>Nutrition Plans</h3>
-                <p>Smart meal planning</p>
+                <h3>Kế Hoạch Dinh Dưỡng</h3>
+                <p>Lập kế hoạch bữa ăn thông minh</p>
               </div>
             </div>
             <div className="tab-item">
@@ -211,8 +211,8 @@ export function HomePage({ logos }: Props) {
                 />
               </div>
               <div>
-                <h3>Progress Tracking</h3>
-                <p>Monitor your journey</p>
+                <h3>Theo Dõi Tiến Độ</h3>
+                <p>Giám sát hành trình của bạn</p>
               </div>
             </div>
             <div className="tab-item">
@@ -228,8 +228,8 @@ export function HomePage({ logos }: Props) {
                 />
               </div>
               <div>
-                <h3>Challenges</h3>
-                <p>Join fitness challenges</p>
+                <h3>Thử Thách</h3>
+                <p>Tham gia thử thách thể hình</p>
               </div>
             </div>
           </div>
@@ -238,20 +238,20 @@ export function HomePage({ logos }: Props) {
 
       <section className="slogan-section">
         <div className="slogan-container">
-          <h2 className="slogan-text">Your Journey to Better Health Starts Here</h2>
-          <p className="slogan-subtext">Join thousands of users achieving their fitness goals</p>
+          <h2 className="slogan-text">Hành Trình Đến Sức Khỏe Tốt Hơn Bắt Đầu Từ Đây</h2>
+          <p className="slogan-subtext">Tham gia cùng hàng nghìn người dùng đang đạt được mục tiêu thể hình</p>
         </div>
       </section>
 
       <section className="email-form-section">
         <div className="email-form-container">
-          <h2 className="form-title">Get Expert Advice</h2>
-          <p className="form-subtitle">Subscribe to receive personalized fitness and nutrition tips</p>
+          <h2 className="form-title">Nhận Tư Vấn Chuyên Gia</h2>
+          <p className="form-subtitle">Đăng ký để nhận mẹo về thể hình và dinh dưỡng cá nhân hóa</p>
           <form className="email-form" onSubmit={(e) => e.preventDefault()}>
             <div className="form-group">
-              <input type="email" placeholder="Enter your email address" className="email-input" required />
+              <input type="email" placeholder="Nhập địa chỉ email của bạn" className="email-input" required />
               <button type="submit" className="submit-btn">
-                Subscribe
+                Đăng Ký
               </button>
             </div>
           </form>
@@ -263,29 +263,29 @@ export function HomePage({ logos }: Props) {
           <div className="footer-section">
             <h3 className="footer-title">Alaca</h3>
             <p className="footer-description">
-              Your personal fitness and nutrition companion. Transform your body, transform your life.
+              Người bạn đồng hành thể hình và dinh dưỡng của bạn. Biến đổi cơ thể, biến đổi cuộc sống.
             </p>
           </div>
           <div className="footer-section">
-            <h4 className="footer-heading">Features</h4>
+            <h4 className="footer-heading">Tính Năng</h4>
             <ul className="footer-links">
-              <li><a href="#workouts">Workouts</a></li>
-              <li><a href="#nutrition">Nutrition Plans</a></li>
-              <li><a href="#progress">Progress Tracking</a></li>
-              <li><a href="#challenges">Challenges</a></li>
+              <li><a href="#workouts">Bài Tập</a></li>
+              <li><a href="#nutrition">Kế Hoạch Dinh Dưỡng</a></li>
+              <li><a href="#progress">Theo Dõi Tiến Độ</a></li>
+              <li><a href="#challenges">Thử Thách</a></li>
             </ul>
           </div>
           <div className="footer-section">
-            <h4 className="footer-heading">Resources</h4>
+            <h4 className="footer-heading">Tài Nguyên</h4>
             <ul className="footer-links">
-              <li><a href="#muscle-wiki">Muscle Wiki</a></li>
+              <li><a href="#muscle-wiki">Bách Khoa Cơ</a></li>
               <li><a href="#blog">Blog</a></li>
-              <li><a href="#faq">FAQ</a></li>
-              <li><a href="#support">Support</a></li>
+              <li><a href="#faq">Câu Hỏi Thường Gặp</a></li>
+              <li><a href="#support">Hỗ Trợ</a></li>
             </ul>
           </div>
           <div className="footer-section">
-            <h4 className="footer-heading">Contact</h4>
+            <h4 className="footer-heading">Liên Hệ</h4>
             <ul className="footer-links">
               <li>Email: info@alaca.com</li>
               <li>Phone: +1 (555) 123-4567</li>
@@ -306,11 +306,9 @@ export function HomePage({ logos }: Props) {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2025 Alaca. All rights reserved.</p>
+          <p>&copy; 2025 Alaca. Bảo lưu mọi quyền.</p>
         </div>
       </footer>
     </>
   )
 }
-
-

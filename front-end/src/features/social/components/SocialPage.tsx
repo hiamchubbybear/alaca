@@ -1,8 +1,8 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { deletePost } from '../api/postApi'
-import { useVote } from '../hooks/useVote'
 import { usePosts } from '../hooks/usePosts'
+import { useVote } from '../hooks/useVote'
 import { CreatePostForm } from './CreatePostForm'
 import { PostCard } from './PostCard'
 import './SocialPage.css'
@@ -29,7 +29,7 @@ export function SocialPage() {
   }
 
   const handleDeletePost = async (postId: string) => {
-    if (!confirm('Are you sure you want to delete this post?')) return
+    if (!confirm('Bạn có chắc chắn muốn xóa bài viết này?')) return
 
     try {
       const res = await deletePost(postId)

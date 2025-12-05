@@ -23,7 +23,7 @@ export function BmiModal({ open, onClose }: Props) {
     const w = parseFloat(weight)
 
     if (!h || !w || h <= 0 || w <= 0) {
-      setError('Please enter valid positive numbers for height and weight.')
+      setError('Vui lòng nhập số dương hợp lệ cho chiều cao và cân nặng.')
       return
     }
 
@@ -40,54 +40,52 @@ export function BmiModal({ open, onClose }: Props) {
         }}
       >
         <div className="auth-modal-header">
-          <h2>Calculate your BMI</h2>
+          <h2>Tính Chỉ Số BMI</h2>
           <button type="button" className="auth-modal-close" onClick={onClose}>
             ×
           </button>
         </div>
         <p className="auth-modal-subtitle">
-          Enter your height in meters and weight in kilograms to estimate your Body Mass Index.
+          Nhập chiều cao (mét) và cân nặng (kg) để ước tính Chỉ Số Khối Cơ Thể.
         </p>
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-form-group">
-            <label htmlFor="bmi-height">Height (m)</label>
+            <label htmlFor="bmi-height">Chiều cao (m)</label>
             <input
               id="bmi-height"
               type="number"
               step="0.01"
               min="0"
-              placeholder="e.g. 1.70"
+              placeholder="ví dụ: 1.70"
               value={height}
               onChange={(event) => setHeight(event.target.value)}
               required
             />
           </div>
           <div className="auth-form-group">
-            <label htmlFor="bmi-weight">Weight (kg)</label>
+            <label htmlFor="bmi-weight">Cân nặng (kg)</label>
             <input
               id="bmi-weight"
               type="number"
               step="0.1"
               min="0"
-              placeholder="e.g. 65"
+              placeholder="ví dụ: 65"
               value={weight}
               onChange={(event) => setWeight(event.target.value)}
               required
             />
           </div>
           <button type="submit" className="auth-submit-btn">
-            Find your BMI
+            Tìm BMI của bạn
           </button>
         </form>
         {error && <p className="auth-error">{error}</p>}
         {result !== null && !error && (
           <p className="bmi-result">
-            Your BMI is <span>{result}</span>
+            BMI của bạn là <span>{result}</span>
           </p>
         )}
       </div>
     </div>
   )
 }
-
-

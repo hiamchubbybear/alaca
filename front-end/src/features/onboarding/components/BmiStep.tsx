@@ -22,7 +22,7 @@ export function BmiStep({ onNext }: Props) {
     const weight = parseFloat(weightKg)
 
     if (!height || !weight || height <= 0 || weight <= 0) {
-      setError('Please enter valid positive numbers for height and weight.')
+      setError('Vui lòng nhập số dương hợp lệ cho chiều cao và cân nặng.')
       return
     }
 
@@ -31,7 +31,7 @@ export function BmiStep({ onNext }: Props) {
       const res = await calculateBmi(height, weight)
 
       if (!res.success || !res.data) {
-        setError(res.message || 'Failed to calculate BMI')
+        setError(res.message || 'Tính BMI thất bại')
         return
       }
 
@@ -40,7 +40,7 @@ export function BmiStep({ onNext }: Props) {
         assessment: res.data.assessment
       })
     } catch {
-      setError('Unable to reach server. Please try again.')
+      setError('Không thể kết nối máy chủ. Vui lòng thử lại.')
     } finally {
       setLoading(false)
     }
@@ -53,41 +53,41 @@ export function BmiStep({ onNext }: Props) {
   return (
     <div className="onboarding-step">
       <div className="onboarding-header">
-        <h2>Calculate Your BMI</h2>
+        <h2>Tính Chỉ Số BMI</h2>
         <p className="onboarding-subtitle">
-          Let's start by calculating your Body Mass Index to personalize your fitness plan.
+          Hãy bắt đầu bằng việc tính chỉ số khối cơ thể để cá nhân hóa kế hoạch thể hình.
         </p>
       </div>
 
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="auth-form-group">
-          <label htmlFor="bmi-height">Height (cm)</label>
+          <label htmlFor="bmi-height">Chiều cao (cm)</label>
           <input
             id="bmi-height"
             type="number"
             step="0.1"
             min="0"
-            placeholder="e.g. 170"
+            placeholder="ví dụ: 170"
             value={heightCm}
             onChange={(e) => setHeightCm(e.target.value)}
             required
           />
         </div>
         <div className="auth-form-group">
-          <label htmlFor="bmi-weight">Weight (kg)</label>
+          <label htmlFor="bmi-weight">Cân nặng (kg)</label>
           <input
             id="bmi-weight"
             type="number"
             step="0.1"
             min="0"
-            placeholder="e.g. 65"
+            placeholder="ví dụ: 65"
             value={weightKg}
             onChange={(e) => setWeightKg(e.target.value)}
             required
           />
         </div>
         <button type="submit" className="auth-submit-btn" disabled={loading}>
-          {loading ? 'Calculating...' : 'Calculate BMI'}
+          {loading ? 'Đang tính...' : 'Tính BMI'}
         </button>
       </form>
 
@@ -95,11 +95,11 @@ export function BmiStep({ onNext }: Props) {
 
       {result && !error && (
         <div className="bmi-result-card">
-          <h3>Your BMI Result</h3>
+          <h3>Kết Quả BMI Của Bạn</h3>
           <div className="bmi-value">{result.bmi}</div>
           <div className="bmi-assessment">{result.assessment}</div>
           <button type="button" className="auth-submit-btn" onClick={handleNext}>
-            Continue
+            Tiếp tục
           </button>
         </div>
       )}

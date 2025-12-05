@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react"
-import { AuthModal, type AuthMode } from "./features/auth/components/AuthModal"
-import { BmiModal } from "./shared/components/BmiModal"
-import { HomePage } from "./features/landing/components/HomePage"
-import { LoggedInLayout, type MainSection } from "./features/dashboard/components/LoggedInLayout"
-import { MuscleWikiPage } from "./features/muscleWiki/components/MuscleWikiPage"
-import { WeekStreak } from "./features/dashboard/components/WeekStreak"
-import { logos } from "./shared/constants/logos"
-import { getProfile } from "./features/profile/api/profileApi"
 import "./App.css"
+import { AuthModal, type AuthMode } from "./features/auth/components/AuthModal"
+import { LoggedInLayout, type MainSection } from "./features/dashboard/components/LoggedInLayout"
+import { WeekStreak } from "./features/dashboard/components/WeekStreak"
+import { HomePage } from "./features/landing/components/HomePage"
+import { MuscleWikiPage } from "./features/muscleWiki/components/MuscleWikiPage"
+import { getProfile } from "./features/profile/api/profileApi"
+import { BmiModal } from "./shared/components/BmiModal"
+import { logos } from "./shared/constants/logos"
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
@@ -62,14 +62,14 @@ function App() {
             </div>
             <div className="nav-right">
               <button type="button" className="nav-link nav-link-button" onClick={openLogin}>
-                Training Now
+                Luyện Tập Ngay
               </button>
               <button
                 type="button"
                 className="nav-link nav-link-button"
                 onClick={() => setShowBmiModal(true)}
               >
-                Calculate your BMI
+                Tính Chỉ Số BMI
               </button>
               <a
                 href="#muscle-wiki"
@@ -79,7 +79,7 @@ function App() {
                   setCurrentPage("muscle-wiki")
                 }}
               >
-                Muscle Wiki
+                Bách Khoa Cơ
               </a>
               <button className="login-btn" type="button" onClick={openLogin}>
                 <svg
@@ -105,7 +105,7 @@ function App() {
                     strokeLinejoin="round"
                   />
                 </svg>
-                <span>Login</span>
+                <span>Đăng Nhập</span>
               </button>
             </div>
           </div>

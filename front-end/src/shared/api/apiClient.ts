@@ -67,5 +67,3 @@ export async function request<TReq, TRes>(
 
   return data
 }
-
-

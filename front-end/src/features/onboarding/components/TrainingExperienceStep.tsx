@@ -9,33 +9,33 @@ type Props = {
 const practiceLevels: PracticeLevelOption[] = [
   {
     id: 'PRO',
-    title: 'Pro',
-    description: 'Professional athlete level',
-    timeRange: '> 1 hour/day'
+    title: 'Chuyên nghiệp',
+    description: 'Cấp độ vận động viên chuyên nghiệp',
+    timeRange: '> 1 giờ/ngày'
   },
   {
     id: 'HARD',
-    title: 'Hard',
-    description: 'Advanced fitness enthusiast',
-    timeRange: '45m → 1h'
+    title: 'Nặng',
+    description: 'Người đam mê thể hình nâng cao',
+    timeRange: '45p → 1h'
   },
   {
     id: 'MEDIUM',
-    title: 'Medium',
-    description: 'Regular workout routine',
-    timeRange: '30m → 45m'
+    title: 'Trung bình',
+    description: 'Lịch tập luyện đều đặn',
+    timeRange: '30p → 45p'
   },
   {
     id: 'EASY',
-    title: 'Easy',
-    description: 'Getting started with fitness',
-    timeRange: '15m → 30m'
+    title: 'Dễ',
+    description: 'Bắt đầu với thể hình',
+    timeRange: '15p → 30p'
   },
   {
     id: 'NEWBIE',
-    title: 'Newbie',
-    description: 'Just beginning your journey',
-    timeRange: '5m → 15m'
+    title: 'Mới bắt đầu',
+    description: 'Vừa bắt đầu hành trình',
+    timeRange: '5p → 15p'
   }
 ]
 
@@ -51,14 +51,14 @@ export function TrainingExperienceStep({ onComplete }: Props) {
       // Verify BMI record was created by calling /bmi/me
       const res = await getBmiRecord()
       if (!res.success) {
-        setError('Failed to verify your profile. Please try again.')
+        setError('Không thể xác minh hồ sơ. Vui lòng thử lại.')
         return
       }
 
       // Complete onboarding
       onComplete()
     } catch {
-      setError('Unable to reach server. Please try again.')
+      setError('Không thể kết nối máy chủ. Vui lòng thử lại.')
     } finally {
       setLoading(false)
     }
@@ -67,9 +67,9 @@ export function TrainingExperienceStep({ onComplete }: Props) {
   return (
     <div className="onboarding-step">
       <div className="onboarding-header">
-        <h2>Select Your Training Experience</h2>
+        <h2>Chọn Kinh Nghiệm Tập Luyện</h2>
         <p className="onboarding-subtitle">
-          Help us tailor your workout plans to match your current fitness level.
+          Giúp chúng tôi tùy chỉnh kế hoạch tập luyện phù hợp với trình độ hiện tại.
         </p>
       </div>
 
@@ -91,7 +91,7 @@ export function TrainingExperienceStep({ onComplete }: Props) {
         ))}
       </div>
 
-      {loading && <p className="onboarding-loading">Setting up your profile...</p>}
+      {loading && <p className="onboarding-loading">Đang thiết lập hồ sơ...</p>}
     </div>
   )
 }

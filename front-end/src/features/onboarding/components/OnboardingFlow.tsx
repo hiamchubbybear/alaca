@@ -36,7 +36,7 @@ export function OnboardingFlow({ onComplete }: Props) {
           />
         </div>
         <p className="progress-text">
-          Step {currentStep === 'bmi' ? '1' : currentStep === 'activity' ? '2' : '3'} of 3
+          Bước {currentStep === 'bmi' ? '1' : currentStep === 'activity' ? '2' : '3'} / 3
         </p>
       </div>
 

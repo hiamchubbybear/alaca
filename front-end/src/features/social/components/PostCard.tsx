@@ -42,7 +42,7 @@ export function PostCard({ post, currentUser, onUpvote, onDownvote, onDelete }: 
             type="button"
             className="post-menu-btn"
             onClick={() => onDelete(post.postId)}
-            title="Delete post"
+            title="Xóa bài viết"
           >
             ⋮
           </button>

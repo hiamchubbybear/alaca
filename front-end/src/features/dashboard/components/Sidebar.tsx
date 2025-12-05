@@ -10,11 +10,11 @@ type Props = {
 }
 
 const sections: { id: DashboardSection; label: string }[] = [
-  { id: 'training', label: 'Training' },
-  { id: 'nutrition', label: 'Nutrition Plans' },
-  { id: 'progress', label: 'Your Progress' },
-  { id: 'challenge', label: 'Challenge' },
-  { id: 'social', label: 'Social' }
+  { id: 'training', label: 'Luyện Tập' },
+  { id: 'nutrition', label: 'Dinh Dưỡng' },
+  { id: 'progress', label: 'Tiến Độ' },
+  { id: 'challenge', label: 'Thử Thách' },
+  { id: 'social', label: 'Cộng Đồng' }
 ]
 
 export function Sidebar({
@@ -52,7 +52,7 @@ export function Sidebar({
           <div className="sidebar-user-avatar">{initials}</div>
           <div>
             <p className="sidebar-user-name">{userName}</p>
-            <span className="sidebar-user-role">Ready to train</span>
+            <span className="sidebar-user-role">Sẵn sàng luyện tập</span>
           </div>
         </div>
         <button
@@ -72,7 +72,7 @@ export function Sidebar({
                 setShowMenu(false)
               }}
             >
-              Profile
+              Hồ Sơ
             </button>
             <button
               type="button"
@@ -81,7 +81,7 @@ export function Sidebar({
                 setShowMenu(false)
               }}
             >
-              Logout
+              Đăng Xuất
             </button>
           </div>
         )}

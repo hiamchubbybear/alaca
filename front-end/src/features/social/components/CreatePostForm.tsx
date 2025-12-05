@@ -26,13 +26,13 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
 
     // Validate file type
     if (!file.type.startsWith('image/')) {
-      alert('Please select an image file')
+      alert('Vui lòng chọn tệp hình ảnh')
       return
     }
 
     // Validate file size (max 10MB)
     if (file.size > 10 * 1024 * 1024) {
-      alert('Image size should be less than 10MB')
+      alert('Kích thước ảnh phải nhỏ hơn 10MB')
       return
     }
 
@@ -55,12 +55,12 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
           URL.revokeObjectURL(imagePreview)
         }
       } else {
-        alert(result.error || 'Failed to upload image')
+        alert(result.error || 'Tải ảnh lên thất bại')
         setImagePreview(null)
       }
     } catch (error) {
       console.error('Failed to upload image:', error)
-      alert('Failed to upload image. Please try again.')
+      alert('Tải ảnh lên thất bại. Vui lòng thử lại.')
       setImagePreview(null)
     } finally {
       setUploading(false)
@@ -73,7 +73,7 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
 
     try {
       const res = await createPost({
-        title: newPost.title || 'Untitled',
+        title: newPost.title || 'Không có tiêu đề',
         content: newPost.content,
         media: newPost.media
       })
@@ -104,20 +104,20 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
           className="create-post-input"
           onClick={() => setShowForm(!showForm)}
         >
-          What's on your mind?
+          Bạn đang nghĩ gì?
         </button>
       </div>
       {showForm && (
         <form className="create-post-form" onSubmit={handleCreatePost}>
           <input
             type="text"
-            placeholder="Title (optional)"
+            placeholder="Tiêu đề (tùy chọn)"
             value={newPost.title}
             onChange={(e) => setNewPost((prev) => ({ ...prev, title: e.target.value }))}
             className="post-title-input"
           />
           <textarea
-            placeholder="What's on your mind?"
+            placeholder="Bạn đang nghĩ gì?"
             value={newPost.content}
             onChange={(e) => setNewPost((prev) => ({ ...prev, content: e.target.value }))}
             className="post-content-input"
@@ -142,7 +142,7 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
               {uploading && (
                 <div className="upload-progress">
                   <div className="upload-progress-bar"></div>
-                  <span>Uploading...</span>
+                  <span>Đang tải lên...</span>
                 </div>
               )}
             </div>
@@ -155,10 +155,10 @@ export function CreatePostForm({ currentUser, onPostCreated }: Props) {
                 onChange={handleImageSelect}
                 style={{ display: 'none' }}
               />
-              {uploading ? 'Uploading...' : '📷 Photo'}
+              {uploading ? 'Đang tải...' : '📷 Hình ảnh'}
             </label>
             <button type="submit" className="post-submit-btn" disabled={uploading}>
-              Post
+              Đăng Bài
             </button>
           </div>
         </form>
