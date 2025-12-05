@@ -14,7 +14,7 @@ export function NutritionPage() {
   const [plans, setPlans] = useState<NutritionPlan[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [selectedPlan, setSelectedPlan] = useState<NutritionPlan | null>(null)
+  const [selectedPlan] = useState<NutritionPlan | null>(null)
 
   useEffect(() => {
     loadPlans()

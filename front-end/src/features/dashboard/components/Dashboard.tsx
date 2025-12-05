@@ -9,7 +9,7 @@ import type { DashboardSection } from '../types'
 import { Sidebar } from './Sidebar'
 import { ProfileModal, UserAvatar } from './UserAvatar'
 // Mock update function
-const updateProfileService = async (data: any) => ({ success: true })
+const updateProfileService = async (_data: any) => ({ success: true })
 
 type Props = {
   userName: string
