@@ -36,6 +36,7 @@ namespace fitlife_planner_back_end.Api.Configurations
         // Social Features
         public DbSet<PostLike> PostLikes { get; set; }
         public DbSet<PostComment> PostComments { get; set; }
+        public DbSet<PostVote> PostVotes { get; set; }
         public DbSet<UserFollower> UserFollowers { get; set; }
 
         // Messaging & Reviews
@@ -117,6 +118,8 @@ namespace fitlife_planner_back_end.Api.Configurations
                 entity.Property(e => e.Content).HasMaxLength(500).IsRequired(false);
                 entity.Property(e => e.Media).HasMaxLength(200).IsRequired(false);
                 entity.Property(e => e.LikeCount).HasDefaultValue(0);
+                entity.Property(e => e.UpvoteCount).HasDefaultValue(0);
+                entity.Property(e => e.DownvoteCount).HasDefaultValue(0);
                 entity.Property(e => e.CommentCount).HasDefaultValue(0);
                 entity.Property(e => e.Status).HasDefaultValue(Status.Pending);
                 entity.Property(e => e.CreatedAt)
@@ -369,6 +372,25 @@ namespace fitlife_planner_back_end.Api.Configurations
                     .WithMany()
                     .HasForeignKey(e => e.PostId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<PostVote>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.PostId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.VoteType).IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                entity.Property(e => e.UpdatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP");
+
+                entity.HasOne(e => e.Post)
+                    .WithMany()
+                    .HasForeignKey(e => e.PostId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // One vote per user per post
+                entity.HasIndex(e => new { e.PostId, e.UserId }).IsUnique();
             });
 
             modelBuilder.Entity<UserFollower>(entity =>

@@ -105,15 +105,20 @@ public class Mapping
             post.UpdatedAt
         );
     }
-    public GetPostResponseDto GetPostMapper(Post post)
+    public GetPostResponseDto GetPostMapper(Post post, Profile profile, User user)
     {
         return new GetPostResponseDto(
             post.PostId,
             post.ProfileId,
+            user.Id,
+            user.Username,
+            profile.AvatarUrl,
             post.Title,
             post.Content,
             post.Media,
             post.LikeCount,
+            post.UpvoteCount,
+            post.DownvoteCount,
             post.CommentCount,
             post.CreatedAt,
             post.UpdatedAt

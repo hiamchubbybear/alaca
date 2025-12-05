@@ -1,22 +1,25 @@
 # FitLife Planner - API Documentation for Frontend
 
 ## Base URL
+
 ```
 https://alaca.onrender.com
 ```
 
-
 ## Authentication
 
 All authenticated endpoints require a Bearer token in the Authorization header:
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 ### 1. Register
+
 **POST** `/account/register`
 
 **Request:**
+
 ```json
 {
   "username": "johndoe",
@@ -27,6 +30,7 @@ Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -43,9 +47,11 @@ Authorization: Bearer {access_token}
 ---
 
 ### 2. Login
+
 **POST** `/account/login`
 
 **Request:**
+
 ```json
 {
   "email": "john@example.com",
@@ -54,6 +60,7 @@ Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -77,14 +84,17 @@ Authorization: Bearer {access_token}
 ## Profile Management
 
 ### 3. Get My Profile
+
 **GET** `/profile/me`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -103,14 +113,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 4. Update Profile
+
 **PUT** `/profile/update`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "displayName": "John Doe Updated",
@@ -126,14 +139,17 @@ Authorization: Bearer {access_token}
 ## Food Items & Nutrition
 
 ### 5. Get All Food Items
+
 **GET** `/food-items`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -159,14 +175,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 6. Create Food Item (Admin Only)
+
 **POST** `/food-items`
 
 **Headers:**
+
 ```
 Authorization: Bearer {admin_access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "name": "Banana",
@@ -185,14 +204,17 @@ Authorization: Bearer {admin_access_token}
 ---
 
 ### 7. Get My Nutrition Plans
+
 **GET** `/nutrition-plans/me`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -226,14 +248,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 8. Create Nutrition Plan
+
 **POST** `/nutrition-plans`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "title": "My Cutting Plan",
@@ -249,14 +274,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 9. Add Item to Nutrition Plan
+
 **POST** `/nutrition-plans/{planId}/items`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "mealTime": "breakfast",
@@ -271,17 +299,21 @@ Authorization: Bearer {access_token}
 ## Exercise Library
 
 ### 10. Get All Exercises
+
 **GET** `/exercises`
 
 **Query Parameters:**
+
 - `muscleGroup` (optional): Filter by muscle group (e.g., "chest", "back", "legs")
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -306,14 +338,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 11. Create Exercise (Admin Only)
+
 **POST** `/exercises`
 
 **Headers:**
+
 ```
 Authorization: Bearer {admin_access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "title": "Squat",
@@ -333,14 +368,17 @@ Authorization: Bearer {admin_access_token}
 ## Workouts
 
 ### 12. Get My Workouts
+
 **GET** `/workouts/me`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -374,14 +412,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 13. Create Workout
+
 **POST** `/workouts`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "title": "Pull Day",
@@ -407,14 +448,17 @@ Authorization: Bearer {access_token}
 ## Workout Scheduling
 
 ### 14. Get My Schedule
+
 **GET** `/workout-schedules/me`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -435,14 +479,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 15. Schedule Workout
+
 **POST** `/workout-schedules`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "workoutId": "uuid",
@@ -454,14 +501,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 16. Complete Workout
+
 **PUT** `/workout-schedules/{scheduleId}/complete`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -478,17 +528,21 @@ Authorization: Bearer {access_token}
 ## Progress Tracking
 
 ### 17. Get My Progress
+
 **GET** `/progress/me`
 
 **Query Parameters:**
+
 - `type` (optional): Filter by type ("weight", "bmi", "photo", "measurements", "notes")
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -509,14 +563,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 18. Create Progress Entry
+
 **POST** `/progress`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request (Weight):**
+
 ```json
 {
   "type": "weight",
@@ -526,6 +583,7 @@ Authorization: Bearer {access_token}
 ```
 
 **Request (Photo):**
+
 ```json
 {
   "type": "photo",
@@ -539,14 +597,17 @@ Authorization: Bearer {access_token}
 ## Challenges
 
 ### 19. Get All Challenges
+
 **GET** `/challenges`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -572,14 +633,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 20. Join Challenge
+
 **POST** `/challenges/{challengeId}/join`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -591,14 +655,17 @@ Authorization: Bearer {access_token}
 ---
 
 ### 21. Update Challenge Progress
+
 **PUT** `/challenges/{challengeId}/progress`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "progress": "{\"day\": 5, \"completed\": true, \"time\": 65}"
@@ -610,14 +677,17 @@ Authorization: Bearer {access_token}
 ## Notifications
 
 ### 22. Get My Notifications
+
 **GET** `/notifications/me`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -639,9 +709,11 @@ Authorization: Bearer {access_token}
 ---
 
 ### 23. Mark Notification as Read
+
 **PUT** `/notifications/{notificationId}/read`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
@@ -649,9 +721,11 @@ Authorization: Bearer {access_token}
 ---
 
 ### 24. Mark All Notifications as Read
+
 **PUT** `/notifications/read-all`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
@@ -661,24 +735,80 @@ Authorization: Bearer {access_token}
 ## Posts (Social Features)
 
 ### 25. Get All Posts
-**GET** `/post`
+
+**GET** `/post/all`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
+**Query Parameters:**
+
+- `pageNumber` (optional): Page number (default: 1)
+- `pageSize` (optional): Items per page (default: 10)
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "postId": "uuid",
+        "profileId": "uuid",
+        "userId": "uuid",
+        "username": "johndoe",
+        "avatarUrl": "https://...",
+        "title": "My Fitness Journey",
+        "content": "Just completed my first month!",
+        "media": "https://storage.../post-image.jpg",
+        "likeCount": 15,
+        "upvoteCount": 25,
+        "downvoteCount": 3,
+        "commentCount": 8,
+        "createdAt": "2024-01-15T10:00:00Z",
+        "updatedAt": "2024-01-15T10:00:00Z"
+      }
+    ],
+    "pageNumber": 1,
+    "pageSize": 10,
+    "totalPages": 5,
+    "totalCount": 50
+  }
+}
+```
+
 ---
 
-### 26. Create Post
-**POST** `/post/create`
+### 26. Get My Posts
+
+**GET** `/post`
 
 **Headers:**
+
+```
+Authorization: Bearer {access_token}
+```
+
+**Response:** Same format as Get All Posts
+
+---
+
+### 27. Create Post
+
+**POST** `/post`
+
+**Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request:**
+
 ```json
 {
   "title": "My Fitness Journey",
@@ -687,19 +817,172 @@ Authorization: Bearer {access_token}
 }
 ```
 
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Successfully created Post",
+  "data": {
+    "postId": "uuid",
+    "profileId": "uuid",
+    "title": "My Fitness Journey",
+    "content": "Just completed my first month!",
+    "media": "https://storage.../post-image.jpg",
+    "likeCount": 0,
+    "commentCount": 0,
+    "createdAt": "2024-01-15T10:00:00Z",
+    "updatedAt": "2024-01-15T10:00:00Z"
+  },
+  "statusCode": 201
+}
+```
+
 ---
 
-## BMI Calculator
+### 28. Vote on Post (Upvote/Downvote)
 
-### 27. Calculate BMI
-**POST** `/bmi/calculate`
+**POST** `/post/{postId}/vote`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Request:**
+
+```json
+{
+  "voteType": 1
+}
+```
+
+**Vote Types:**
+
+- `1` = Upvote
+- `-1` = Downvote
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Successfully voted on post",
+  "data": true,
+  "statusCode": 200
+}
+```
+
+**Notes:**
+
+- If user already voted with the same type, nothing happens
+- If user voted with different type, the vote is updated
+- Vote counts are automatically updated
+
+---
+
+### 29. Remove Vote from Post
+
+**DELETE** `/post/{postId}/vote`
+
+**Headers:**
+
+```
+Authorization: Bearer {access_token}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Successfully removed vote",
+  "data": true,
+  "statusCode": 200
+}
+```
+
+---
+
+### 30. Delete Post
+
+**DELETE** `/post/{postId}`
+
+**Headers:**
+
+```
+Authorization: Bearer {access_token}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Successfully delete Post",
+  "data": true,
+  "statusCode": 200
+}
+```
+
+---
+
+## Admin Endpoints
+
+### 31. Create Admin Account
+
+**POST** `/account/admin`
+
+**CORS Restriction:** Only accessible from localhost (ports 3000, 5173, 5174)
+
+**Request:**
+
+```json
+{
+  "username": "admin",
+  "email": "admin@fitlife.com",
+  "password": "SecureAdminPass@123"
+}
+```
+
+**Response:**
+
+```json
+{
+  "success": true,
+  "message": "Successfully created admin user",
+  "data": {
+    "username": "admin",
+    "email": "admin@fitlife.com",
+    "password": "SecureAdminPass@123"
+  },
+  "statusCode": 201
+}
+```
+
+**Notes:**
+
+- This endpoint is protected by CORS policy "AdminOnly"
+- Can only be accessed from whitelisted origins
+- Creates user with Admin role
+
+---
+
+## BMI Calculator
+
+### 27. Calculate BMI
+
+**POST** `/bmi/calculate`
+
+**Headers:**
+
+```
+Authorization: Bearer {access_token}
+```
+
+**Request:**
+
 ```json
 {
   "heightCm": 175,
@@ -708,6 +991,7 @@ Authorization: Bearer {access_token}
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -735,6 +1019,7 @@ All endpoints may return error responses in this format:
 ```
 
 **Common Status Codes:**
+
 - `200` - Success
 - `201` - Created
 - `400` - Bad Request
@@ -750,7 +1035,7 @@ All endpoints may return error responses in this format:
 1. **Register or Login** to get `accessToken`
 2. **Store token** in localStorage/sessionStorage:
    ```javascript
-   localStorage.setItem('accessToken', response.data.accessToken);
+   localStorage.setItem("accessToken", response.data.accessToken);
    ```
 3. **Include token** in all subsequent requests:
    ```javascript
@@ -768,15 +1053,15 @@ All endpoints may return error responses in this format:
 ```javascript
 // Configure axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: "http://localhost:5000",
   headers: {
-    'Content-Type': 'application/json'
-  }
+    "Content-Type": "application/json",
+  },
 });
 
 // Add token to all requests
-api.interceptors.request.use(config => {
-  const token = localStorage.getItem('accessToken');
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -785,11 +1070,11 @@ api.interceptors.request.use(config => {
 
 // Handle 401 errors
 api.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('accessToken');
-      window.location.href = '/login';
+      localStorage.removeItem("accessToken");
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
@@ -797,18 +1082,18 @@ api.interceptors.response.use(
 
 // Usage examples
 async function login(email, password) {
-  const response = await api.post('/account/login', { email, password });
-  localStorage.setItem('accessToken', response.data.data.accessToken);
+  const response = await api.post("/account/login", { email, password });
+  localStorage.setItem("accessToken", response.data.data.accessToken);
   return response.data;
 }
 
 async function getMyWorkouts() {
-  const response = await api.get('/workouts/me');
+  const response = await api.get("/workouts/me");
   return response.data.data;
 }
 
 async function createWorkout(workoutData) {
-  const response = await api.post('/workouts', workoutData);
+  const response = await api.post("/workouts", workoutData);
   return response.data.data;
 }
 ```
@@ -818,17 +1103,21 @@ async function createWorkout(workoutData) {
 ## Social Features - Followers
 
 ### 28. Follow a User
+
 **POST** `/api/followers/{userId}/follow`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Path Parameters:**
+
 - `userId` - UUID of the user to follow
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -839,6 +1128,7 @@ Authorization: Bearer {access_token}
 ```
 
 **Error Cases:**
+
 - `400` - Cannot follow yourself
 - `404` - User not found
 - Already following returns `data: false`
@@ -846,17 +1136,21 @@ Authorization: Bearer {access_token}
 ---
 
 ### 29. Unfollow a User
+
 **DELETE** `/api/followers/{userId}/unfollow`
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Path Parameters:**
+
 - `userId` - UUID of the user to unfollow
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -869,21 +1163,25 @@ Authorization: Bearer {access_token}
 ---
 
 ### 30. Get Followers List
+
 **GET** `/api/followers/followers`
 
 Get list of users who follow you (or specified user).
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Query Parameters:**
+
 - `userId` (optional) - Get followers of specific user (defaults to current user)
 - `page` (optional, default: 1) - Page number
 - `pageSize` (optional, default: 20) - Items per page
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -906,21 +1204,25 @@ Authorization: Bearer {access_token}
 ---
 
 ### 31. Get Following List
+
 **GET** `/api/followers/following`
 
 Get list of users that you (or specified user) follow.
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Query Parameters:**
+
 - `userId` (optional) - Get following list of specific user (defaults to current user)
 - `page` (optional, default: 1)
 - `pageSize` (optional, default: 20)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -943,19 +1245,23 @@ Authorization: Bearer {access_token}
 ---
 
 ### 32. Get Follower Statistics
+
 **GET** `/api/followers/stats`
 
 Get follower/following counts and relationship status.
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Query Parameters:**
+
 - `userId` (optional) - Get stats for specific user (defaults to current user)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -971,6 +1277,7 @@ Authorization: Bearer {access_token}
 ```
 
 **Fields:**
+
 - `followersCount` - Number of followers
 - `followingCount` - Number of users being followed
 - `isFollowing` - Whether current user follows the target user
@@ -979,19 +1286,23 @@ Authorization: Bearer {access_token}
 ---
 
 ### 33. Get Mutual Followers
+
 **GET** `/api/followers/{userId}/mutual`
 
 Get users that both you and the target user follow.
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Path Parameters:**
+
 - `userId` - UUID of the user to compare with
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1014,19 +1325,23 @@ Authorization: Bearer {access_token}
 ---
 
 ### 34. Get Follow Suggestions
+
 **GET** `/api/followers/suggestions`
 
 Get smart follow suggestions based on mutual connections and popularity.
 
 **Headers:**
+
 ```
 Authorization: Bearer {access_token}
 ```
 
 **Query Parameters:**
+
 - `limit` (optional, default: 10) - Number of suggestions to return
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -1054,6 +1369,7 @@ Authorization: Bearer {access_token}
 ```
 
 **Algorithm:**
+
 - Prioritizes users followed by people you follow (friends-of-friends)
 - Falls back to popular users if not enough suggestions
 - Excludes users you already follow
@@ -1075,7 +1391,7 @@ async function toggleFollow(userId, isFollowing) {
       return true; // Now following
     }
   } catch (error) {
-    console.error('Follow/unfollow error:', error);
+    console.error("Follow/unfollow error:", error);
     throw error;
   }
 }
@@ -1087,12 +1403,12 @@ async function toggleFollow(userId, isFollowing) {
 async function getUserProfile(userId) {
   const [profile, stats] = await Promise.all([
     api.get(`/profile/${userId}`),
-    api.get(`/api/followers/stats?userId=${userId}`)
+    api.get(`/api/followers/stats?userId=${userId}`),
   ]);
 
   return {
     ...profile.data.data,
-    ...stats.data.data
+    ...stats.data.data,
   };
 }
 ```
@@ -1101,13 +1417,12 @@ async function getUserProfile(userId) {
 
 ```javascript
 async function loadFollowSuggestions() {
-  const response = await api.get('/api/followers/suggestions?limit=10');
+  const response = await api.get("/api/followers/suggestions?limit=10");
   return response.data.data;
 }
 ```
 
 ---
-
 
 ## Notes for Frontend Developers
 

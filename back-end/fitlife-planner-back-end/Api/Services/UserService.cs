@@ -59,4 +59,33 @@ public class UserService(
 
         return await db.Users.FirstOrDefaultAsync(x => x.Id == userId);
     }
+
+    public async Task<CreateAccountRequestDto> CreateAdminUser(CreateAccountRequestDto user)
+    {
+        string rawPassword = user.password;
+        string email = user.email;
+        string username = user.username;
+
+        if (rawPassword.Length < 6 || String.IsNullOrEmpty(rawPassword) ||
+            String.IsNullOrWhiteSpace(rawPassword))
+            throw new ArgumentException("Password must be more than 6 characters");
+
+        if (email.Length < 6 || String.IsNullOrEmpty(email))
+            throw new ArgumentException("Invalid email address");
+
+        if (db.Users.Any(x => x.Email == email))
+            throw new InvalidOperationException("Email already exists");
+
+        if (db.Users.Any(u => u.Username == username))
+            throw new InvalidOperationException("Username already exists");
+
+        User saveUser = new User(username: username, email: email, rawPassword: rawPassword);
+        saveUser.Role = Role.Admin; // Set as Admin
+
+        var accountSaved = await db.Users.AddAsync(saveUser);
+        await profileService.CreateProfile(new CreateProfileRequestDTO(username), accountSaved.Entity.Id);
+        await db.SaveChangesAsync();
+
+        return user;
+    }
 }

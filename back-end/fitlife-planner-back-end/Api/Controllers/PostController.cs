@@ -210,4 +210,53 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
             return response.ToActionResult();
         }
     }
+
+    // --- VOTE ENDPOINTS ---
+    [HttpPost("{postId:guid}/vote")]
+    [Authorize]
+    public async Task<IActionResult> VoteOnPost(Guid postId, [FromBody] VoteRequestDto dto)
+    {
+        try
+        {
+            var result = await postService.VoteOnPost(postId, dto.VoteType);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: "Successfully voted on post",
+                data: result,
+                statusCode: HttpStatusCode.OK);
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(success: false, message: e.Message,
+                statusCode: HttpStatusCode.BadRequest);
+
+            return response.ToActionResult();
+        }
+    }
+
+    [HttpDelete("{postId:guid}/vote")]
+    [Authorize]
+    public async Task<IActionResult> RemoveVote(Guid postId)
+    {
+        try
+        {
+            var result = await postService.RemoveVote(postId);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: result ? "Successfully removed vote" : "No vote to remove",
+                data: result,
+                statusCode: HttpStatusCode.OK);
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(success: false, message: e.Message,
+                statusCode: HttpStatusCode.BadRequest);
+
+            return response.ToActionResult();
+        }
+    }
 }

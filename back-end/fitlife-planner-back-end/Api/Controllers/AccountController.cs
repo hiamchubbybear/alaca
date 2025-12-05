@@ -59,4 +59,24 @@ public class AccountController(ILogger<AccountController> logger, UserService us
             return response.ToActionResult();
         }
     }
+
+    [HttpPost("admin")]
+    [Microsoft.AspNetCore.Cors.EnableCors("AdminOnly")]
+    public async Task<IActionResult> CreateAdminUser([FromBody] CreateAccountRequestDto user)
+    {
+        try
+        {
+            var userResponse = await userService.CreateAdminUser(user);
+            var response = new ApiResponse<CreateAccountRequestDto>(success: true, message: "Successfully created admin user",
+                data: userResponse,
+                statusCode: HttpStatusCode.Created);
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<CreateAccountRequestDto>(success: false, message: e.Message,
+                statusCode: HttpStatusCode.BadRequest);
+            return response.ToActionResult();
+        }
+    }
 }

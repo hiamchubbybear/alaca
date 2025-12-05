@@ -34,10 +34,15 @@ public class PostService(
             throw new ArgumentException("Invalid post id");
         }
 
-        var post = await dbContext.Posts.FirstOrDefaultAsync(p => p.PostId == postId)
-                   ?? throw new KeyNotFoundException("Post not found");
+        var post = await dbContext.Posts
+            .Include(p => p.Profile)
+            .FirstOrDefaultAsync(p => p.PostId == postId)
+            ?? throw new KeyNotFoundException("Post not found");
 
-        var response = mapping.GetPostMapper(post);
+        var user = await dbContext.Users.FindAsync(post.Profile.UserId)
+            ?? throw new KeyNotFoundException("User not found");
+
+        var response = mapping.GetPostMapper(post, post.Profile, user);
         return response ?? throw new InvalidOperationException("Failed to map post data");
     }
 
@@ -49,6 +54,9 @@ public class PostService(
         if (profile == null)
             throw new KeyNotFoundException("Profile not found");
 
+        var user = await dbContext.Users.FindAsync(userId)
+            ?? throw new KeyNotFoundException("User not found");
+
         var posts = await dbContext.Posts
             .Where(p => p.ProfileId == profile.ProfileId)
             .OrderByDescending(p => p.CreatedAt)
@@ -57,7 +65,7 @@ public class PostService(
         if (posts == null || posts.Count == 0)
             return new List<GetPostResponseDto>();
 
-        var result = posts.Select(p => mapping.GetPostMapper(p)).ToList();
+        var result = posts.Select(p => mapping.GetPostMapper(p, profile, user)).ToList();
         return result;
     }
 
@@ -181,6 +189,95 @@ public class PostService(
 
         post.Status = Status.Reject;
 
+        dbContext.Posts.Update(post);
+        await dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    // Vote methods
+    public async Task<bool> VoteOnPost(Guid postId, VoteType voteType)
+    {
+        var userId = userContext.User.userId;
+
+        // Check if post exists
+        var post = await dbContext.Posts.FindAsync(postId)
+            ?? throw new KeyNotFoundException("Post not found");
+
+        // Check if user already voted
+        var existingVote = await dbContext.PostVotes
+            .FirstOrDefaultAsync(v => v.PostId == postId && v.UserId == userId);
+
+        if (existingVote != null)
+        {
+            // Update existing vote if different
+            if (existingVote.VoteType != voteType)
+            {
+                // Remove old vote count
+                if (existingVote.VoteType == VoteType.Upvote)
+                    post.UpvoteCount = Math.Max(0, post.UpvoteCount - 1);
+                else
+                    post.DownvoteCount = Math.Max(0, post.DownvoteCount - 1);
+
+                // Update vote type
+                existingVote.VoteType = voteType;
+                existingVote.UpdatedAt = DateTime.UtcNow;
+
+                // Add new vote count
+                if (voteType == VoteType.Upvote)
+                    post.UpvoteCount++;
+                else
+                    post.DownvoteCount++;
+
+                dbContext.PostVotes.Update(existingVote);
+            }
+            // If same vote type, do nothing (already voted)
+        }
+        else
+        {
+            // Create new vote
+            var newVote = new PostVote
+            {
+                PostId = postId,
+                UserId = userId,
+                VoteType = voteType
+            };
+
+            await dbContext.PostVotes.AddAsync(newVote);
+
+            // Update vote count
+            if (voteType == VoteType.Upvote)
+                post.UpvoteCount++;
+            else
+                post.DownvoteCount++;
+        }
+
+        dbContext.Posts.Update(post);
+        await dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> RemoveVote(Guid postId)
+    {
+        var userId = userContext.User.userId;
+
+        var vote = await dbContext.PostVotes
+            .FirstOrDefaultAsync(v => v.PostId == postId && v.UserId == userId);
+
+        if (vote == null)
+            return false; // No vote to remove
+
+        var post = await dbContext.Posts.FindAsync(postId)
+            ?? throw new KeyNotFoundException("Post not found");
+
+        // Decrease vote count
+        if (vote.VoteType == VoteType.Upvote)
+            post.UpvoteCount = Math.Max(0, post.UpvoteCount - 1);
+        else
+            post.DownvoteCount = Math.Max(0, post.DownvoteCount - 1);
+
+        dbContext.PostVotes.Remove(vote);
         dbContext.Posts.Update(post);
         await dbContext.SaveChangesAsync();
 
