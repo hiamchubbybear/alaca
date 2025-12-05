@@ -15,15 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 DotNetEnv.Env.Load();
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AdminOnly", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:5173", "http://localhost:5174")
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
+builder.Services.AddCors();
 builder.Services.AddControllers()
     .AddJsonOptions(opts =>
     {

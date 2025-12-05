@@ -61,7 +61,6 @@ public class AccountController(ILogger<AccountController> logger, UserService us
     }
 
     [HttpPost("admin")]
-    [Microsoft.AspNetCore.Cors.EnableCors("AdminOnly")]
     public async Task<IActionResult> CreateAdminUser([FromBody] CreateAccountRequestDto user)
     {
         try
