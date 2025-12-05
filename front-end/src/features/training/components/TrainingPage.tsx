@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
-import { getMyWorkouts, type Workout } from '../../../services/workoutService'
 import './TrainingPage.css'
+// Mock data for staging
+type Workout = {
+  id: string
+  name: string
+  title: string
+  description: string
+  exercises: any[]
+  intensity: string
+  durationMin: number
+}
 
 export function TrainingPage() {
   const [workouts, setWorkouts] = useState<Workout[]>([])
@@ -15,12 +24,8 @@ export function TrainingPage() {
     try {
       setLoading(true)
       setError(null)
-      const res = await getMyWorkouts()
-      if (res.success && res.data) {
-        setWorkouts(res.data)
-      } else {
-        setError(res.message || 'Không thể tải bài tập')
-      }
+      // Mock data - no API calls
+      setWorkouts([])
     } catch (err) {
       setError('Không thể tải bài tập')
       console.error(err)

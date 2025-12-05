@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react'
-import { getMyProgress, type ProgressEntry } from '../../../services/progressService'
 import './ProgressPage.css'
+// Mock data for staging
+type ProgressEntry = {
+  id: string
+  date: string
+  weight: number
+  notes: string
+  type: string
+  numericValue: number
+  textValue: string
+  photoUrl: string
+  recordedAt: string
+}
 
 export function ProgressPage() {
   const [entries, setEntries] = useState<ProgressEntry[]>([])
@@ -16,13 +27,8 @@ export function ProgressPage() {
     try {
       setLoading(true)
       setError(null)
-      const filterType = filter === 'all' ? undefined : filter
-      const res = await getMyProgress(filterType)
-      if (res.success && res.data) {
-        setEntries(res.data)
-      } else {
-        setError(res.message || 'Không thể tải tiến độ')
-      }
+      // Mock data - no API calls
+      setEntries([])
     } catch (err) {
       setError('Không thể tải tiến độ')
       console.error(err)

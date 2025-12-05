@@ -236,7 +236,7 @@ export function LoggedInLayout({
                 className={`sidebar-item ${activeSection === section ? 'active' : ''}`}
                 onClick={() => onSelectSection(section)}
               >
-                {section === 'nutrition' ? 'Dinh Dưỡng' : section === 'progress' ? 'Tiến Độ' : section === 'training' ? 'Luyện Tập' : section === 'challenge' ? 'Thử Thách' : section === 'social' ? 'Cộng Đồng' : section === 'notifications' ? 'Thông Báo' : section.charAt(0).toUpperCase() + section.slice(1)}
+                {section === 'nutrition' ? 'Dinh Dưỡng' : section === 'progress' ? 'Tiến Độ' : section === 'training' ? 'Luyện Tập' : section === 'challenge' ? 'Thử Thách' : section === 'social' ? 'Cộng Đồng' : 'Thông Báo'}
               </button>
             </li>
           ))}

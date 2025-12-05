@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
-import { getAllChallenges, getMyChallenges, joinChallenge, type Challenge } from '../../../services/challengeService'
 import './ChallengePage.css'
+// Mock data for staging
+type Challenge = {
+  id: string
+  title: string
+  description: string
+  startDate: string
+  endDate: string
+  participantCount: number
+  isParticipating: boolean
+}
 
 export function ChallengePage() {
   const [allChallenges, setAllChallenges] = useState<Challenge[]>([])
@@ -17,17 +26,9 @@ export function ChallengePage() {
     try {
       setLoading(true)
       setError(null)
-      const [allRes, myRes] = await Promise.all([
-        getAllChallenges(),
-        getMyChallenges()
-      ])
-
-      if (allRes.success && allRes.data) {
-        setAllChallenges(allRes.data)
-      }
-      if (myRes.success && myRes.data) {
-        setMyChallenges(myRes.data)
-      }
+      // Mock data - no API calls
+      setAllChallenges([])
+      setMyChallenges([])
     } catch (err) {
       setError('Không thể tải thử thách')
       console.error(err)
@@ -38,10 +39,9 @@ export function ChallengePage() {
 
   const handleJoinChallenge = async (challengeId: string) => {
     try {
-      const res = await joinChallenge(challengeId)
-      if (res.success) {
-        loadChallenges()
-      }
+      // Mock - do nothing
+      console.log('Join challenge:', challengeId)
+      loadChallenges()
     } catch (err) {
       console.error('Không thể tham gia thử thách:', err)
     }

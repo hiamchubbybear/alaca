@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react'
-import { getMyNutritionPlans, type NutritionPlan } from '../../../services/nutritionService'
 import './NutritionPage.css'
+// Mock data for staging
+type NutritionPlan = {
+  id: string
+  name: string
+  description: string
+  items: any[]
+  macros: any
+  caloriesTargetKcal: number
+}
 
 export function NutritionPage() {
   const [plans, setPlans] = useState<NutritionPlan[]>([])
@@ -16,15 +24,8 @@ export function NutritionPage() {
     try {
       setLoading(true)
       setError(null)
-      const res = await getMyNutritionPlans()
-      if (res.success && res.data) {
-        setPlans(res.data)
-        if (res.data.length > 0) {
-          setSelectedPlan(res.data[0])
-        }
-      } else {
-        setError(res.message || 'Không thể tải kế hoạch dinh dưỡng')
-      }
+      // Mock data - no API calls
+      setPlans([])
     } catch (err) {
       setError('Không thể tải kế hoạch dinh dưỡng')
       console.error(err)
@@ -123,7 +124,7 @@ export function NutritionPage() {
           </div>
           {selectedPlan?.items && selectedPlan.items.length > 0 ? (
             <div className="meal-list">
-              {selectedPlan.items.map((item) => (
+              {selectedPlan.items.map((item: any) => (
                 <div key={item.id} className="meal-item">
                   <div className="meal-info">
                     <span className="meal-time">{item.mealTime}</span>

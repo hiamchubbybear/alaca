@@ -1,6 +1,8 @@
 import type React from 'react'
 import { useState } from 'react'
-import { calculateBmi } from '../../../services/bmiService'
+// Mock function - no service needed
+const calculateBmi = (height: number, weight: number) => (weight / (height * height)).toFixed(1)
+
 
 type Props = {
   onNext: () => void
@@ -9,7 +11,7 @@ type Props = {
 export function BmiStep({ onNext }: Props) {
   const [heightCm, setHeightCm] = useState('')
   const [weightKg, setWeightKg] = useState('')
-  const [result, setResult] = useState<{ bmi: number; assessment: string } | null>(null)
+  const [result, setResult] = useState<{ bmi: string; assessment: string } | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
@@ -28,19 +30,28 @@ export function BmiStep({ onNext }: Props) {
 
     try {
       setLoading(true)
-      const res = await calculateBmi(height, weight)
+      // Perform BMI calculation directly
+      const bmiValue = calculateBmi(height, weight)
 
-      if (!res.success || !res.data) {
-        setError(res.message || 'Tính BMI thất bại')
-        return
+      let assessment = '';
+      const bmiNum = parseFloat(bmiValue);
+      if (bmiNum < 18.5) {
+        assessment = 'Thiếu cân';
+      } else if (bmiNum >= 18.5 && bmiNum < 24.9) {
+        assessment = 'Bình thường';
+      } else if (bmiNum >= 25 && bmiNum < 29.9) {
+        assessment = 'Thừa cân';
+      } else {
+        assessment = 'Béo phì';
       }
 
       setResult({
-        bmi: res.data.bmi,
-        assessment: res.data.assessment
+        bmi: bmiValue,
+        assessment: assessment
       })
-    } catch {
-      setError('Không thể kết nối máy chủ. Vui lòng thử lại.')
+    } catch (err) {
+      setError('Không thể tính BMI. Vui lòng thử lại.')
+      console.error(err)
     } finally {
       setLoading(false)
     }

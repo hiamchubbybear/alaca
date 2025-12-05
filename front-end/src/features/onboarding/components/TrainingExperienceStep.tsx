@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { getBmiRecord } from '../../../services/bmiService'
 import type { PracticeLevelOption } from '../types'
+// Mock function - no service needed
+const getBmiRecord = async () => ({ success: true, data: null })
 
 type Props = {
   onComplete: () => void

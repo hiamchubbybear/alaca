@@ -1,6 +1,15 @@
 import { useEffect, useState } from 'react'
-import { getMyNotifications, markAllNotificationsAsRead, markNotificationAsRead, type Notification } from '../../../services/notificationService'
 import './NotificationPage.css'
+// Mock data for staging
+type Notification = {
+  id: string
+  type: string
+  title: string
+  body: string
+  message: string
+  isRead: boolean
+  createdAt: string
+}
 
 export function NotificationPage() {
   const [notifications, setNotifications] = useState<Notification[]>([])
@@ -16,12 +25,8 @@ export function NotificationPage() {
     try {
       setLoading(true)
       setError(null)
-      const res = await getMyNotifications(1, 50)
-      if (res.success && res.data) {
-        setNotifications(res.data)
-      } else {
-        setError(res.message || 'Không thể tải thông báo')
-      }
+      // Mock data - no API calls
+      setNotifications([])
     } catch (err) {
       setError('Không thể tải thông báo')
       console.error(err)
@@ -32,7 +37,7 @@ export function NotificationPage() {
 
   const handleMarkAsRead = async (notificationId: string) => {
     try {
-      await markNotificationAsRead(notificationId)
+      // Mock - just update state
       setNotifications(prev =>
         prev.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
       )
@@ -43,7 +48,7 @@ export function NotificationPage() {
 
   const handleMarkAllAsRead = async () => {
     try {
-      await markAllNotificationsAsRead()
+      // Mock - just update state
       setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
     } catch (err) {
       console.error('Không thể đánh dấu tất cả đã đọc:', err)

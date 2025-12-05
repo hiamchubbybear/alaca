@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { updateProfile as updateProfileService } from '../../../services/profileService'
 import type { ProfileData } from '../../../shared/types/api'
 import { ChallengePage } from '../../challenge/components/ChallengePage'
 import { NutritionPage } from '../../nutrition/components/NutritionPage'
@@ -9,6 +8,8 @@ import { TrainingPage } from '../../training/components/TrainingPage'
 import type { DashboardSection } from '../types'
 import { Sidebar } from './Sidebar'
 import { ProfileModal, UserAvatar } from './UserAvatar'
+// Mock update function
+const updateProfileService = async (data: any) => ({ success: true })
 
 type Props = {
   userName: string
