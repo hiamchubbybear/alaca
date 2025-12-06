@@ -143,7 +143,7 @@ using (var scope = app.Services.CreateScope())
 
 // Configure CORS - allow specific origins with credentials
 app.UseCors(p => p
-    .WithOrigins("http://localhost:3000", "http://localhost:5173", "https://alaca.onrender.com")
+    .WithOrigins("http://localhost:3000", "http://localhost:5173", "https://alaca.onrender.com" ,"https://alaca.vercel.app/")
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials());
