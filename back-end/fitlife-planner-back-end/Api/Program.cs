@@ -107,8 +107,17 @@ if (!useInMemory)
 Console.WriteLine($"Using MySQL connection: {connString}");
 
 var app = builder.Build();
+
+// CRITICAL: CORS must be before Authentication/Authorization
+app.UseCors(p => p
+    .WithOrigins("http://localhost:3000", "http://localhost:5173", "https://alaca.onrender.com", "https://alaca.vercel.app")
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials());
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -137,15 +146,20 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         Console.WriteLine($"⚠ Data seeding error: {ex.Message}");
-        app.UseSwagger();
-        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
+        // Don't crash the app, just log the error
     }
+}
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
+}
 
 // CRITICAL: Map controllers to enable API routes
-    app.MapControllers();
+app.MapControllers();
 
-    app.Run();
-}
+app.Run();
 
 public partial class Program
 {
