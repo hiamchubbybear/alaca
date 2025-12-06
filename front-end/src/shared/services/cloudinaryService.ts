@@ -7,7 +7,7 @@ export type UploadResult = {
 /**
  * Upload image to Cloudinary using unsigned upload with upload preset
  * This is the recommended approach for client-side uploads
- * 
+ *
  * @param file - The image file to upload
  * @param uploadPreset - Optional upload preset name (defaults to env variable)
  * @returns Promise with upload result containing URL or error
@@ -38,21 +38,21 @@ export async function uploadImage(file: File, uploadPreset?: string): Promise<Up
     formData.append('file', file)
     formData.append('upload_preset', preset)
     formData.append('folder', 'alaca/avatars') // Optional: organize uploads in folders
-    
+
     // Optional: Add tags for better organization
     formData.append('tags', 'avatar,profile')
-    
+
     // Optional: Add context metadata
-    formData.append('context', `alt=${encodeURIComponent('User avatar')}|caption=${encodeURIComponent('Profile picture')}`)
+    formData.append(
+      'context',
+      `alt=${encodeURIComponent('User avatar')}|caption=${encodeURIComponent('Profile picture')}`
+    )
 
     // Upload to Cloudinary using unsigned upload endpoint
-    const response = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-      {
-        method: 'POST',
-        body: formData
-      }
-    )
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+      method: 'POST',
+      body: formData
+    })
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}))
@@ -66,7 +66,7 @@ export async function uploadImage(file: File, uploadPreset?: string): Promise<Up
 
     // Get the base URL from Cloudinary response
     const baseUrl = data.secure_url || data.url
-    
+
     if (!baseUrl) {
       return {
         success: false,
@@ -81,7 +81,7 @@ export async function uploadImage(file: File, uploadPreset?: string): Promise<Up
     if (data.public_id) {
       // Apply transformations: width 400, height 400, crop fill, gravity face, auto quality, auto format
       const transformations = 'w_400,h_400,c_fill,g_face,q_auto,f_auto'
-      
+
       // Build transformed URL by inserting transformations into the URL path
       // Original: https://res.cloudinary.com/{cloud}/image/upload/v{version}/{public_id}.{format}
       // Transformed: https://res.cloudinary.com/{cloud}/image/upload/{transformations}/v{version}/{public_id}.{format}
@@ -107,4 +107,3 @@ export async function uploadImage(file: File, uploadPreset?: string): Promise<Up
     }
   }
 }
-

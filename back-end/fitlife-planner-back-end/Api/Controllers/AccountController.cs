@@ -80,6 +80,42 @@ public class AccountController(ILogger<AccountController> logger, UserService us
         }
     }
 
+    [HttpPost("admin/first")]
+    public async Task<IActionResult> CreateFirstAdmin([FromBody] CreateAccountRequestDto user)
+    {
+        try
+        {
+            // Check if any admin exists
+            var adminExists = await userService.AdminExists();
+            if (adminExists)
+            {
+                return new ApiResponse<object>(
+                    success: false,
+                    message: "Admin already exists. Use /account/admin endpoint with admin authorization.",
+                    statusCode: HttpStatusCode.Forbidden
+                ).ToActionResult();
+            }
+
+            var userResponse = await userService.CreateAdminUser(user);
+            var response = new ApiResponse<CreateAccountRequestDto>(
+                success: true,
+                message: "Successfully created first admin user",
+                data: userResponse,
+                statusCode: HttpStatusCode.Created
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<CreateAccountRequestDto>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
+    }
+
     // ADMIN TOOLS
     [Authorize(Roles = "Admin")]
     [HttpGet("admin/users")]
@@ -103,7 +139,22 @@ public class AccountController(ILogger<AccountController> logger, UserService us
         try
         {
             var result = await userService.BanUser(id);
-            return new ApiResponse<bool>(success: true, message: "Successfully banned user", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+            return new ApiResponse<bool>(success: true, message: "User banned successfully", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("admin/users/{id:guid}/unban")]
+    public async Task<IActionResult> UnbanUser(Guid id)
+    {
+        try
+        {
+            var result = await userService.UnbanUser(id);
+            return new ApiResponse<bool>(success: true, message: "User unbanned successfully", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
         }
         catch (Exception e)
         {

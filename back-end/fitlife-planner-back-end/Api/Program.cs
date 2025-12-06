@@ -141,13 +141,12 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// using var scopeDB = app.Services.CreateScope();
-// var db = scopeDB.ServiceProvider.GetRequiredService<AppDbContext>();
-// db.Database.EnsureDeleted();
-// db.Database.EnsureCreated();
-
-
-app.UseCors(p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+// Configure CORS - allow specific origins with credentials
+app.UseCors(p => p
+    .WithOrigins("http://localhost:3000", "http://localhost:5173", "https://alaca.onrender.com")
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .AllowCredentials());
 
 if (app.Environment.IsDevelopment())
 {
@@ -155,7 +154,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
 }
 
+// CRITICAL: Map controllers to enable API routes
 app.MapControllers();
+
 app.Run();
 
 public partial class Program

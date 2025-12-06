@@ -55,8 +55,9 @@ public class PostService(
 
     public async Task<PaginatedList<GetPostResponseDto>> GetAllPostsByLikeAsync(PaginationParameters paginationParameters)
     {
-        // Get posts with profiles included, ordered by like count
+        // Get only accepted posts with profiles included, ordered by like count
         var query = dbContext.Posts
+            .Where(p => p.Status == Status.Accept)  // Only show accepted posts
             .Include(p => p.Profile)
             .OrderByDescending(p => p.LikeCount);
 
@@ -201,6 +202,40 @@ public class PostService(
         }
 
         dbContext.Posts.Remove(post);
+        await dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    // Admin methods
+    public async Task<bool> DeletePostAdmin(Guid postId)
+    {
+        var post = await dbContext.Posts.FindAsync(postId)
+                   ?? throw new KeyNotFoundException("Post not found");
+
+        dbContext.Posts.Remove(post);
+        await dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> HidePost(Guid postId)
+    {
+        var post = await dbContext.Posts.FindAsync(postId)
+                   ?? throw new KeyNotFoundException("Post not found");
+
+        post.Status = Status.Reject;
+        await dbContext.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<bool> ShowPost(Guid postId)
+    {
+        var post = await dbContext.Posts.FindAsync(postId)
+                   ?? throw new KeyNotFoundException("Post not found");
+
+        post.Status = Status.Accept;
         await dbContext.SaveChangesAsync();
 
         return true;

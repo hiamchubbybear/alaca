@@ -1,6 +1,7 @@
 using fitlife_planner_back_end.Api.Configurations;
 using fitlife_planner_back_end.Api.DTOs.Responses;
 using fitlife_planner_back_end.Api.DTOs.Resquests;
+using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Middlewares;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Util;
@@ -37,6 +38,11 @@ public class AuthenticationService
             _logger.LogInformation("[JwtSigner_Authenticate] {}", user.Email);
             if (!PasswordEncoder.DecodePassword(user.Password, loginRequestDto.Password))
                 throw new UnauthorizedAccessException("Password incorrect");
+
+            // Check if user is banned
+            if (user.Role == Role.Banned)
+                throw new UnauthorizedAccessException("Your account has been banned. Please contact support.");
+
             var profile = _db.Profiles.FirstOrDefault(u => u.UserId == user.Id);
             Guid profileId = profile?.ProfileId ?? Guid.Empty;
             // public record AuthenticationRequestDto(string username, string email, Guid id, Role role, Guid? profileId)
@@ -51,6 +57,12 @@ public class AuthenticationService
             AuthenticationResponseDto tokenResponse = await GenerateToken(authRequestDto);
             _logger.LogInformation("[JwtSigner_Authenticate] {}", tokenResponse);
             return tokenResponse;
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            // Re-throw UnauthorizedAccessException with original message (including ban message)
+            _logger.LogInformation(ex.Message);
+            throw;
         }
         catch (Exception e)
         {

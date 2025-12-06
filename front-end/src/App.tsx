@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
 import "./App.css"
+// import { AdminLogin } from "./features/admin/pages/AdminLogin"
+// import { AdminDashboard } from "./features/admin/pages/AdminDashboard"
 import { AuthModal, type AuthMode } from "./features/auth/components/AuthModal"
 import { LoggedInLayout, type MainSection } from "./features/dashboard/components/LoggedInLayout"
 import { WeekStreak } from "./features/dashboard/components/WeekStreak"
 import { HomePage } from "./features/landing/components/HomePage"
 import { MuscleWikiPage } from "./features/muscleWiki/components/MuscleWikiPage"
 import { getProfile } from "./features/profile/api/profileApi"
+import { AdminAuth } from "./pages/admin/AdminAuth"
+import { AdminDashboard } from "./pages/admin/AdminDashboard"
 import { BmiModal } from "./shared/components/BmiModal"
 import { logos } from "./shared/constants/logos"
 
@@ -13,7 +17,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     typeof window !== "undefined" && !!localStorage.getItem("accessToken")
   )
-  const [currentPage, setCurrentPage] = useState<"home" | "muscle-wiki">("home")
+  const [currentPage, setCurrentPage] = useState<"home" | "muscle-wiki" | "admin-login">("home")
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>("login")
   const [showBmiModal, setShowBmiModal] = useState(false)
@@ -34,6 +38,7 @@ function App() {
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken")
+    localStorage.removeItem("userRole")
     setIsLoggedIn(false)
     setCurrentPage("home")
   }
@@ -49,6 +54,19 @@ function App() {
       }
     })()
   }, [isLoggedIn])
+
+  // Check if admin logged in
+  const isAdmin = typeof window !== "undefined" && localStorage.getItem("userRole") === "Admin"
+
+  // Show admin dashboard if logged in as admin
+  if (isLoggedIn && isAdmin) {
+    return <AdminDashboard />
+  }
+
+  // Check if on /admin route (not logged in)
+  if (typeof window !== "undefined" && window.location.pathname === "/admin") {
+    return <AdminAuth />
+  }
 
   return (
     <div className="app">

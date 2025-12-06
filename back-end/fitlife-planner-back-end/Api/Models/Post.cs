@@ -24,7 +24,7 @@ public class Post
     {
     }
 
-    public Post(Guid profileId, string title, string content, string media)
+    public Post(Guid profileId, string title, string content, string media, Status accept)
     {
         PostId = Guid.NewGuid();
         ProfileId = profileId;
@@ -37,6 +37,6 @@ public class Post
         CommentCount = 0;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
-        Status = Status.Pending;
+        Status = accept;
     }
 }

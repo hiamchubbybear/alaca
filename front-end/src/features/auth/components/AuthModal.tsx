@@ -38,7 +38,8 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
         const res = await login(email, password)
         // Backend returns token in data.token (not data.accessToken)
         if (!res.success || !res.data || !(res as any).data.token) {
-          setError(res.message || 'Đăng nhập thất bại')
+          const errorMsg = res.message || 'Đăng nhập thất bại'
+          setError(errorMsg)
           return
         }
         const token = (res as any).data.token as string
@@ -64,8 +65,8 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
       }
       onLoginSuccess()
       onClose()
-    } catch {
-      setError('Không thể kết nối máy chủ. Vui lòng thử lại.')
+    } catch (err: any) {
+      setError(err?.message || 'Không thể kết nối máy chủ. Vui lòng thử lại.')
     } finally {
       setLoading(false)
     }
@@ -148,7 +149,16 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
                 : 'Đăng Ký'}
           </button>
         </form>
-        {error && <p className="auth-error">{error}</p>}
+          {error && (
+            <div className={`auth-error ${error.toLowerCase().includes('banned') || error.toLowerCase().includes('cấm') ? 'auth-error-banned' : ''}`}>
+              {error}
+              {(error.toLowerCase().includes('banned') || error.toLowerCase().includes('cấm')) && (
+                <p className="auth-error-contact">
+                  Vui lòng liên hệ: <a href="mailto:support@alaca.com">support@alaca.com</a>
+                </p>
+              )}
+            </div>
+          )}
         <div className="auth-switch">
           {mode === 'login' ? (
             <p>

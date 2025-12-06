@@ -106,6 +106,19 @@ public class UserService(
         return true;
     }
 
+    public async Task<bool> UnbanUser(Guid id)
+    {
+        var user = await db.Users.FindAsync(id) ?? throw new Exception("User not found");
+        user.Role = Role.User; // Restore to User role
+        await db.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> AdminExists()
+    {
+        return await db.Users.AnyAsync(u => u.Role == Role.Admin);
+    }
+
     public async Task<bool> DeleteUser(Guid id)
     {
         var user = await db.Users.FindAsync(id) ?? throw new Exception("User not found");

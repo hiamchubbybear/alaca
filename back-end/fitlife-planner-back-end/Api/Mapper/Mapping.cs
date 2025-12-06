@@ -1,6 +1,7 @@
 
 using fitlife_planner_back_end.Api.DTOs.Responses;
 using fitlife_planner_back_end.Api.DTOs.Resquests;
+using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Models;
 
 namespace fitlife_planner_back_end.Api.Mapper;
@@ -88,7 +89,8 @@ public class Mapping
             profileId,
             dto.Title,
             dto.Content,
-            dto.Media
+            dto.Media,
+            Status.Accept  // Auto-accept all new posts
         );
     }
     public CreatePostResponseDto InsertPostResponseMapper(Post post)
