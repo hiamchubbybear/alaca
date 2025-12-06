@@ -74,6 +74,7 @@ builder.Services.AddAuthentication(options =>
         };
     });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IUserContext, UserContext>();
 builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<AuthenticationService>()
     .AddScoped<Mapping>().AddScoped<ProfileService>().AddScoped<ProfileRepository>().AddScoped<BMIService>()

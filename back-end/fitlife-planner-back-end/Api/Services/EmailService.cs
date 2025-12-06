@@ -1,30 +1,29 @@
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
+using System.Text;
+using System.Text.Json;
 
 namespace fitlife_planner_back_end.Api.Services;
 
 public class EmailService
 {
     private readonly ILogger<EmailService> _logger;
-    private readonly string _smtpHost;
-    private readonly int _smtpPort;
-    private readonly string _smtpUser;
-    private readonly string _smtpPassword;
+    private readonly HttpClient _httpClient;
+    private readonly string _sparkPostApiKey;
     private readonly string _fromName;
     private readonly string _fromEmail;
     private readonly string _frontendUrl;
 
-    public EmailService(ILogger<EmailService> logger, IConfiguration configuration)
+    public EmailService(ILogger<EmailService> logger, IHttpClientFactory httpClientFactory, IConfiguration configuration)
     {
         _logger = logger;
-        _smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST") ?? "smtp.gmail.com";
-        _smtpPort = int.Parse(Environment.GetEnvironmentVariable("SMTP_PORT") ?? "587");
-        _smtpUser = Environment.GetEnvironmentVariable("SMTP_USER") ?? "";
-        _smtpPassword = Environment.GetEnvironmentVariable("SMTP_PASSWORD") ?? "";
+        _httpClient = httpClientFactory.CreateClient();
+        // SparkPost API key from SMTP_PASSWORD env var
+        _sparkPostApiKey = Environment.GetEnvironmentVariable("SMTP_PASSWORD") ?? "";
         _fromName = Environment.GetEnvironmentVariable("SMTP_FROM_NAME") ?? "Alaca - FitLife Planner";
-        _fromEmail = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL") ?? _smtpUser;
+        _fromEmail = Environment.GetEnvironmentVariable("SMTP_FROM_EMAIL") ?? "noreply@fitlife.com";
         _frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL") ?? "http://localhost:5173";
+
+        _logger.LogInformation("EmailService initialized with SparkPost HTTP API");
+        _logger.LogInformation("From: {FromName} <{FromEmail}>", _fromName, _fromEmail);
     }
 
     public async Task<bool> SendPasswordResetEmail(string toEmail, string username, string resetToken)
@@ -34,54 +33,63 @@ public class EmailService
             var resetLink = $"{_frontendUrl}/reset-password?token={resetToken}";
             var htmlBody = GetPasswordResetEmailTemplate(username, resetLink);
 
-            await SendEmailAsync(toEmail, "Reset Your Password - Alaca - FitLife Planner", htmlBody);
+            _logger.LogInformation("Preparing to send password reset email to {Email}", toEmail);
 
-            _logger.LogInformation("Password reset email sent to {Email}", toEmail);
-            return true;
+            // SparkPost API endpoint
+            var apiUrl = "https://api.sparkpost.com/api/v1/transmissions";
+
+            // Create request payload
+            var payload = new
+            {
+                options = new { },
+                content = new
+                {
+                    from = new
+                    {
+                        name = _fromName,
+                        email = _fromEmail
+                    },
+                    subject = "Reset Your Password - Alaca - FitLife Planner",
+                    html = htmlBody
+                },
+                recipients = new[]
+                {
+                    new { address = new { email = toEmail } }
+                }
+            };
+
+            var jsonPayload = JsonSerializer.Serialize(payload);
+            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+
+            // Set authorization header
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("Authorization", _sparkPostApiKey);
+
+            _logger.LogInformation("Sending email via SparkPost HTTP API to {Email}...", toEmail);
+            _logger.LogInformation("DEBUG - API Key (first 10 chars): {ApiKey}", _sparkPostApiKey.Substring(0, Math.Min(10, _sparkPostApiKey.Length)));
+            _logger.LogInformation("DEBUG - From Email: {FromEmail}", _fromEmail);
+            _logger.LogInformation("DEBUG - Payload: {Payload}", jsonPayload.Substring(0, Math.Min(200, jsonPayload.Length)));
+
+            var response = await _httpClient.PostAsync(apiUrl, content);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                _logger.LogInformation("Password reset email sent successfully to {Email}. Response: {Response}",
+                    toEmail, responseBody);
+                return true;
+            }
+            else
+            {
+                _logger.LogError("SparkPost API returned status {StatusCode}: {Response}",
+                    response.StatusCode, responseBody);
+                return false;
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to send password reset email to {Email}", toEmail);
+            _logger.LogError(ex, "❌ Failed to send password reset email to {Email}: {Message}", toEmail, ex.Message);
             return false;
-        }
-    }
-
-    private async Task SendEmailAsync(string to, string subject, string htmlBody)
-    {
-        var message = new MimeMessage();
-        message.From.Add(new MailboxAddress(_fromName, _fromEmail));
-        message.To.Add(new MailboxAddress("", to));
-        message.Subject = subject;
-
-        var bodyBuilder = new BodyBuilder
-        {
-            HtmlBody = htmlBody
-        };
-        message.Body = bodyBuilder.ToMessageBody();
-
-        using var client = new SmtpClient();
-
-        // Set timeout to 30 seconds to prevent long waits
-        client.Timeout = 30000; // 30 seconds
-
-        try
-        {
-            _logger.LogInformation("Connecting to SMTP server {Host}:{Port}", _smtpHost, _smtpPort);
-            await client.ConnectAsync(_smtpHost, _smtpPort, SecureSocketOptions.StartTls);
-
-            _logger.LogInformation("Authenticating with SMTP server");
-            await client.AuthenticateAsync(_smtpUser, _smtpPassword);
-
-            _logger.LogInformation("Sending email to {To}", to);
-            await client.SendAsync(message);
-
-            _logger.LogInformation("Email sent successfully");
-            await client.DisconnectAsync(true);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "SMTP error: {Message}", ex.Message);
-            throw;
         }
     }
 
