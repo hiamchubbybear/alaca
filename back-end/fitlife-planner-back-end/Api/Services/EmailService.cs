@@ -61,10 +61,28 @@ public class EmailService
 
         using var client = new SmtpClient();
 
-        await client.ConnectAsync(_smtpHost, _smtpPort, SecureSocketOptions.StartTls);
-        await client.AuthenticateAsync(_smtpUser, _smtpPassword);
-        await client.SendAsync(message);
-        await client.DisconnectAsync(true);
+        // Set timeout to 30 seconds to prevent long waits
+        client.Timeout = 30000; // 30 seconds
+
+        try
+        {
+            _logger.LogInformation("Connecting to SMTP server {Host}:{Port}", _smtpHost, _smtpPort);
+            await client.ConnectAsync(_smtpHost, _smtpPort, SecureSocketOptions.StartTls);
+
+            _logger.LogInformation("Authenticating with SMTP server");
+            await client.AuthenticateAsync(_smtpUser, _smtpPassword);
+
+            _logger.LogInformation("Sending email to {To}", to);
+            await client.SendAsync(message);
+
+            _logger.LogInformation("Email sent successfully");
+            await client.DisconnectAsync(true);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "SMTP error: {Message}", ex.Message);
+            throw;
+        }
     }
 
     private string GetPasswordResetEmailTemplate(string username, string resetLink)
