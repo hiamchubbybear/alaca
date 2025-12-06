@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { banUser, deleteUser, getAllUsers } from './adminApi'
+import { banUser, deleteUser, getAllUsers, unbanUser } from './adminApi'
 import { ConfirmModal } from './ConfirmModal'
 import './UserManagement.css'
 
