@@ -29,7 +29,17 @@ function App() {
     if (isLoggedIn) {
       setMainSection("social")
     }
+    // Update URL
+    window.history.pushState({}, '', '/')
   }
+
+  // Check URL path on mount to handle direct navigation
+  useEffect(() => {
+    const path = window.location.pathname
+    if (path === '/admin' || path.startsWith('/admin/')) {
+      setCurrentPage('admin-login')
+    }
+  }, [])
 
   const openLogin = () => {
     setAuthMode("login")
