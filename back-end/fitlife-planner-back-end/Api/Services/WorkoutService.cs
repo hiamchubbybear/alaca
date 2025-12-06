@@ -20,16 +20,18 @@ public class WorkoutService
         _userContext = userContext;
     }
 
-    public virtual async Task<List<GetWorkoutResponseDTO>> GetMyWorkouts()
+    public virtual async Task<object> GetMyWorkouts(int page = 1, int pageSize = 20)
     {
+        var skip = (page - 1) * pageSize;
         var userId = _userContext.User.userId;
-        var workouts = await _dbContext.Workouts
+        var query = _dbContext.Workouts
             .Include(w => w.Exercises)
             .ThenInclude(we => we.Exercise)
-            .Where(w => w.OwnerUserId == userId)
-            .ToListAsync();
+            .Where(w => w.OwnerUserId == userId);
 
-        return workouts.Select(w => MapToResponseDTO(w)).ToList();
+        var total = await query.CountAsync();
+        var workouts = await query.Skip(skip).Take(pageSize).ToListAsync();
+        return new { workouts = workouts.Select(w => MapToResponseDTO(w)), total, page, pageSize };
     }
 
     public virtual async Task<GetWorkoutResponseDTO> GetWorkoutById(Guid id)
@@ -126,5 +128,53 @@ public class WorkoutService
                 Notes = we.Notes
             }).ToList()
         };
+    }
+
+    public virtual async Task<GetWorkoutResponseDTO> UpdateWorkout(Guid id, UpdateWorkoutRequestDTO dto)
+    {
+        var userId = _userContext.User.userId;
+        var workout = await _dbContext.Workouts.Include(w => w.Exercises).ThenInclude(we => we.Exercise).FirstOrDefaultAsync(w => w.Id == id) ?? throw new Exception("Workout not found");
+        if (workout.OwnerUserId != userId) throw new UnauthorizedAccessException("You don't own this workout");
+        if (dto.Title != null) workout.Title = dto.Title;
+        if (dto.Description != null) workout.Description = dto.Description;
+        workout.UpdatedAt = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync();
+        return MapToResponseDTO(workout);
+    }
+
+    public virtual async Task<GetWorkoutResponseDTO> DuplicateWorkout(Guid id)
+    {
+        var userId = _userContext.User.userId;
+        var original = await _dbContext.Workouts.Include(w => w.Exercises).FirstOrDefaultAsync(w => w.Id == id) ?? throw new Exception("Workout not found");
+        var newWorkout = new Workout
+        {
+            OwnerUserId = userId,
+            Title = original.Title + " (Copy)",
+            Description = original.Description,
+            DurationMin = original.DurationMin,
+            Intensity = original.Intensity
+        };
+        await _dbContext.Workouts.AddAsync(newWorkout);
+        await _dbContext.SaveChangesAsync();
+        if (original.Exercises != null && original.Exercises.Any())
+        {
+            foreach (var ex in original.Exercises)
+            {
+                await _dbContext.WorkoutExercises.AddAsync(new WorkoutExercise
+                {
+                    WorkoutId = newWorkout.Id,
+                    ExerciseId = ex.ExerciseId,
+                    OrderIndex = ex.OrderIndex,
+                    Sets = ex.Sets,
+                    Reps = ex.Reps,
+                    RestSeconds = ex.RestSeconds,
+                    Tempo = ex.Tempo,
+                    Notes = ex.Notes
+                });
+            }
+            await _dbContext.SaveChangesAsync();
+        }
+        var result = await _dbContext.Workouts.Include(w => w.Exercises).ThenInclude(we => we.Exercise).FirstAsync(w => w.Id == newWorkout.Id);
+        return MapToResponseDTO(result);
     }
 }

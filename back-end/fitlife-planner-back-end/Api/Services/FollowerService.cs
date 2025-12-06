@@ -26,17 +26,17 @@ public class FollowerService
         if (currentUserId == targetUserId)
             throw new InvalidOperationException("Cannot follow yourself");
 
-        // Check if target user exists
+
         var targetUser = await _dbContext.Users.FindAsync(targetUserId);
         if (targetUser == null)
             throw new Exception("User not found");
 
-        // Check if already following
+
         var existingFollow = await _dbContext.UserFollowers
             .FirstOrDefaultAsync(f => f.UserId == targetUserId && f.FollowerId == currentUserId);
 
         if (existingFollow != null)
-            return false; // Already following
+            return false;
 
         var follower = new UserFollower
         {
@@ -61,7 +61,7 @@ public class FollowerService
             .FirstOrDefaultAsync(f => f.UserId == targetUserId && f.FollowerId == currentUserId);
 
         if (follower == null)
-            return false; // Not following
+            return false;
 
         _dbContext.UserFollowers.Remove(follower);
         await _dbContext.SaveChangesAsync();
@@ -152,7 +152,7 @@ public class FollowerService
     {
         var currentUserId = _userContext.User.userId;
 
-        // Get users that both current user and target user follow
+
         var mutualFollowers = await _dbContext.UserFollowers
             .Where(f => f.FollowerId == currentUserId)
             .Join(
@@ -182,13 +182,13 @@ public class FollowerService
     {
         var currentUserId = _userContext.User.userId;
 
-        // Get users that current user is already following
+
         var followingIds = await _dbContext.UserFollowers
             .Where(f => f.FollowerId == currentUserId)
             .Select(f => f.UserId)
             .ToListAsync();
 
-        // Find users followed by people you follow (friends of friends)
+
         var suggestions = await _dbContext.UserFollowers
             .Where(f => followingIds.Contains(f.FollowerId) && f.UserId != currentUserId && !followingIds.Contains(f.UserId))
             .GroupBy(f => f.UserId)
@@ -223,7 +223,7 @@ public class FollowerService
             }
         }
 
-        // If not enough suggestions, add popular users
+
         if (suggestionDTOs.Count < limit)
         {
             var popularUsers = await _dbContext.UserFollowers

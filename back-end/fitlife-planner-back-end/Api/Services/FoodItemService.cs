@@ -20,24 +20,13 @@ public class FoodItemService
         _userContext = userContext;
     }
 
-    public virtual async Task<List<GetFoodItemResponseDTO>> GetAllFoodItems()
+    public virtual async Task<object> GetAllFoodItems(int page = 1, int pageSize = 20)
     {
-        var foodItems = await _dbContext.FoodItems.ToListAsync();
-        return foodItems.Select(f => new GetFoodItemResponseDTO
-        {
-            Id = f.Id,
-            Name = f.Name,
-            ServingSize = f.ServingSize,
-            ServingAmount = f.ServingAmount,
-            CaloriesKcal = f.CaloriesKcal,
-            ProteinG = f.ProteinG,
-            CarbsG = f.CarbsG,
-            FatG = f.FatG,
-            FiberG = f.FiberG,
-            SodiumMg = f.SodiumMg,
-            Micronutrients = f.Micronutrients,
-            CreatedAt = f.CreatedAt
-        }).ToList();
+        var skip = (page - 1) * pageSize;
+        var query = _dbContext.FoodItems;
+        var total = await query.CountAsync();
+        var foodItems = await query.Skip(skip).Take(pageSize).ToListAsync();
+        return new { foodItems = foodItems.Select(f => MapToResponseDTO(f)), total, page, pageSize };
     }
 
     public virtual async Task<GetFoodItemResponseDTO> GetFoodItemById(Guid id)
@@ -106,5 +95,60 @@ public class FoodItemService
         _dbContext.FoodItems.Remove(foodItem);
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+
+    public virtual async Task<GetFoodItemResponseDTO> UpdateFoodItem(Guid id, UpdateFoodItemRequestDTO dto)
+    {
+        var foodItem = await _dbContext.FoodItems.FindAsync(id) ?? throw new Exception("Food item not found");
+        if (dto.Name != null) foodItem.Name = dto.Name;
+        if (dto.ServingSize != null) foodItem.ServingSize = dto.ServingSize;
+        if (dto.ServingAmount.HasValue) foodItem.ServingAmount = dto.ServingAmount;
+        if (dto.CaloriesKcal.HasValue) foodItem.CaloriesKcal = dto.CaloriesKcal;
+        if (dto.ProteinG.HasValue) foodItem.ProteinG = dto.ProteinG;
+        if (dto.CarbsG.HasValue) foodItem.CarbsG = dto.CarbsG;
+        if (dto.FatG.HasValue) foodItem.FatG = dto.FatG;
+        if (dto.FiberG.HasValue) foodItem.FiberG = dto.FiberG;
+        if (dto.SodiumMg.HasValue) foodItem.SodiumMg = dto.SodiumMg;
+        if (dto.Micronutrients != null) foodItem.Micronutrients = dto.Micronutrients;
+        foodItem.UpdatedAt = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync();
+        return MapToResponseDTO(foodItem);
+    }
+
+    private GetFoodItemResponseDTO MapToResponseDTO(FoodItem f)
+    {
+        return new GetFoodItemResponseDTO
+        {
+            Id = f.Id,
+            Name = f.Name,
+            ServingSize = f.ServingSize,
+            ServingAmount = f.ServingAmount,
+            CaloriesKcal = f.CaloriesKcal,
+            ProteinG = f.ProteinG,
+            CarbsG = f.CarbsG,
+            FatG = f.FatG,
+            FiberG = f.FiberG,
+            SodiumMg = f.SodiumMg,
+            Micronutrients = f.Micronutrients,
+            CreatedAt = f.CreatedAt
+        };
+    }
+
+    public async Task<object> SearchFoodItems(string query, int page, int pageSize)
+    {
+        var skip = (page - 1) * pageSize;
+        var searchQuery = _dbContext.FoodItems
+            .Where(f => f.Name.Contains(query) ||
+                       (f.Micronutrients != null && f.Micronutrients.Contains(query)));
+
+        var total = await searchQuery.CountAsync();
+        var foodItems = await searchQuery.Skip(skip).Take(pageSize).ToListAsync();
+
+        return new {
+            foodItems = foodItems.Select(f => MapToResponseDTO(f)),
+            total,
+            page,
+            pageSize
+        };
     }
 }

@@ -4,6 +4,7 @@ using fitlife_planner_back_end.Api.DTOs.Responses;
 using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Services;
+using fitlife_planner_back_end.Api.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using fitlife_planner_back_end.Api.Extensions;
@@ -37,8 +38,7 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
     }
 
 
-    // [Authorize(Roles = "Admin")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpGet("all")]
     public async Task<IActionResult> GetAllPost([FromQuery] PaginationParameters pagination)
     {
@@ -65,6 +65,112 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
             statusCode: HttpStatusCode.OK
         );
         return response.ToActionResult();
+    }
+
+    // --- POST MODERATION ENDPOINTS ---
+
+    [HttpGet("pending")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetPendingPosts([FromQuery] PaginationParameters pagination)
+    {
+        try
+        {
+            var posts = await postService.GetPostsByStatusAsync(Status.Pending, pagination);
+            var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+                success: true,
+                message: "Successfully retrieved pending posts",
+                data: posts,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
+    }
+
+    [HttpGet("status/{status}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> GetPostsByStatus(Status status, [FromQuery] PaginationParameters pagination)
+    {
+        try
+        {
+            var posts = await postService.GetPostsByStatusAsync(status, pagination);
+            var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+                success: true,
+                message: $"Successfully retrieved {status} posts",
+                data: posts,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
+    }
+
+    [HttpGet("approved")]
+    [Authorize]
+    public async Task<IActionResult> GetApprovedPosts([FromQuery] PaginationParameters pagination)
+    {
+        try
+        {
+            var posts = await postService.GetPostsByStatusAsync(Status.Accept, pagination);
+            var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+                success: true,
+                message: "Successfully retrieved approved posts",
+                data: posts,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
+    }
+
+    [HttpGet("user/{userId:guid}")]
+    [Authorize]
+    public async Task<IActionResult> GetPostsByUser(Guid userId, [FromQuery] PaginationParameters pagination)
+    {
+        try
+        {
+            var posts = await postService.GetPostsByUserAsync(userId, pagination);
+            var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+                success: true,
+                message: "Successfully retrieved user posts",
+                data: posts,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
     }
 
 
@@ -164,7 +270,44 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
     }
 
 
+    [HttpPost("{id:guid}/resubmit")]
+    [Authorize]
+    public async Task<IActionResult> ResubmitPost(Guid id)
+    {
+        try
+        {
+            var result = await postService.ResubmitPostAsync(id);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: "Post resubmitted for review",
+                data: result,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (UnauthorizedAccessException e)
+        {
+            var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.Forbidden
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
+    }
+
+
     [HttpPost("{id}/approve")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Approve(Guid id)
     {
         try
@@ -189,6 +332,7 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
 
     // --- REJECT ---
     [HttpPost("{id}/reject")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Reject(Guid id)
     {
         try

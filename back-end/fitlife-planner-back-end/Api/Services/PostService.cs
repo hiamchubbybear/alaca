@@ -19,59 +19,73 @@ public class PostService(
 {
     public async Task<PaginatedList<GetPostResponseDto>> GetAllPostsAsync(PaginationParameters paginationParameters)
     {
-        var posts = postRepository.GetAll(paginationParameters);
+        // Get posts with profiles included
+        var query = dbContext.Posts
+            .Include(p => p.Profile)
+            .OrderByDescending(p => p.CreatedAt);
+
+        var totalCount = await query.CountAsync();
+
+        var posts = await query
+            .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize)
+            .Take(paginationParameters.PageSize)
+            .ToListAsync();
 
         var postDtos = new List<GetPostResponseDto>();
 
-        foreach (var post in posts.Items)
+        foreach (var post in posts)
         {
-            var profile = await dbContext.Profiles
-                .FirstOrDefaultAsync(p => p.ProfileId == post.ProfileId);
-
-            if (profile != null)
+            if (post.Profile != null)
             {
-                var user = await dbContext.Users.FindAsync(profile.UserId);
+                var user = await dbContext.Users.FindAsync(post.Profile.UserId);
                 if (user != null)
                 {
-                    postDtos.Add(mapping.GetPostMapper(post, profile, user));
+                    postDtos.Add(mapping.GetPostMapper(post, post.Profile, user));
                 }
             }
         }
 
         return new PaginatedList<GetPostResponseDto>(
             postDtos,
-            posts.TotalCount,
-            posts.PageNumber,
-            posts.PageSize
+            totalCount,
+            paginationParameters.PageNumber,
+            paginationParameters.PageSize
         );
     }
 
     public async Task<PaginatedList<GetPostResponseDto>> GetAllPostsByLikeAsync(PaginationParameters paginationParameters)
     {
-        var posts = postRepository.GetAllByLike(paginationParameters);
+        // Get posts with profiles included, ordered by like count
+        var query = dbContext.Posts
+            .Include(p => p.Profile)
+            .OrderByDescending(p => p.LikeCount);
+
+        var totalCount = await query.CountAsync();
+
+        var posts = await query
+            .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize)
+            .Take(paginationParameters.PageSize)
+            .ToListAsync();
 
         var postDtos = new List<GetPostResponseDto>();
 
-        foreach (var post in posts.Items)
+        foreach (var post in posts)
         {
-            var profile = await dbContext.Profiles
-                .FirstOrDefaultAsync(p => p.ProfileId == post.ProfileId);
-
-            if (profile != null)
+            if (post.Profile != null)
             {
-                var user = await dbContext.Users.FindAsync(profile.UserId);
+                var user = await dbContext.Users.FindAsync(post.Profile.UserId);
                 if (user != null)
                 {
-                    postDtos.Add(mapping.GetPostMapper(post, profile, user));
+                    postDtos.Add(mapping.GetPostMapper(post, post.Profile, user));
                 }
             }
         }
 
         return new PaginatedList<GetPostResponseDto>(
             postDtos,
-            posts.TotalCount,
-            posts.PageNumber,
-            posts.PageSize
+            totalCount,
+            paginationParameters.PageNumber,
+            paginationParameters.PageSize
         );
     }
 
@@ -321,14 +335,116 @@ public class PostService(
 
         // Decrease vote count
         if (vote.VoteType == VoteType.Upvote)
-            post.UpvoteCount = Math.Max(0, post.UpvoteCount - 1);
-        else
-            post.DownvoteCount = Math.Max(0, post.DownvoteCount - 1);
-
-        dbContext.PostVotes.Remove(vote);
-        dbContext.Posts.Update(post);
         await dbContext.SaveChangesAsync();
 
+        return true;
+    }
+
+    // --- POST MODERATION METHODS ---
+
+    public async Task<PaginatedList<GetPostResponseDto>> GetPostsByStatusAsync(
+        Status status,
+        PaginationParameters paginationParameters)
+    {
+        var query = dbContext.Posts
+            .Include(p => p.Profile)
+            .Where(p => p.Status == status)
+            .OrderByDescending(p => p.CreatedAt);
+
+        var totalCount = await query.CountAsync();
+
+        var posts = await query
+            .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize)
+            .Take(paginationParameters.PageSize)
+            .ToListAsync();
+
+        var postDtos = new List<GetPostResponseDto>();
+        foreach (var post in posts)
+        {
+            if (post.Profile != null)
+            {
+                var user = await dbContext.Users.FindAsync(post.Profile.UserId);
+                if (user != null)
+                {
+                    postDtos.Add(mapping.GetPostMapper(post, post.Profile, user));
+                }
+            }
+        }
+
+        return new PaginatedList<GetPostResponseDto>(
+            postDtos,
+            totalCount,
+            paginationParameters.PageNumber,
+            paginationParameters.PageSize
+        );
+    }
+
+    public async Task<PaginatedList<GetPostResponseDto>> GetPostsByUserAsync(
+        Guid userId,
+        PaginationParameters paginationParameters)
+    {
+        // Find user's profile
+        var profile = await dbContext.Profiles
+            .FirstOrDefaultAsync(p => p.UserId == userId);
+
+        if (profile == null)
+            throw new Exception("User profile not found");
+
+        var query = dbContext.Posts
+            .Include(p => p.Profile)
+            .Where(p => p.ProfileId == profile.ProfileId)
+            .OrderByDescending(p => p.CreatedAt);
+
+        var totalCount = await query.CountAsync();
+
+        var posts = await query
+            .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize)
+            .Take(paginationParameters.PageSize)
+            .ToListAsync();
+
+        var postDtos = new List<GetPostResponseDto>();
+        var user = await dbContext.Users.FindAsync(userId);
+
+        foreach (var post in posts)
+        {
+            if (post.Profile != null && user != null)
+            {
+                postDtos.Add(mapping.GetPostMapper(post, post.Profile, user));
+            }
+        }
+
+        return new PaginatedList<GetPostResponseDto>(
+            postDtos,
+            totalCount,
+            paginationParameters.PageNumber,
+            paginationParameters.PageSize
+        );
+    }
+
+    public async Task<bool> ResubmitPostAsync(Guid postId)
+    {
+        var post = await dbContext.Posts.FindAsync(postId);
+        if (post == null)
+            throw new Exception("Post not found");
+
+        // Check if user owns the post
+        var currentUserId = userContext.User.userId;
+        var profile = await dbContext.Profiles
+            .FirstOrDefaultAsync(p => p.ProfileId == post.ProfileId);
+
+        if (profile == null)
+            throw new Exception("Profile not found");
+
+        if (profile.UserId != currentUserId)
+            throw new UnauthorizedAccessException("You can only resubmit your own posts");
+
+        if (post.Status != Status.Reject)
+            throw new Exception("Only rejected posts can be resubmitted");
+
+        post.Status = Status.Pending;
+        post.UpdatedAt = DateTime.UtcNow;
+
+        await dbContext.SaveChangesAsync();
         return true;
     }
 }

@@ -1,5 +1,6 @@
 using fitlife_planner_back_end.Api.Configurations;
 using fitlife_planner_back_end.Api.DTOs.Responses;
+using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Interface;
 using fitlife_planner_back_end.Api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,35 @@ public class NotificationService
         _dbContext = dbContext;
         _logger = logger;
         _userContext = userContext;
+    }
+
+    public async Task<GetNotificationResponseDTO> CreateNotification(CreateNotificationRequestDTO dto)
+    {
+        var notification = new Notification
+        {
+            UserId = dto.UserId,
+            Title = dto.Title,
+            Body = dto.Body,
+            Data = dto.Data,
+            Type = dto.Type,
+            IsRead = false,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _dbContext.Notifications.Add(notification);
+        await _dbContext.SaveChangesAsync();
+
+        return new GetNotificationResponseDTO
+        {
+            Id = notification.Id,
+            Title = notification.Title,
+            Body = notification.Body,
+            Type = notification.Type,
+            Data = notification.Data,
+            IsRead = notification.IsRead,
+            CreatedAt = notification.CreatedAt,
+            ReadAt = notification.ReadAt
+        };
     }
 
     public async Task<List<GetNotificationResponseDTO>> GetMyNotifications()
@@ -70,5 +100,28 @@ public class NotificationService
 
         await _dbContext.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<bool> DeleteNotification(Guid id)
+    {
+        var userId = _userContext.User.userId;
+        var notification = await _dbContext.Notifications.FindAsync(id)
+            ?? throw new Exception("Notification not found");
+
+        if (notification.UserId != userId)
+            throw new UnauthorizedAccessException("This is not your notification");
+
+        _dbContext.Notifications.Remove(notification);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<int> GetUnreadCount()
+    {
+        var userId = _userContext.User.userId;
+        var count = await _dbContext.Notifications
+            .Where(n => n.UserId == userId && !n.IsRead)
+            .CountAsync();
+        return count;
     }
 }

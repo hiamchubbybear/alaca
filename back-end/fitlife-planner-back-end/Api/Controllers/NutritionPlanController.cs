@@ -25,11 +25,11 @@ public class NutritionPlanController : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<IActionResult> GetMyNutritionPlans()
+    public async Task<IActionResult> GetMyNutritionPlans([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         try
         {
-            var plans = await _nutritionPlanService.GetMyNutritionPlans();
+            var plans = await _nutritionPlanService.GetMyNutritionPlans(page, pageSize);
             var response = new ApiResponse<List<GetNutritionPlanResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved nutrition plans",
@@ -160,6 +160,66 @@ public class NutritionPlanController : ControllerBase
             );;
 
             return response.ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateNutritionPlan(Guid id, [FromBody] UpdateNutritionPlanRequestDTO dto)
+    {
+        try
+        {
+            var plan = await _nutritionPlanService.UpdateNutritionPlan(id, dto);
+            return new ApiResponse<GetNutritionPlanResponseDTO>(success: true, message: "Successfully updated nutrition plan", data: plan, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetNutritionPlanResponseDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPut("{planId:guid}/items/{itemId:guid}")]
+    public async Task<IActionResult> UpdatePlanItem(Guid planId, Guid itemId, [FromBody] UpdateNutritionPlanItemRequestDTO dto)
+    {
+        try
+        {
+            var item = await _nutritionPlanService.UpdatePlanItem(planId, itemId, dto);
+            return new ApiResponse<GetNutritionPlanItemResponseDTO>(success: true, message: "Successfully updated item", data: item, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetNutritionPlanItemResponseDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpDelete("{planId:guid}/items/{itemId:guid}")]
+    public async Task<IActionResult> RemoveItemFromPlan(Guid planId, Guid itemId)
+    {
+        try
+        {
+            var result = await _nutritionPlanService.RemoveItemFromPlan(planId, itemId);
+            return new ApiResponse<bool>(success: true, message: "Successfully removed item", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("{id:guid}/summary")]
+    public async Task<IActionResult> GetNutritionSummary(Guid id)
+    {
+        try
+        {
+            var summary = await _nutritionPlanService.GetNutritionSummary(id);
+            return new ApiResponse<NutritionSummaryDTO>(success: true, message: "Successfully retrieved summary", data: summary, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<NutritionSummaryDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
         }
     }
 }

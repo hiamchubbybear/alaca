@@ -25,11 +25,11 @@ public class ExerciseLibraryController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetAllExercises([FromQuery] string? muscleGroup = null)
+    public async Task<IActionResult> GetAllExercises([FromQuery] string? muscleGroup = null, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         try
         {
-            var exercises = await _exerciseService.GetAllExercises(muscleGroup);
+            var exercises = await _exerciseService.GetAllExercises(muscleGroup, page, pageSize);
             var response = new ApiResponse<List<GetExerciseResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved exercises",
@@ -132,6 +132,36 @@ public class ExerciseLibraryController : ControllerBase
             );;
 
             return response.ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateExercise(Guid id, [FromBody] UpdateExerciseRequestDTO dto)
+    {
+        try
+        {
+            var exercise = await _exerciseService.UpdateExercise(id, dto);
+            return new ApiResponse<GetExerciseResponseDTO>(success: true, message: "Successfully updated exercise", data: exercise, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetExerciseResponseDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchExercises([FromQuery] string query, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        try
+        {
+            var exercises = await _exerciseService.SearchExercises(query, page, pageSize);
+            return new ApiResponse<object>(success: true, message: "Successfully searched exercises", data: exercises, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<object>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
         }
     }
 }

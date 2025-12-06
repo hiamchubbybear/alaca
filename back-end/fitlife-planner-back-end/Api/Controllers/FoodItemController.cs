@@ -25,11 +25,11 @@ public class FoodItemController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetAllFoodItems()
+    public async Task<IActionResult> GetAllFoodItems([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         try
         {
-            var foodItems = await _foodItemService.GetAllFoodItems();
+            var foodItems = await _foodItemService.GetAllFoodItems(page, pageSize);
             var response = new ApiResponse<List<GetFoodItemResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved food items",
@@ -79,7 +79,7 @@ public class FoodItemController : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> CreateFoodItem([FromBody] CreateFoodItemRequestDTO dto)
     {
@@ -107,7 +107,7 @@ public class FoodItemController : ControllerBase
         }
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteFoodItem(Guid id)
     {
@@ -132,6 +132,36 @@ public class FoodItemController : ControllerBase
             );;
 
             return response.ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateFoodItem(Guid id, [FromBody] UpdateFoodItemRequestDTO dto)
+    {
+        try
+        {
+            var foodItem = await _foodItemService.UpdateFoodItem(id, dto);
+            return new ApiResponse<GetFoodItemResponseDTO>(success: true, message: "Successfully updated food item", data: foodItem, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetFoodItemResponseDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchFoodItems([FromQuery] string query, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        try
+        {
+            var foodItems = await _foodItemService.SearchFoodItems(query, page, pageSize);
+            return new ApiResponse<object>(success: true, message: "Successfully searched food items", data: foodItems, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<object>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
         }
     }
 }

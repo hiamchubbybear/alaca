@@ -39,6 +39,9 @@ namespace fitlife_planner_back_end.Api.Configurations
         public DbSet<PostVote> PostVotes { get; set; }
         public DbSet<UserFollower> UserFollowers { get; set; }
 
+        // Authentication & Security
+        public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+
         // Messaging & Reviews
         public DbSet<Message> Messages { get; set; }
         public DbSet<Review> Reviews { get; set; }
@@ -391,6 +394,29 @@ namespace fitlife_planner_back_end.Api.Configurations
 
                 // One vote per user per post
                 entity.HasIndex(e => new { e.PostId, e.UserId }).IsUnique();
+            });
+
+            modelBuilder.Entity<PasswordResetToken>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).HasColumnType("char(36)");
+                entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.Token).HasMaxLength(256).IsRequired();
+                entity.Property(e => e.ExpiresAt).HasColumnType("datetime").IsRequired();
+                entity.Property(e => e.IsUsed).HasDefaultValue(false);
+                entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                // Foreign key to User
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                // Index on Token for fast lookup
+                entity.HasIndex(e => e.Token);
+
+                // Index on UserId for cleanup queries
+                entity.HasIndex(e => e.UserId);
             });
 
             modelBuilder.Entity<UserFollower>(entity =>

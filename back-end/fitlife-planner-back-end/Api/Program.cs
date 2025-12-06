@@ -90,7 +90,9 @@ builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<Authe
     .AddScoped<FollowerService>()
     .AddScoped<NutritionDataSeeder>()
     .AddScoped<RecommendationService>()
-    .AddScoped<DataSeederService>();
+    .AddScoped<DataSeederService>()
+    .AddScoped<EmailService>()
+    .AddScoped<PasswordResetService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var connString = $"Server={host};Port={port};Database={db};User={user};Password={pass};SslMode={ssl};";

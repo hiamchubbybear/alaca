@@ -1,6 +1,7 @@
 using System.Net;
 using APIResponseWrapper;
 using fitlife_planner_back_end.Api.DTOs.Responses;
+using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,34 @@ public class NotificationController : ControllerBase
     {
         _notificationService = notificationService;
         _logger = logger;
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    public async Task<IActionResult> CreateNotification([FromBody] CreateNotificationRequestDTO dto)
+    {
+        try
+        {
+            var notification = await _notificationService.CreateNotification(dto);
+            var response = new ApiResponse<GetNotificationResponseDTO>(
+                success: true,
+                message: "Successfully created notification",
+                data: notification,
+                statusCode: HttpStatusCode.Created
+            );;
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<GetNotificationResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );;
+
+            return response.ToActionResult();
+        }
     }
 
     [Authorize]
@@ -97,6 +126,62 @@ public class NotificationController : ControllerBase
         catch (Exception e)
         {
             var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );;
+
+            return response.ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteNotification(Guid id)
+    {
+        try
+        {
+            var result = await _notificationService.DeleteNotification(id);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: "Successfully deleted notification",
+                data: result,
+                statusCode: HttpStatusCode.OK
+            );;
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );;
+
+            return response.ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("unread-count")]
+    public async Task<IActionResult> GetUnreadCount()
+    {
+        try
+        {
+            var count = await _notificationService.GetUnreadCount();
+            var response = new ApiResponse<int>(
+                success: true,
+                message: "Successfully retrieved unread count",
+                data: count,
+                statusCode: HttpStatusCode.OK
+            );;
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<int>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest

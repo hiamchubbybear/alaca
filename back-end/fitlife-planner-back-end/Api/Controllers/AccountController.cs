@@ -61,6 +61,7 @@ public class AccountController(ILogger<AccountController> logger, UserService us
     }
 
     [HttpPost("admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateAdminUser([FromBody] CreateAccountRequestDto user)
     {
         try
@@ -76,6 +77,113 @@ public class AccountController(ILogger<AccountController> logger, UserService us
             var response = new ApiResponse<CreateAccountRequestDto>(success: false, message: e.Message,
                 statusCode: HttpStatusCode.BadRequest);
             return response.ToActionResult();
+        }
+    }
+
+    // ADMIN TOOLS
+    [Authorize(Roles = "Admin")]
+    [HttpGet("admin/users")]
+    public async Task<IActionResult> GetAllUsers([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        try
+        {
+            var users = await userService.GetAllUsers(page, pageSize);
+            return new ApiResponse<object>(success: true, message: "Successfully retrieved users", data: users, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<object>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("admin/users/{id:guid}/ban")]
+    public async Task<IActionResult> BanUser(Guid id)
+    {
+        try
+        {
+            var result = await userService.BanUser(id);
+            return new ApiResponse<bool>(success: true, message: "Successfully banned user", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("admin/users/{id:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        try
+        {
+            var result = await userService.DeleteUser(id);
+            return new ApiResponse<bool>(success: true, message: "Successfully deleted user", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet("admin/stats")]
+    public async Task<IActionResult> GetPlatformStats()
+    {
+        try
+        {
+            var stats = await userService.GetPlatformStats();
+            return new ApiResponse<object>(success: true, message: "Successfully retrieved platform stats", data: stats, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<object>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    // ACCOUNT MANAGEMENT
+    [Authorize]
+    [HttpPut("")]
+    public async Task<IActionResult> UpdateAccount([FromBody] UpdateAccountRequestDTO dto)
+    {
+        try
+        {
+            var user = await userService.UpdateAccount(dto);
+            return new ApiResponse<object>(success: true, message: "Successfully updated account", data: user, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<object>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPut("password")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDTO dto)
+    {
+        try
+        {
+            var result = await userService.ChangePassword(dto);
+            return new ApiResponse<bool>(success: true, message: "Successfully changed password", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpDelete("")]
+    public async Task<IActionResult> DeleteAccount()
+    {
+        try
+        {
+            var result = await userService.DeleteAccount();
+            return new ApiResponse<bool>(success: true, message: "Successfully deleted account", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
         }
     }
 }

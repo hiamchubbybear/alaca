@@ -25,11 +25,11 @@ public class ChallengeController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetAllChallenges()
+    public async Task<IActionResult> GetAllChallenges([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         try
         {
-            var challenges = await _challengeService.GetAllChallenges();
+            var challenges = await _challengeService.GetAllChallenges(page, pageSize);
             var response = new ApiResponse<List<GetChallengeResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved challenges",
@@ -158,6 +158,118 @@ public class ChallengeController : ControllerBase
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
             );;
+
+            return response.ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateChallenge(Guid id, [FromBody] UpdateChallengeRequestDTO dto)
+    {
+        try
+        {
+            var challenge = await _challengeService.UpdateChallenge(id, dto);
+            var response = new ApiResponse<GetChallengeResponseDTO>(
+                success: true,
+                message: "Successfully updated challenge",
+                data: challenge,
+                statusCode: HttpStatusCode.OK
+            );
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<GetChallengeResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+
+            return response.ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteChallenge(Guid id)
+    {
+        try
+        {
+            var result = await _challengeService.DeleteChallenge(id);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: "Successfully deleted challenge",
+                data: result,
+                statusCode: HttpStatusCode.OK
+            );
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+
+            return response.ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPost("{id:guid}/leave")]
+    public async Task<IActionResult> LeaveChallenge(Guid id)
+    {
+        try
+        {
+            var result = await _challengeService.LeaveChallenge(id);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: "Successfully left challenge",
+                data: result,
+                statusCode: HttpStatusCode.OK
+            );
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+
+            return response.ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("{id:guid}/leaderboard")]
+    public async Task<IActionResult> GetChallengeLeaderboard(Guid id)
+    {
+        try
+        {
+            var leaderboard = await _challengeService.GetChallengeLeaderboard(id);
+            var response = new ApiResponse<List<ChallengeLeaderboardDTO>>(
+                success: true,
+                message: "Successfully retrieved leaderboard",
+                data: leaderboard,
+                statusCode: HttpStatusCode.OK
+            );
+
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<List<ChallengeLeaderboardDTO>>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
 
             return response.ToActionResult();
         }

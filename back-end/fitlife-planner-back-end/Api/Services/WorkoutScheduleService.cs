@@ -123,4 +123,51 @@ public class WorkoutScheduleService
             CompletedAt = schedule.CompletedAt
         };
     }
+
+    public virtual async Task<GetWorkoutScheduleResponseDTO> RescheduleWorkout(Guid id, RescheduleWorkoutRequestDTO dto)
+    {
+        var userId = _userContext.User.userId;
+        var schedule = await _dbContext.WorkoutSchedules.Include(s => s.Workout).FirstOrDefaultAsync(s => s.Id == id) ?? throw new Exception("Schedule not found");
+        if (schedule.UserId != userId) throw new UnauthorizedAccessException("You don't own this schedule");
+        schedule.ScheduledDate = dto.ScheduledDate;
+        await _dbContext.SaveChangesAsync();
+        return MapToResponseDTO(schedule);
+    }
+
+    public virtual async Task<bool> CancelSchedule(Guid id)
+    {
+        var userId = _userContext.User.userId;
+        var schedule = await _dbContext.WorkoutSchedules.FindAsync(id) ?? throw new Exception("Schedule not found");
+        if (schedule.UserId != userId) throw new UnauthorizedAccessException("You don't own this schedule");
+        _dbContext.WorkoutSchedules.Remove(schedule);
+        await _dbContext.SaveChangesAsync();
+        return true;
+    }
+
+    public virtual async Task<List<GetWorkoutScheduleResponseDTO>> GetWeekSchedule(DateTime? startDate = null)
+    {
+        var userId = _userContext.User.userId;
+        var start = startDate ?? DateTime.UtcNow.Date;
+        var end = start.AddDays(7);
+        var schedules = await _dbContext.WorkoutSchedules
+            .Include(s => s.Workout)
+            .Where(s => s.UserId == userId && s.ScheduledDate >= start && s.ScheduledDate < end)
+            .OrderBy(s => s.ScheduledDate)
+            .ToListAsync();
+        return schedules.Select(s => MapToResponseDTO(s)).ToList();
+    }
+
+    private GetWorkoutScheduleResponseDTO MapToResponseDTO(WorkoutSchedule s)
+    {
+        return new GetWorkoutScheduleResponseDTO
+        {
+            Id = s.Id,
+            WorkoutId = s.WorkoutId,
+            WorkoutTitle = s.Workout?.Title ?? "",
+            ScheduledDate = s.ScheduledDate,
+            ScheduledTime = s.ScheduledTime,
+            Status = s.Status,
+            CompletedAt = s.CompletedAt
+        };
+    }
 }

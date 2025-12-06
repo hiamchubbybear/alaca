@@ -174,3 +174,83 @@ public class DataSeederService
         }
     }
 }
+
+// JSON deserialization models
+public class NutritionDataRoot
+{
+    [System.Text.Json.Serialization.JsonPropertyName("stats")]
+    public NutritionStats? Stats { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("data")]
+    public List<NutritionDataItem> Data { get; set; } = new();
+}
+
+public class NutritionStats
+{
+    [System.Text.Json.Serialization.JsonPropertyName("total")]
+    public int Total { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("valid")]
+    public int Valid { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("invalid")]
+    public int Invalid { get; set; }
+}
+
+public class NutritionDataItem
+{
+    [System.Text.Json.Serialization.JsonPropertyName("file")]
+    public string File { get; set; } = string.Empty;
+
+    [System.Text.Json.Serialization.JsonPropertyName("nutrition")]
+    public NutritionInfo? Nutrition { get; set; }
+}
+
+public class NutritionInfo
+{
+    [System.Text.Json.Serialization.JsonPropertyName("energy")]
+    public double Energy { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("protein")]
+    public double Protein { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("fat")]
+    public double Fat { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("carb")]
+    public double Carb { get; set; }
+}
+
+// Exercise data models
+public class ExerciseDataRoot
+{
+    [System.Text.Json.Serialization.JsonPropertyName("exercises")]
+    public List<ExerciseDataItem> Exercises { get; set; } = new();
+}
+
+public class ExerciseDataItem
+{
+    [System.Text.Json.Serialization.JsonPropertyName("title")]
+    public string Title { get; set; } = string.Empty;
+
+    [System.Text.Json.Serialization.JsonPropertyName("description")]
+    public string Description { get; set; } = string.Empty;
+
+    [System.Text.Json.Serialization.JsonPropertyName("primaryMuscle")]
+    public string PrimaryMuscle { get; set; } = string.Empty;
+
+    [System.Text.Json.Serialization.JsonPropertyName("secondaryMuscles")]
+    public List<string>? SecondaryMuscles { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("equipment")]
+    public List<string>? Equipment { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("difficulty")]
+    public string Difficulty { get; set; } = string.Empty;
+
+    [System.Text.Json.Serialization.JsonPropertyName("videoUrl")]
+    public string VideoUrl { get; set; } = string.Empty;
+
+    [System.Text.Json.Serialization.JsonPropertyName("images")]
+    public List<string>? Images { get; set; }
+}

@@ -134,4 +134,49 @@ public class WorkoutScheduleController : ControllerBase
             return response.ToActionResult();
         }
     }
+
+    [Authorize]
+    [HttpPut("{id:guid}/reschedule")]
+    public async Task<IActionResult> RescheduleWorkout(Guid id, [FromBody] RescheduleWorkoutRequestDTO dto)
+    {
+        try
+        {
+            var schedule = await _scheduleService.RescheduleWorkout(id, dto);
+            return new ApiResponse<GetWorkoutScheduleResponseDTO>(success: true, message: "Successfully rescheduled workout", data: schedule, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetWorkoutScheduleResponseDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> CancelSchedule(Guid id)
+    {
+        try
+        {
+            var result = await _scheduleService.CancelSchedule(id);
+            return new ApiResponse<bool>(success: true, message: "Successfully cancelled schedule", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("week")]
+    public async Task<IActionResult> GetWeekSchedule([FromQuery] DateTime? startDate = null)
+    {
+        try
+        {
+            var schedules = await _scheduleService.GetWeekSchedule(startDate);
+            return new ApiResponse<List<GetWorkoutScheduleResponseDTO>>(success: true, message: "Successfully retrieved week schedule", data: schedules, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<List<GetWorkoutScheduleResponseDTO>>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
 }

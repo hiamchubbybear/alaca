@@ -40,7 +40,7 @@ public class NutritionDataSeeder
 
             foreach (var item in nutritionData.Data)
             {
-                // Skip items with missing critical data
+
                 if (item.Nutrition == null ||
                     item.Nutrition.Energy == 0 ||
                     string.IsNullOrWhiteSpace(item.File))
@@ -49,10 +49,10 @@ public class NutritionDataSeeder
                     continue;
                 }
 
-                // Extract food name from filename (remove .pdf extension)
+
                 var foodName = item.File.Replace(".pdf", "").Trim();
 
-                // Check if food item already exists
+
                 var existingItem = await _dbContext.FoodItems
                     .FirstOrDefaultAsync(f => f.Name == foodName);
 
@@ -67,15 +67,15 @@ public class NutritionDataSeeder
                 {
                     Id = Guid.NewGuid(),
                     Name = foodName,
-                    ServingSize = "100g", // Default serving size
+                    ServingSize = "100g",
                     ServingAmount = 1,
                     CaloriesKcal = (int)Math.Round(item.Nutrition.Energy),
                     ProteinG = (decimal)item.Nutrition.Protein,
                     CarbsG = (decimal)item.Nutrition.Carb,
                     FatG = (decimal)item.Nutrition.Fat,
-                    FiberG = 0, // Not provided in source data
-                    SodiumMg = 0, // Not provided in source data
-                    Micronutrients = "{}", // Empty JSON object
+                    FiberG = 0,
+                    SodiumMg = 0,
+                    Micronutrients = "{}",
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 };
@@ -102,32 +102,4 @@ public class NutritionDataSeeder
             throw;
         }
     }
-}
-
-// JSON deserialization models
-public class NutritionDataRoot
-{
-    public NutritionStats? Stats { get; set; }
-    public List<NutritionDataItem> Data { get; set; } = new();
-}
-
-public class NutritionStats
-{
-    public int Total { get; set; }
-    public int Valid { get; set; }
-    public int Invalid { get; set; }
-}
-
-public class NutritionDataItem
-{
-    public string File { get; set; } = string.Empty;
-    public NutritionInfo? Nutrition { get; set; }
-}
-
-public class NutritionInfo
-{
-    public double Energy { get; set; }
-    public double Protein { get; set; }
-    public double Fat { get; set; }
-    public double Carb { get; set; }
 }

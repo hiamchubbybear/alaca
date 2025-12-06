@@ -20,8 +20,9 @@ public class ExerciseLibraryService
         _userContext = userContext;
     }
 
-    public async Task<List<GetExerciseResponseDTO>> GetAllExercises(string? muscleGroup = null)
+    public async Task<object> GetAllExercises(string? muscleGroup = null, int page = 1, int pageSize = 20)
     {
+        var skip = (page - 1) * pageSize;
         var query = _dbContext.ExerciseLibrary.Include(e => e.Tags).AsQueryable();
 
         if (!string.IsNullOrEmpty(muscleGroup))
@@ -29,8 +30,9 @@ public class ExerciseLibraryService
             query = query.Where(e => e.PrimaryMuscle == muscleGroup || e.SecondaryMuscles.Contains(muscleGroup));
         }
 
-        var exercises = await query.ToListAsync();
-        return exercises.Select(e => MapToResponseDTO(e)).ToList();
+        var total = await query.CountAsync();
+        var exercises = await query.Skip(skip).Take(pageSize).ToListAsync();
+        return new { exercises = exercises.Select(e => MapToResponseDTO(e)), total, page, pageSize };
     }
 
     public async Task<GetExerciseResponseDTO> GetExerciseById(Guid id)
@@ -104,6 +106,43 @@ public class ExerciseLibraryService
             Images = exercise.Images,
             Tags = exercise.Tags?.Select(t => t.Tag).ToList(),
             CreatedAt = exercise.CreatedAt
+        };
+    }
+
+    public async Task<GetExerciseResponseDTO> UpdateExercise(Guid id, UpdateExerciseRequestDTO dto)
+    {
+        var exercise = await _dbContext.ExerciseLibrary.Include(e => e.Tags).FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("Exercise not found");
+        if (dto.Title != null) exercise.Title = dto.Title;
+        if (dto.Description != null) exercise.Description = dto.Description;
+        if (dto.Category != null) exercise.PrimaryMuscle = dto.Category;
+        if (dto.Difficulty != null) exercise.Difficulty = dto.Difficulty;
+        if (dto.MuscleGroup != null) exercise.PrimaryMuscle = dto.MuscleGroup;
+        if (dto.Equipment != null) exercise.Equipment = dto.Equipment;
+        if (dto.Instructions != null) exercise.Description = dto.Instructions;
+        if (dto.VideoUrl != null) exercise.VideoUrl = dto.VideoUrl;
+        exercise.UpdatedAt = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync();
+        return MapToResponseDTO(exercise);
+    }
+
+    public async Task<object> SearchExercises(string query, int page, int pageSize)
+    {
+        var skip = (page - 1) * pageSize;
+        var searchQuery = _dbContext.ExerciseLibrary
+            .Include(e => e.Tags)
+            .Where(e => e.Title.Contains(query) ||
+                       e.Description.Contains(query) ||
+                       e.PrimaryMuscle.Contains(query) ||
+                       e.Equipment.Contains(query));
+
+        var total = await searchQuery.CountAsync();
+        var exercises = await searchQuery.Skip(skip).Take(pageSize).ToListAsync();
+
+        return new {
+            exercises = exercises.Select(e => MapToResponseDTO(e)),
+            total,
+            page,
+            pageSize
         };
     }
 }

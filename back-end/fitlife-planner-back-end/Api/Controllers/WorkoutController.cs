@@ -25,11 +25,11 @@ public class WorkoutController : ControllerBase
 
     [Authorize]
     [HttpGet("me")]
-    public async Task<IActionResult> GetMyWorkouts()
+    public async Task<IActionResult> GetMyWorkouts([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
         try
         {
-            var workouts = await _workoutService.GetMyWorkouts();
+            var workouts = await _workoutService.GetMyWorkouts(page, pageSize);
             var response = new ApiResponse<List<GetWorkoutResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved workouts",
@@ -132,6 +132,36 @@ public class WorkoutController : ControllerBase
             );;
 
             return response.ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateWorkout(Guid id, [FromBody] UpdateWorkoutRequestDTO dto)
+    {
+        try
+        {
+            var workout = await _workoutService.UpdateWorkout(id, dto);
+            return new ApiResponse<GetWorkoutResponseDTO>(success: true, message: "Successfully updated workout", data: workout, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetWorkoutResponseDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPost("{id:guid}/duplicate")]
+    public async Task<IActionResult> DuplicateWorkout(Guid id)
+    {
+        try
+        {
+            var workout = await _workoutService.DuplicateWorkout(id);
+            return new ApiResponse<GetWorkoutResponseDTO>(success: true, message: "Successfully duplicated workout", data: workout, statusCode: HttpStatusCode.Created).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetWorkoutResponseDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
         }
     }
 }

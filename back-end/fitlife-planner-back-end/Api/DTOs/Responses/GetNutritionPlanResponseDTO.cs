@@ -21,6 +21,6 @@ public class GetNutritionPlanItemResponseDTO
     public string? MealTime { get; set; }
     public Guid FoodItemId { get; set; }
     public string FoodItemName { get; set; }
-    public decimal? ServingCount { get; set; }
+    public double ServingCount { get; set; }
     public string? Notes { get; set; }
 }

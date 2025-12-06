@@ -92,7 +92,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.success && response.data) {",
                                     "        pm.collectionVariables.set('userId', response.data.id);",
-                                    "        console.log('✓ Account created - User ID:', response.data.id);",
+                                    "        console.log('\u2713 Account created - User ID:', response.data.id);",
                                     "    }",
                                     "}"
                                 ],
@@ -135,7 +135,7 @@
                                     "    if (response.success && response.data) {",
                                     "        pm.collectionVariables.set('token', response.data.token);",
                                     "        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
-                                    "        console.log('✓ Login successful - Token saved');",
+                                    "        console.log('\u2713 Login successful - Token saved');",
                                     "    }",
                                     "}"
                                 ],
@@ -178,7 +178,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data && response.data.token) {",
                                     "        pm.collectionVariables.set('token', response.data.token);",
-                                    "        console.log('✓ Token refreshed');",
+                                    "        console.log('\u2713 Token refreshed');",
                                     "    }",
                                     "}"
                                 ],
@@ -247,7 +247,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('profileId', response.data.profileId);",
-                                    "        console.log('✓ Profile ID:', response.data.profileId);",
+                                    "        console.log('\u2713 Profile ID:', response.data.profileId);",
                                     "    }",
                                     "}"
                                 ],
@@ -351,7 +351,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('bmiRecordId', response.data.bmiRecordID);",
-                                    "        console.log('✓ BMI:', response.data.bmi, '-', response.data.assessment);",
+                                    "        console.log('\u2713 BMI:', response.data.bmi, '-', response.data.assessment);",
                                     "    }",
                                     "}"
                                 ],
@@ -508,7 +508,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('foodItemId', response.data.id);",
-                                    "        console.log('✓ Food item created:', response.data.name);",
+                                    "        console.log('\u2713 Food item created:', response.data.name);",
                                     "    }",
                                     "}"
                                 ],
@@ -594,6 +594,42 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "Search Food Items",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/food-items/search?query=chicken&page=1&pageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "food-items",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "chicken"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
                 }
             ]
         },
@@ -655,7 +691,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('workoutId', response.data.id);",
-                                    "        console.log('✓ Workout created:', response.data.id);",
+                                    "        console.log('\u2713 Workout created:', response.data.id);",
                                     "    }",
                                     "}"
                                 ],
@@ -741,6 +777,29 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "Duplicate Workout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/workouts/{{workoutId}}/duplicate",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workouts",
+                                "{{workoutId}}",
+                                "duplicate"
+                            ]
+                        }
+                    }
                 }
             ]
         },
@@ -780,7 +839,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('progressId', response.data.id);",
-                                    "        console.log('✓ Progress entry created');",
+                                    "        console.log('\u2713 Progress entry created');",
                                     "    }",
                                     "}"
                                 ],
@@ -936,7 +995,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('challengeId', response.data.id);",
-                                    "        console.log('✓ Challenge created');",
+                                    "        console.log('\u2713 Challenge created');",
                                     "    }",
                                     "}"
                                 ],
@@ -990,6 +1049,104 @@
                                 "challenges",
                                 "{{challengeId}}",
                                 "join"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Leave Challenge",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/{{challengeId}}/leave",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "{{challengeId}}",
+                                "leave"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Challenge (Admin)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"30-Day Challenge Updated\",\n  \"description\": \"Updated description\",\n  \"startDate\": \"2024-12-10T00:00:00Z\",\n  \"endDate\": \"2025-01-10T00:00:00Z\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/{{challengeId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "{{challengeId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Challenge (Admin)",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/{{challengeId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "{{challengeId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Challenge Leaderboard",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/challenges/{{challengeId}}/leaderboard",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "challenges",
+                                "{{challengeId}}",
+                                "leaderboard"
                             ]
                         }
                     }
@@ -1117,7 +1274,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('postId', response.data.postId || response.data.id);",
-                                    "        console.log('✓ Post created');",
+                                    "        console.log('\u2713 Post created');",
                                     "    }",
                                     "}"
                                 ],
@@ -1139,7 +1296,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"title\": \"First 5K Run!\",\n  \"content\": \"Just completed my first 5K run! 🏃‍♂️\",\n  \"media\": \"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800\"\n}"
+                            "raw": "{\n  \"title\": \"First 5K Run!\",\n  \"content\": \"Just completed my first 5K run! \ud83c\udfc3\u200d\u2642\ufe0f\",\n  \"media\": \"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/post",
@@ -1168,7 +1325,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"title\": \"First 5K Run - New PR!\",\n  \"content\": \"Just completed my first 5K run! New personal best: 25:30! 🏃‍♂️🎉\",\n  \"media\": \"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800\"\n}"
+                            "raw": "{\n  \"title\": \"First 5K Run - New PR!\",\n  \"content\": \"Just completed my first 5K run! New personal best: 25:30! \ud83c\udfc3\u200d\u2642\ufe0f\ud83c\udf89\",\n  \"media\": \"https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?w=800\"\n}"
                         },
                         "url": {
                             "raw": "{{baseUrl}}/post/{{postId}}",
@@ -1405,6 +1562,35 @@
             "name": "10. Notifications",
             "item": [
                 {
+                    "name": "Create Notification",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"title\": \"New Notification\",\n  \"body\": \"This is a test notification\",\n  \"type\": \"system\",\n  \"data\": \"{}\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications"
+                            ]
+                        }
+                    }
+                },
+                {
                     "name": "Get My Notifications",
                     "request": {
                         "method": "GET",
@@ -1432,6 +1618,50 @@
                                     "key": "PageSize",
                                     "value": "20"
                                 }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Notification",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/{{notificationId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "{{notificationId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Unread Count",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/notifications/unread-count",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "notifications",
+                                "unread-count"
                             ]
                         }
                     }
@@ -1581,7 +1811,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data && response.data.length > 0) {",
                                     "        pm.collectionVariables.set('exerciseId', response.data[0].id);",
-                                    "        console.log('✓ Exercise ID:', response.data[0].id);",
+                                    "        console.log('\u2713 Exercise ID:', response.data[0].id);",
                                     "    }",
                                     "}"
                                 ],
@@ -1675,6 +1905,36 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "Update Exercise (Admin)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Bench Press Updated\",\n  \"description\": \"Updated description\",\n  \"muscleGroup\": \"Chest\",\n  \"equipment\": \"Barbell\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/exercise-library/{{exerciseId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "exercise-library",
+                                "{{exerciseId}}"
+                            ]
+                        }
+                    }
                 }
             ]
         },
@@ -1714,7 +1974,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('scheduleId', response.data.id);",
-                                    "        console.log('✓ Schedule created');",
+                                    "        console.log('\u2713 Schedule created');",
                                     "    }",
                                     "}"
                                 ],
@@ -1800,6 +2060,65 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "Reschedule Workout",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"newScheduledFor\": \"2024-12-08T10:00:00Z\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/workout-schedules/{{scheduleId}}/reschedule",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                "{{scheduleId}}",
+                                "reschedule"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Week Schedule",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/workout-schedules/week?startDate=2024-12-01",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                "week"
+                            ],
+                            "query": [
+                                {
+                                    "key": "startDate",
+                                    "value": "2024-12-01"
+                                }
+                            ]
+                        }
+                    }
                 }
             ]
         },
@@ -1817,7 +2136,7 @@
                                     "    const response = pm.response.json();",
                                     "    if (response.data) {",
                                     "        pm.collectionVariables.set('nutritionPlanId', response.data.id);",
-                                    "        console.log('✓ Nutrition Plan ID:', response.data.id);",
+                                    "        console.log('\u2713 Nutrition Plan ID:', response.data.id);",
                                     "    }",
                                     "}"
                                 ],
@@ -1897,11 +2216,64 @@
                             ]
                         }
                     }
+                },
+                {
+                    "name": "Update Nutrition Plan",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"name\": \"Updated Plan\",\n  \"description\": \"Updated description\",\n  \"targetCalories\": 2200\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/nutrition-plans/{{nutritionPlanId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{nutritionPlanId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Nutrition Summary",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/nutrition-plans/{{nutritionPlanId}}/summary",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{nutritionPlanId}}",
+                                "summary"
+                            ]
+                        }
+                    }
                 }
             ]
         },
         {
-            "name": "15. Admin",
+            "name": "15. ",
             "item": [
                 {
                     "name": "Seed Nutrition Data",
@@ -1923,6 +2295,197 @@
                                 "admin",
                                 "seed",
                                 "nutrition-data"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "16. Admin Tools",
+            "item": [
+                {
+                    "name": "Get All Users (Admin)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/admin/users?page=1&pageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Ban User (Admin)",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/admin/users/{{userId}}/ban",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users",
+                                "{{userId}}",
+                                "ban"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete User (Admin)",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/admin/users/{{userId}}",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "users",
+                                "{{userId}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Platform Stats (Admin)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/admin/stats",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "admin",
+                                "stats"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "17. Account Management",
+            "item": [
+                {
+                    "name": "Update Account",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"username\": \"newusername\",\n  \"email\": \"newemail@example.com\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/account",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Change Password",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"currentPassword\": \"OldPassword123!\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/account/password",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account",
+                                "password"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Account",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/account",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account"
                             ]
                         }
                     }
