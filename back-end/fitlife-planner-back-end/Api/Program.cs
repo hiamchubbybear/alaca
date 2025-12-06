@@ -137,19 +137,6 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         Console.WriteLine($"⚠ Data seeding error: {ex.Message}");
-        // Don't crash the app, just log the error
-    }
-}
-
-// Configure CORS - allow specific origins with credentials
-app.UseCors(p => p
-    .WithOrigins("http://localhost:3000", "http://localhost:5173", "https://alaca.onrender.com" ,"https://alaca.vercel.app/")
-    .AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowCredentials());
-
-if (app.Environment.IsDevelopment())
-{
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
 }
