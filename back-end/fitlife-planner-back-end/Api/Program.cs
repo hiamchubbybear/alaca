@@ -137,14 +137,15 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         Console.WriteLine($"⚠ Data seeding error: {ex.Message}");
-    app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
-}
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
+    }
 
 // CRITICAL: Map controllers to enable API routes
-app.MapControllers();
+    app.MapControllers();
 
-app.Run();
+    app.Run();
+}
 
 public partial class Program
 {
