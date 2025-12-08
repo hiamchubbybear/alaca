@@ -1,19 +1,20 @@
 export interface Post {
   postId: string
   profileId: string
+  userId: string
+  username: string // From backend: Username
+  avatarUrl: string | null // From backend: AvatarUrl
   title: string
   content: string
   media: string | null
-  likeCount: number
+  likeCount: number // Deprecated
+  upvoteCount: number // From backend: UpvoteCount
+  downvoteCount: number // From backend: DownvoteCount
   commentCount: number
   createdAt: string
   updatedAt: string
-  // Author info (optional, will be populated from profile)
-  authorName?: string
-  authorAvatar?: string
-  // Vote info
-  upvoteCount?: number
-  downvoteCount?: number
+  userVoteType?: string | null // "Upvote", "Downvote", or null from backend
+  // Vote info (will be added by frontend)
   userVote?: 'upvote' | 'downvote' | null
 }
 
@@ -55,4 +56,3 @@ export interface Comment {
 export interface CreateCommentRequest {
   content: string
 }
-

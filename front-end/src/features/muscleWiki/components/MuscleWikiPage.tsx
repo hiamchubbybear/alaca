@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { exerciseVideos } from '../../../shared/constants/exerciseVideos'
 import { muscleGroups, type MuscleKey } from '../../../shared/constants/muscleGroups'
+import './MuscleWikiPage.css'
 
 type Props = {
   onBack: () => void
@@ -7,6 +9,35 @@ type Props = {
 
 export function MuscleWikiPage({ onBack }: Props) {
   const [selectedMuscle, setSelectedMuscle] = useState<MuscleKey | null>(null)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState<number | null>(null)
+  const videoContainerRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const showVideo = (index: number) => {
+    setSelectedVideoIndex(index)
+    setTimeout(() => {
+      videoContainerRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }, 100)
+  }
+
+  const closeVideo = () => {
+    setSelectedVideoIndex(null)
+  }
 
   return (
     <section className="muscle-wiki-page">
@@ -80,7 +111,15 @@ export function MuscleWikiPage({ onBack }: Props) {
                   <h3 className="muscle-info-heading">Bài tập đề xuất</h3>
                   <ul className="muscle-info-list">
                     {muscleGroups[selectedMuscle].exercises.map((exercise, index) => (
-                      <li key={index}>{exercise}</li>
+                      <li key={index}>
+                        <button
+                          type="button"
+                          className="exercise-link-btn"
+                          onClick={() => showVideo(index)}
+                        >
+                          {exercise} →
+                        </button>
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -97,6 +136,38 @@ export function MuscleWikiPage({ onBack }: Props) {
           </div>
         </div>
       </div>
+
+      {selectedVideoIndex !== null && selectedMuscle && exerciseVideos[selectedMuscle] && (
+        <div className="fullscreen-video-container" ref={videoContainerRef}>
+          <button className="close-video-btn" onClick={closeVideo}>
+            ✕ Đóng
+          </button>
+          <div className="fullscreen-video-wrapper">
+            <iframe
+              width="100%"
+              height="100%"
+              src={`https://www.youtube.com/embed/${exerciseVideos[selectedMuscle][selectedVideoIndex].videoId}?autoplay=1`}
+              title={exerciseVideos[selectedMuscle][selectedVideoIndex].title}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+          <h3 className="fullscreen-video-title">
+            {exerciseVideos[selectedMuscle][selectedVideoIndex].title}
+          </h3>
+        </div>
+      )}
+
+      {showScrollTop && (
+        <button
+          className="scroll-to-top-btn"
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+        >
+          ↑
+        </button>
+      )}
     </section>
   )
 }

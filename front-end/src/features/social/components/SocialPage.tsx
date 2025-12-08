@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { deletePost } from '../api/postApi'
 import { usePosts } from '../hooks/usePosts'
@@ -9,7 +9,6 @@ import './SocialPage.css'
 
 export function SocialPage() {
   const [currentUser, setCurrentUser] = useState<ProfileResponse | null>(null)
-  const [profileCache, setProfileCache] = useState<Map<string, { displayName: string; avatarUrl?: string }>>(new Map())
   const { posts, loading, error, pageNumber, hasMore, loadPosts, updatePost, removePost } = usePosts()
   const { handleUpvote, handleDownvote } = useVote(posts, updatePost)
 
@@ -44,51 +43,6 @@ export function SocialPage() {
   const handlePostCreated = () => {
     loadPosts(1)
   }
-
-  // Enrich posts with author info
-  const enrichedPosts = useMemo(() => {
-    return posts.map((post) => {
-      const authorInfo = profileCache.get(post.profileId)
-      return {
-        ...post,
-        authorName: authorInfo?.displayName || 'User',
-        authorAvatar: authorInfo?.avatarUrl,
-        upvoteCount: post.upvoteCount ?? 0,
-        downvoteCount: post.downvoteCount ?? 0
-      }
-    })
-  }, [posts, profileCache])
-
-  // Fetch profile info for posts that don't have it
-  useEffect(() => {
-    if (posts.length === 0 || !currentUser) return
-
-    const missingProfileIds = posts
-      .filter((post) => !profileCache.has(post.profileId))
-      .map((post) => post.profileId)
-
-    if (missingProfileIds.length === 0) return
-
-    setProfileCache((prev) => {
-      const newMap = new Map(prev)
-      missingProfileIds.forEach((profileId) => {
-        // Use currentUser if profileId matches
-        if (currentUser.id === profileId) {
-          newMap.set(profileId, {
-            displayName: currentUser.displayName,
-            avatarUrl: currentUser.avatarUrl
-          })
-        } else {
-          // Default for other users (would need API call in real app)
-          // For now, we'll show "User" until we have an API endpoint
-          newMap.set(profileId, {
-            displayName: 'User'
-          })
-        }
-      })
-      return newMap
-    })
-  }, [posts, currentUser])
 
   return (
     <div className="social-page">
@@ -126,7 +80,7 @@ export function SocialPage() {
           <div className="no-posts">No posts yet. Be the first to post!</div>
         ) : (
           <div className="posts-feed">
-            {enrichedPosts.map((post) => (
+            {posts.map((post) => (
               <PostCard
                 key={post.postId}
                 post={post}

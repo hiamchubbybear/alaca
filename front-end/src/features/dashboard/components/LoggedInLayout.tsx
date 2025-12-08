@@ -36,6 +36,7 @@ type Props = {
   activeSection: MainSection
   onSelectSection: (section: MainSection) => void
   onProfile: () => void
+  onChangePassword: () => void
   onLogout: () => void
   userName?: string
 }
@@ -44,6 +45,7 @@ export function LoggedInLayout({
   activeSection,
   onSelectSection,
   onProfile,
+  onChangePassword,
   onLogout,
   userName = 'User'
 }: Props) {
@@ -305,6 +307,15 @@ export function LoggedInLayout({
                 }}
               >
                 Hồ Sơ
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onChangePassword()
+                  setShowMenu(false)
+                }}
+              >
+                Đổi mật khẩu
               </button>
               <button
                 type="button"

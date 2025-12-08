@@ -5,6 +5,37 @@
   box-sizing: border-box;
 }
 
+/* YouTube-Style Progress Bar */
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  box-shadow:
+    0 0 10px rgba(102, 126, 234, 0.7),
+    0 0 5px rgba(102, 126, 234, 0.5);
+}
+
+#nprogress .peg {
+  display: block;
+  position: absolute;
+  right: 0px;
+  width: 100px;
+  height: 100%;
+  box-shadow:
+    0 0 10px #667eea,
+    0 0 5px #667eea;
+  opacity: 1;
+  transform: rotate(3deg) translate(0px, -4px);
+}
+
 .app {
   min-height: 100vh;
   display: flex;
@@ -21,7 +52,7 @@
   border-bottom: 1px solid rgba(102, 126, 234, 0.1);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   z-index: 1000;
-  padding: 1rem 0;
+  padding: 0.1rem 0; /* Reduced from 0.25rem to 0.1rem */
   transition: all 0.3s ease;
 }
 
@@ -83,10 +114,11 @@
 }
 
 .logo-image {
-  width: 80px;
-  height: 80px;
+  width: 50px; /* Reduced from 80px to 50px */
+  height: 50px; /* Reduced from 80px to 50px */
   object-fit: contain;
   display: block;
+
   transition: transform 0.3s ease;
   position: relative;
   z-index: 1;
@@ -1526,12 +1558,16 @@
 /* Auth modal */
 .auth-modal-overlay {
   position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.55);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
 }
 
 .auth-modal {
@@ -1627,6 +1663,55 @@
   box-shadow: 0 8px 18px rgba(102, 126, 234, 0.45);
 }
 
+.auth-divider {
+  margin: 1.5rem 0;
+  text-align: center;
+  position: relative;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+}
+
+.auth-divider::before {
+  left: 0;
+}
+
+.auth-divider::after {
+  right: 0;
+}
+
+.auth-divider span {
+  color: #718096;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: white;
+  padding: 0 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.google-oauth-button {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.google-oauth-button > div {
+  width: 100%;
+}
+
+.google-oauth-button button {
+  width: 100% !important;
+  justify-content: center !important;
+}
+
 .auth-switch {
   margin-top: 1rem;
   text-align: center;
@@ -1641,6 +1726,91 @@
   font-weight: 600;
   cursor: pointer;
   padding: 0;
+}
+
+.auth-link-btn {
+  background: none;
+  border: none;
+  color: #667eea;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.auth-link-btn:hover {
+  color: #5568d3;
+}
+
+.auth-success-message {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.auth-success-message p {
+  color: #10b981;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Reset Password Page */
+.reset-password-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+}
+
+.reset-password-container {
+  width: 100%;
+  max-width: 480px;
+}
+
+.reset-password-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.reset-password-card h1 {
+  color: #1e293b;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.reset-success {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.success-icon {
+  width: 80px;
+  height: 80px;
+  background: #10b981;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  margin: 0 auto 1.5rem;
+}
+
+.reset-success h2 {
+  color: #1e293b;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.reset-success p {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 2rem;
 }
 
 .auth-error {
@@ -1671,22 +1841,246 @@
   font-weight: 600;
   text-decoration: none;
 }
-
 .auth-error-contact a:hover {
   text-decoration: underline;
 }
 
-.bmi-result {
-  margin-top: 0.75rem;
-  font-size: 0.95rem;
-  color: #1a202c;
+/* BMI Modal Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.bmi-result span {
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* BMI Modal - Ultra Compact */
+.bmi-modal-wide {
+  background: white;
+  border-radius: 14px;
+  width: 90%;
+  max-width: 450px; /* Smaller */
+  max-height: 80vh; /* Reduced */
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: slideUp 0.3s ease-out;
+  transition: max-width 0.3s ease;
+}
+
+.bmi-modal-wide.has-results {
+  max-width: 800px; /* Smaller */
+}
+
+.bmi-modal-header-minimal {
+  padding: 0.5rem 0.75rem; /* Minimal padding */
+  text-align: right;
+}
+
+.auth-modal-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.auth-modal-header h2 {
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.bmi-modal-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  padding: 1rem; /* Reduced */
+}
+
+.bmi-modal-content.split-layout {
+  grid-template-columns: 340px 1fr; /* Narrower */
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.bmi-form-section {
+  padding-right: 0;
+  border-right: none;
+}
+
+.bmi-modal-content.split-layout .bmi-form-section {
+  padding-right: 1rem;
+  border-right: 1px solid #e2e8f0;
+}
+
+.auth-modal-subtitle {
+  font-size: 0.8rem; /* Smaller */
+  margin-bottom: 0.75rem;
+}
+
+.bmi-results-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem; /* Reduced */
+  animation: slideInRight 0.4s ease-out;
+}
+
+.bmi-score-card {
+  text-align: center;
+  padding: 0.75rem; /* Reduced */
+  border: 2px solid;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.bmi-value {
+  font-size: 1.75rem; /* Smaller */
   font-weight: 700;
-  color: #667eea;
+  margin-bottom: 0.15rem;
 }
 
+.bmi-status {
+  font-size: 0.8rem; /* Smaller */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.bmi-info-card {
+  background: #f8fafc;
+  padding: 0.7rem; /* Reduced */
+  border-radius: 7px;
+  border-left: 2.5px solid #667eea;
+}
+
+.bmi-info-card h3 {
+  color: #334155;
+  font-size: 0.8rem; /* Smaller */
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+}
+
+.bmi-info-card p {
+  color: #475569;
+  line-height: 1.3; /* Tighter */
+  margin: 0;
+  font-size: 0.775rem; /* Smaller */
+}
+
+.bmi-tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.bmi-tips-list li {
+  color: #475569;
+  padding: 0.2rem 0; /* Reduced */
+  padding-left: 0.9rem;
+  position: relative;
+  font-size: 0.775rem; /* Smaller */
+}
+
+.bmi-tips-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #667eea;
+  font-weight: bold;
+}
+
+.bmi-cta-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.85rem; /* Reduced */
+  border-radius: 7px;
+}
+
+.bmi-cta-card h3 {
+  color: white;
+  font-size: 0.875rem; /* Smaller */
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.bmi-cta-card p {
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.3; /* Tighter */
+  margin-bottom: 0.65rem; /* Reduced */
+  font-size: 0.775rem; /* Smaller */
+}
+
+.bmi-cta-btn {
+  background: white;
+  color: #667eea;
+  border: none;
+  padding: 0.55rem 1rem; /* Reduced */
+  border-radius: 6px;
+  font-size: 0.8rem; /* Smaller */
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.bmi-cta-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.bmi-reset-btn {
+  background: #f1f5f9;
+  color: #64748b;
+  border: none;
+  padding: 0.45rem 0.9rem; /* Reduced */
+  border-radius: 5px;
+  font-size: 0.8rem; /* Reduced */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+  margin-top: 0.4rem; /* Reduced */
+}
+
+.bmi-reset-btn:hover {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bmi-modal-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .bmi-form-section {
+    padding-right: 0;
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1.5rem;
+  }
+}
 /* Main layout when logged in */
 .main-layout {
   display: grid;

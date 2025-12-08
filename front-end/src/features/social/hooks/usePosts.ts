@@ -21,10 +21,16 @@ export function usePosts() {
         const postsArray = Array.isArray(data) ? data : []
         const hasNext = data?.hasNext ?? data?.hasNextPage ?? false
 
+        // Map userVoteType from backend to userVote for frontend
+        const mappedPosts = postsArray.map((post: Post) => ({
+          ...post,
+          userVote: post.userVoteType ? (post.userVoteType.toLowerCase() as 'upvote' | 'downvote') : null
+        }))
+
         if (page === 1) {
-          setPosts(postsArray)
+          setPosts(mappedPosts)
         } else {
-          setPosts((prev) => [...prev, ...postsArray])
+          setPosts((prev) => [...prev, ...mappedPosts])
         }
         setHasMore(hasNext)
         setPageNumber(page)

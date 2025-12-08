@@ -17,9 +17,10 @@ export function PostCard({ post, currentUser, onUpvote, onDownvote, onDelete }: 
   const downvoteCount = post.downvoteCount ?? 0
   const userVote = post.userVote ?? null
 
-  const authorName = post.authorName || 'User'
-  const authorAvatar = post.authorAvatar
+  const authorName = post.username || 'User'
+  const authorAvatar = post.avatarUrl
   const authorInitials = getUserInitials(authorName)
+
 
   return (
     <div className="post-card">

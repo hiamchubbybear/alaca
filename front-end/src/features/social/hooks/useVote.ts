@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import type { Post } from '../types/post.types'
 
-export function useVote(
-  posts: Post[],
-  updatePost: (postId: string, updater: (post: Post) => Post) => void
-) {
+export function useVote(posts: Post[], updatePost: (postId: string, updater: (post: Post) => Post) => void) {
   const [votedPosts, setVotedPosts] = useState<Map<string, 'upvote' | 'downvote'>>(new Map())
 
   const handleUpvote = async (postId: string) => {
@@ -33,7 +30,7 @@ export function useVote(
     updatePost(postId, (p) => {
       const currentUpvotes = p.upvoteCount ?? 0
       const currentDownvotes = p.downvoteCount ?? 0
-      
+
       let newUpvotes = currentUpvotes
       let newDownvotes = currentDownvotes
 
@@ -57,8 +54,32 @@ export function useVote(
       }
     })
 
-    // TODO: Call API to upvote
-    // For now, just optimistic update
+    // Call API to upvote/downvote/remove
+    try {
+      const { upvotePost, removeVote } = await import('../api/postApi')
+
+      if (isUpvoted) {
+        // Remove upvote
+        await removeVote(postId)
+      } else {
+        // Add upvote (or switch from downvote)
+        await upvotePost(postId)
+      }
+    } catch (error) {
+      console.error('Failed to upvote:', error)
+      // Revert optimistic update on error
+      setVotedPosts((prev) => {
+        const newMap = new Map(prev)
+        if (currentVote) {
+          newMap.set(postId, currentVote)
+        } else {
+          newMap.delete(postId)
+        }
+        return newMap
+      })
+
+      updatePost(postId, () => post)
+    }
   }
 
   const handleDownvote = async (postId: string) => {
@@ -87,7 +108,7 @@ export function useVote(
     updatePost(postId, (p) => {
       const currentUpvotes = p.upvoteCount ?? 0
       const currentDownvotes = p.downvoteCount ?? 0
-      
+
       let newUpvotes = currentUpvotes
       let newDownvotes = currentDownvotes
 
@@ -111,8 +132,32 @@ export function useVote(
       }
     })
 
-    // TODO: Call API to downvote
-    // For now, just optimistic update
+    // Call API to upvote/downvote/remove
+    try {
+      const { downvotePost, removeVote } = await import('../api/postApi')
+
+      if (isDownvoted) {
+        // Remove downvote
+        await removeVote(postId)
+      } else {
+        // Add downvote (or switch from upvote)
+        await downvotePost(postId)
+      }
+    } catch (error) {
+      console.error('Failed to downvote:', error)
+      // Revert optimistic update on error
+      setVotedPosts((prev) => {
+        const newMap = new Map(prev)
+        if (currentVote) {
+          newMap.set(postId, currentVote)
+        } else {
+          newMap.delete(postId)
+        }
+        return newMap
+      })
+
+      updatePost(postId, () => post)
+    }
   }
 
   return {
@@ -121,5 +166,3 @@ export function useVote(
     handleDownvote
   }
 }
-
-

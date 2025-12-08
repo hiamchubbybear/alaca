@@ -10,17 +10,25 @@ import { MuscleWikiPage } from "./features/muscleWiki/components/MuscleWikiPage"
 import { getProfile } from "./features/profile/api/profileApi"
 import { AdminAuth } from "./pages/admin/AdminAuth"
 import { AdminDashboard } from "./pages/admin/AdminDashboard"
+import { ResetPasswordPage } from "./pages/ResetPasswordPage"
 import { BmiModal } from "./shared/components/BmiModal"
+import { ChangePasswordModal } from "./shared/components/ChangePasswordModal"
+import { ForgotPasswordModal } from "./shared/components/ForgotPasswordModal"
+import { ProgressBar } from "./shared/components/ProgressBar"
 import { logos } from "./shared/constants/logos"
+
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(
     typeof window !== "undefined" && !!localStorage.getItem("accessToken")
   )
-  const [currentPage, setCurrentPage] = useState<"home" | "muscle-wiki" | "admin-login">("home")
+  const [currentPage, setCurrentPage] = useState<"home" | "muscle-wiki" | "admin-login" | "reset-password">("home")
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [authMode, setAuthMode] = useState<AuthMode>("login")
   const [showBmiModal, setShowBmiModal] = useState(false)
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false)
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false)
   const [mainSection, setMainSection] = useState<MainSection>("social")
   const [userName, setUserName] = useState("User")
 
@@ -38,6 +46,8 @@ function App() {
     const path = window.location.pathname
     if (path === '/admin' || path.startsWith('/admin/')) {
       setCurrentPage('admin-login')
+    } else if (path === '/reset-password' || window.location.search.includes('token=')) {
+      setCurrentPage('reset-password')
     }
   }, [])
 
@@ -51,6 +61,20 @@ function App() {
     localStorage.removeItem("userRole")
     setIsLoggedIn(false)
     setCurrentPage("home")
+  }
+
+  const handleChangePassword = () => {
+    setShowChangePasswordModal(true)
+  }
+
+  const handleForgotPassword = () => {
+    setShowForgotPasswordModal(true)
+  }
+
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true)
+    setCurrentPage("home")
+    setMainSection("social")
   }
 
   useEffect(() => {
@@ -80,6 +104,8 @@ function App() {
 
   return (
     <div className="app">
+      <ProgressBar />
+
       {!isLoggedIn && (
         <nav className="navbar">
           <div className="nav-container">
@@ -146,10 +172,11 @@ function App() {
             activeSection={mainSection}
             onSelectSection={setMainSection}
             onProfile={() => setMainSection("profile")}
+            onChangePassword={handleChangePassword}
             onLogout={handleLogout}
             userName={userName}
           />
-          <WeekStreak />
+          {mainSection === 'social' && <WeekStreak />}
         </>
       )}
 
@@ -157,20 +184,31 @@ function App() {
         <MuscleWikiPage onBack={() => setCurrentPage("home")} />
       )}
 
+      {currentPage === "reset-password" && <ResetPasswordPage />}
+
       {!isLoggedIn && currentPage === "home" && <HomePage logos={logos} />}
 
       {showBmiModal && <BmiModal open={showBmiModal} onClose={() => setShowBmiModal(false)} />}
+      {showChangePasswordModal && (
+        <ChangePasswordModal
+          open={showChangePasswordModal}
+          onClose={() => setShowChangePasswordModal(false)}
+        />
+      )}
+      {showForgotPasswordModal && (
+        <ForgotPasswordModal
+          open={showForgotPasswordModal}
+          onClose={() => setShowForgotPasswordModal(false)}
+        />
+      )}
 
       <AuthModal
         open={showAuthModal}
         mode={authMode}
         onModeChange={setAuthMode}
         onClose={() => setShowAuthModal(false)}
-        onLoginSuccess={() => {
-          setIsLoggedIn(true)
-          setCurrentPage("home")
-          setMainSection("social")
-        }}
+        onLoginSuccess={handleLoginSuccess}
+        onForgotPassword={handleForgotPassword}
       />
     </div>
   )

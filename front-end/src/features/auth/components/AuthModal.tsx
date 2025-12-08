@@ -1,18 +1,28 @@
 import type React from 'react'
 import { useState } from 'react'
 import { login, registerUser } from '../api/authApi'
+import { GoogleOAuthButton } from './GoogleOAuthButton'
+
 
 export type AuthMode = 'login' | 'signup'
 
 type Props = {
   open: boolean
+  onClose: () => void
   mode: AuthMode
   onModeChange: (mode: AuthMode) => void
-  onClose: () => void
   onLoginSuccess: () => void
+  onForgotPassword: () => void
 }
 
-export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }: Props) {
+export function AuthModal({
+  open,
+  onClose,
+  mode,
+  onModeChange,
+  onLoginSuccess,
+  onForgotPassword,
+}: Props) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -126,6 +136,19 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
               onChange={(event) => setPassword(event.target.value)}
             />
           </div>
+          {mode === 'login' && (
+            <button
+              type="button"
+              className="auth-link-btn"
+              onClick={() => {
+                onForgotPassword()
+                onClose()
+              }}
+              style={{ marginTop: '-0.5rem', marginBottom: '0.5rem', textAlign: 'right', width: '100%' }}
+            >
+              Quên mật khẩu?
+            </button>
+          )}
           {mode === 'signup' && (
             <div className="auth-form-group">
               <label htmlFor="auth-confirm">Xác nhận mật khẩu</label>
@@ -149,6 +172,20 @@ export function AuthModal({ open, mode, onModeChange, onClose, onLoginSuccess }:
                 : 'Đăng Ký'}
           </button>
         </form>
+
+        <div className="auth-divider">
+          <span>hoặc</span>
+        </div>
+
+        <GoogleOAuthButton
+          onSuccess={() => {
+            onLoginSuccess()
+            onClose()
+          }}
+          onError={(errorMsg: string) => setError(errorMsg)}
+
+        />
+
           {error && (
             <div className={`auth-error ${error.toLowerCase().includes('banned') || error.toLowerCase().includes('cấm') ? 'auth-error-banned' : ''}`}>
               {error}
