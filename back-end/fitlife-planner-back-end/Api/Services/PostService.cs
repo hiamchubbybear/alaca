@@ -40,7 +40,8 @@ public class PostService(
                 var user = await dbContext.Users.FindAsync(post.Profile.UserId);
                 if (user != null)
                 {
-                    postDtos.Add(mapping.GetPostMapper(post, post.Profile, user));
+                    var currentUserId = userContext.User.userId;
+                    postDtos.Add(mapping.GetPostMapper(post, post.Profile, user, currentUserId));
                 }
             }
         }
@@ -77,7 +78,8 @@ public class PostService(
                 var user = await dbContext.Users.FindAsync(post.Profile.UserId);
                 if (user != null)
                 {
-                    postDtos.Add(mapping.GetPostMapper(post, post.Profile, user));
+                    var currentUserId = userContext.User.userId;
+                    postDtos.Add(mapping.GetPostMapper(post, post.Profile, user, currentUserId));
                 }
             }
         }
@@ -105,7 +107,8 @@ public class PostService(
         var user = await dbContext.Users.FindAsync(post.Profile.UserId)
             ?? throw new KeyNotFoundException("User not found");
 
-        var response = mapping.GetPostMapper(post, post.Profile, user);
+        var currentUserId = userContext.User.userId;
+        var response = mapping.GetPostMapper(post, post.Profile, user, currentUserId);
         return response ?? throw new InvalidOperationException("Failed to map post data");
     }
 
@@ -128,7 +131,8 @@ public class PostService(
         if (posts == null || posts.Count == 0)
             return new List<GetPostResponseDto>();
 
-        var result = posts.Select(p => mapping.GetPostMapper(p, profile, user)).ToList();
+        var currentUserId = userContext.User.userId;
+        var result = posts.Select(p => mapping.GetPostMapper(p, profile, user, currentUserId)).ToList();
         return result;
     }
 
@@ -370,10 +374,18 @@ public class PostService(
 
         // Decrease vote count
         if (vote.VoteType == VoteType.Upvote)
+            post.UpvoteCount = Math.Max(0, post.UpvoteCount - 1);
+        else
+            post.DownvoteCount = Math.Max(0, post.DownvoteCount - 1);
+
+        // Remove the vote
+        dbContext.PostVotes.Remove(vote);
+        dbContext.Posts.Update(post);
         await dbContext.SaveChangesAsync();
 
         return true;
     }
+
 
     // --- POST MODERATION METHODS ---
 

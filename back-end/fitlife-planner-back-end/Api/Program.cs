@@ -93,8 +93,18 @@ builder.Services.AddScoped<JwtSigner>().AddScoped<UserService>().AddScoped<Authe
     .AddScoped<RecommendationService>()
     .AddScoped<DataSeederService>()
     .AddScoped<EmailService>()
-    .AddScoped<PasswordResetService>();
+    .AddScoped<PasswordResetService>()
+    .AddScoped<GoogleAuthService>();
+
+// Configure Google OAuth settings from environment variables
+builder.Services.AddSingleton(new GoogleOAuthSettings
+{
+    ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID") ?? "",
+    ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET") ?? ""
+});
+
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen();
 var connString = $"Server={host};Port={port};Database={db};User={user};Password={pass};SslMode={ssl};";
 var useInMemory = builder.Configuration.GetValue<bool>("UseInMemoryDatabase");

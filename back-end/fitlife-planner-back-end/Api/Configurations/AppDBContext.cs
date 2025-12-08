@@ -69,7 +69,6 @@ namespace fitlife_planner_back_end.Api.Configurations
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).HasColumnType("char(36)").IsRequired();
                 entity.HasIndex(e => e.Email).IsUnique();
-
                 entity.Property(e => e.Password);
                 entity.Property(e => e.CreatedAt)
                     .HasColumnType("datetime")

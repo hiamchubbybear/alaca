@@ -2,6 +2,7 @@ using System.Net;
 using APIResponseWrapper;
 using fitlife_planner_back_end.Api.DTOs.Responses;
 using fitlife_planner_back_end.Api.DTOs.Resquests;
+using fitlife_planner_back_end.Api.Enums;
 using fitlife_planner_back_end.Api.Models;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -313,6 +314,85 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
             var response = new ApiResponse<bool>(success: false, message: e.Message,
                 statusCode: HttpStatusCode.BadRequest);;
 
+            return response.ToActionResult();
+        }
+    }
+
+    // --- VOTE ENDPOINTS ---
+    [HttpPost("{postId:guid}/upvote")]
+    [Authorize]
+    public async Task<IActionResult> UpvotePost(Guid postId)
+    {
+        try
+        {
+            var result = await postService.VoteOnPost(postId, VoteType.Upvote);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: "Successfully upvoted post",
+                data: result,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
+    }
+
+    [HttpPost("{postId:guid}/downvote")]
+    [Authorize]
+    public async Task<IActionResult> DownvotePost(Guid postId)
+    {
+        try
+        {
+            var result = await postService.VoteOnPost(postId, VoteType.Downvote);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: "Successfully downvoted post",
+                data: result,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
+    }
+
+    [HttpDelete("{postId:guid}/vote")]
+    [Authorize]
+    public async Task<IActionResult> RemoveVote(Guid postId)
+    {
+        try
+        {
+            var result = await postService.RemoveVote(postId);
+            var response = new ApiResponse<bool>(
+                success: true,
+                message: result ? "Successfully removed vote" : "No vote to remove",
+                data: result,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<bool>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
             return response.ToActionResult();
         }
     }

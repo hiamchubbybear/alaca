@@ -36,6 +36,8 @@ public class User
     public string? PhoneNumber { get; set; }
     public int Version { get; set; }
     public Role Role { get; set; }
+    public string? GoogleId { get; set; }
+
 
     // Navigation property
     public Profile? Profile { get; set; }

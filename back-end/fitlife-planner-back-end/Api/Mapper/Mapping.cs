@@ -1,4 +1,5 @@
 
+using fitlife_planner_back_end.Api.Configurations;
 using fitlife_planner_back_end.Api.DTOs.Responses;
 using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Enums;
@@ -8,6 +9,13 @@ namespace fitlife_planner_back_end.Api.Mapper;
 
 public class Mapping
 {
+    private readonly AppDbContext _dbContext;
+
+    public Mapping(AppDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
+
     public CreateAccountResponseDto CreateAccountMapper(User user)
     {
         return new CreateAccountResponseDto(
@@ -107,9 +115,23 @@ public class Mapping
             post.UpdatedAt
         );
     }
-    public GetPostResponseDto GetPostMapper(Post post, Profile profile, User user)
+    public GetPostResponseDto GetPostMapper(Post post, Profile profile, User user, Guid? currentUserId = null)
     {
-        return new GetPostResponseDto(
+        string? userVoteType = null;
+
+        // Check if current user has voted on this post
+        if (currentUserId.HasValue)
+        {
+            var userVote = _dbContext.PostVotes
+                .FirstOrDefault(v => v.PostId == post.PostId && v.UserId == currentUserId.Value);
+
+            if (userVote != null)
+            {
+                userVoteType = userVote.VoteType == VoteType.Upvote ? "Upvote" : "Downvote";
+            }
+        }
+
+        var dto = new GetPostResponseDto(
             post.PostId,
             post.ProfileId,
             user.Id,
@@ -125,5 +147,9 @@ public class Mapping
             post.CreatedAt,
             post.UpdatedAt
         );
+
+        dto.UserVoteType = userVoteType;
+        return dto;
     }
+
 }

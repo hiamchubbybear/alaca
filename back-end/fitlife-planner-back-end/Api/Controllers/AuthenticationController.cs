@@ -11,6 +11,7 @@ using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.DTOs.Requests;
 using fitlife_planner_back_end.Api.Services;
 using Microsoft.AspNetCore.Authorization;
+using fitlife_planner_back_end.Api.Enums;
 
 namespace fitlife_planner_back_end.Api.Controllers;
 
@@ -172,6 +173,79 @@ public class AuthenticationController(
                 success: false,
                 statusCode: HttpStatusCode.InternalServerError,
                 message: "An error occurred while verifying the token"
+            );
+            return response.ToActionResult();
+        }
+    }
+
+    [HttpPost("google")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GoogleAuth([FromBody] GoogleAuthRequestDto request)
+    {
+        try
+        {
+            logger.LogInformation("Processing Google OAuth authentication");
+
+            // Verify Google token and get user info
+            var googleAuthService = HttpContext.RequestServices.GetRequiredService<GoogleAuthService>();
+            var googleUserInfo = await googleAuthService.VerifyGoogleToken(request.IdToken);
+
+            // Get or create user
+            var user = await googleAuthService.GetOrCreateGoogleUser(googleUserInfo);
+
+            // Check if user is banned
+            if (user.Role == Role.Banned)
+            {
+                var bannedResponse = new ApiResponse<AuthenticationResponseDto>(
+                    success: false,
+                    statusCode: HttpStatusCode.Forbidden,
+                    message: "Your account has been banned. Please contact support."
+                );
+                return bannedResponse.ToActionResult();
+            }
+
+            // Get profile if exists
+            var dbContext = HttpContext.RequestServices.GetRequiredService<AppDbContext>();
+            var profile = await dbContext.Profiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
+            Guid profileId = profile?.ProfileId ?? Guid.Empty;
+
+            // Generate JWT tokens
+            var authRequestDto = new AuthenticationRequestDto(
+                user.Username,
+                user.Email,
+                user.Id,
+                user.Role,
+                profileId
+            );
+
+            var tokenResponse = await authService.GenerateToken(authRequestDto);
+
+            var response = new ApiResponse<AuthenticationResponseDto>(
+                success: true,
+                statusCode: HttpStatusCode.OK,
+                data: tokenResponse,
+                message: "Google authentication successful"
+            );
+
+            return response.ToActionResult();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            logger.LogWarning(ex, "Google authentication failed");
+            var response = new ApiResponse<AuthenticationResponseDto>(
+                success: false,
+                statusCode: HttpStatusCode.Unauthorized,
+                message: ex.Message
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error in Google authentication");
+            var response = new ApiResponse<AuthenticationResponseDto>(
+                success: false,
+                statusCode: HttpStatusCode.InternalServerError,
+                message: "An error occurred during Google authentication"
             );
             return response.ToActionResult();
         }

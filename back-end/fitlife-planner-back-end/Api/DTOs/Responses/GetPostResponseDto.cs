@@ -18,6 +18,8 @@ public class GetPostResponseDto
     public int CommentCount { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public string? UserVoteType { get; set; } // "Upvote", "Downvote", or null
+
 
     public GetPostResponseDto(Guid postId, Guid profileId, Guid userId, string username, string? avatarUrl,
         string title, string content, string media, int likeCount, int upvoteCount, int downvoteCount,
