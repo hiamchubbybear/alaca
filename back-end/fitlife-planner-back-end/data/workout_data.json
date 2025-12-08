@@ -1,0 +1,207 @@
+{
+    "workouts": [
+        {
+            "title": "Full Body Beginner",
+            "description": "Complete full body workout for beginners covering all major muscle groups",
+            "intensity": "moderate",
+            "estimatedDuration": 45,
+            "exercises": [
+                {
+                    "exerciseTitle": "Push-up",
+                    "sets": 3,
+                    "reps": "10-15",
+                    "restSeconds": 60,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Squat",
+                    "sets": 3,
+                    "reps": "12-15",
+                    "restSeconds": 90,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Dumbbell Row",
+                    "sets": 3,
+                    "reps": "10-12 per arm",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Plank",
+                    "sets": 3,
+                    "reps": "30-45s hold",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Upper Body Strength",
+            "description": "Focused workout for building upper body strength and muscle",
+            "intensity": "high",
+            "estimatedDuration": 60,
+            "exercises": [
+                {
+                    "exerciseTitle": "Bench Press",
+                    "sets": 4,
+                    "reps": "8-12",
+                    "restSeconds": 90,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Pull-up",
+                    "sets": 4,
+                    "reps": "6-10",
+                    "restSeconds": 90,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Overhead Press",
+                    "sets": 3,
+                    "reps": "8-10",
+                    "restSeconds": 90,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Bicep Curl",
+                    "sets": 3,
+                    "reps": "10-15",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Lower Body Power",
+            "description": "Intense lower body workout focusing on legs and glutes",
+            "intensity": "high",
+            "estimatedDuration": 50,
+            "exercises": [
+                {
+                    "exerciseTitle": "Squat",
+                    "sets": 4,
+                    "reps": "8-12",
+                    "restSeconds": 120,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Deadlift",
+                    "sets": 4,
+                    "reps": "6-8",
+                    "restSeconds": 180,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Lunges",
+                    "sets": 3,
+                    "reps": "10-12 per leg",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                }
+            ]
+        },
+        {
+            "title": "Push Day - Chest, Shoulders, Triceps",
+            "description": "Push movements targeting chest, shoulders, and triceps",
+            "intensity": "high",
+            "estimatedDuration": 55,
+            "exercises": [
+                {
+                    "exerciseTitle": "Bench Press",
+                    "sets": 4,
+                    "reps": "8-12",
+                    "restSeconds": 90,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Overhead Press",
+                    "sets": 3,
+                    "reps": "8-10",
+                    "restSeconds": 90,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Push-up",
+                    "sets": 3,
+                    "reps": "15-20",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                }
+            ]
+        },
+        {
+            "title": "Pull Day - Back & Biceps",
+            "description": "Pull movements for back development and bicep growth",
+            "intensity": "high",
+            "estimatedDuration": 55,
+            "exercises": [
+                {
+                    "exerciseTitle": "Deadlift",
+                    "sets": 4,
+                    "reps": "6-8",
+                    "restSeconds": 180,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Pull-up",
+                    "sets": 4,
+                    "reps": "6-10",
+                    "restSeconds": 90,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Dumbbell Row",
+                    "sets": 3,
+                    "reps": "10-12 per arm",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Bicep Curl",
+                    "sets": 3,
+                    "reps": "10-15",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Core & Abs Focused",
+            "description": "Dedicated core and abdominal strengthening workout",
+            "intensity": "moderate",
+            "estimatedDuration": 30,
+            "exercises": [
+                {
+                    "exerciseTitle": "Plank",
+                    "sets": 4,
+                    "reps": "45-60s hold",
+                    "restSeconds": 60,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Deadlift",
+                    "sets": 3,
+                    "reps": "8-10",
+                    "restSeconds": 90,
+                    "orderIndex": 1
+                }
+            ]
+        }
+    ],
+    "metadata": {
+        "total_workouts": 6,
+        "intensity_distribution": {
+            "moderate": 2,
+            "high": 4
+        },
+        "workout_types": [
+            "full_body",
+            "upper_body",
+            "lower_body",
+            "push",
+            "pull",
+            "core"
+        ]
+    }
+}

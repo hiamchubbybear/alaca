@@ -23,7 +23,7 @@ public class ExerciseLibraryService
     public async Task<object> GetAllExercises(string? muscleGroup = null, int page = 1, int pageSize = 20)
     {
         var skip = (page - 1) * pageSize;
-        var query = _dbContext.ExerciseLibrary.Include(e => e.Tags).AsQueryable();
+        var query = _dbContext.ExerciseLibrary.Include(e => e.ExerciseTags).AsQueryable();
 
         if (!string.IsNullOrEmpty(muscleGroup))
         {
@@ -38,7 +38,7 @@ public class ExerciseLibraryService
     public async Task<GetExerciseResponseDTO> GetExerciseById(Guid id)
     {
         var exercise = await _dbContext.ExerciseLibrary
-            .Include(e => e.Tags)
+            .Include(e => e.ExerciseTags)
             .FirstOrDefaultAsync(e => e.Id == id)
             ?? throw new Exception("Exercise not found");
 
@@ -104,14 +104,14 @@ public class ExerciseLibraryService
             Difficulty = exercise.Difficulty,
             VideoUrl = exercise.VideoUrl,
             Images = exercise.Images,
-            Tags = exercise.Tags?.Select(t => t.Tag).ToList(),
+            Tags = exercise.Tags?.Split(',').ToList() ?? new List<string>(),
             CreatedAt = exercise.CreatedAt
         };
     }
 
     public async Task<GetExerciseResponseDTO> UpdateExercise(Guid id, UpdateExerciseRequestDTO dto)
     {
-        var exercise = await _dbContext.ExerciseLibrary.Include(e => e.Tags).FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("Exercise not found");
+        var exercise = await _dbContext.ExerciseLibrary.Include(e => e.ExerciseTags).FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("Exercise not found");
         if (dto.Title != null) exercise.Title = dto.Title;
         if (dto.Description != null) exercise.Description = dto.Description;
         if (dto.Category != null) exercise.PrimaryMuscle = dto.Category;
@@ -129,7 +129,7 @@ public class ExerciseLibraryService
     {
         var skip = (page - 1) * pageSize;
         var searchQuery = _dbContext.ExerciseLibrary
-            .Include(e => e.Tags)
+            .Include(e => e.ExerciseTags)
             .Where(e => e.Title.Contains(query) ||
                        e.Description.Contains(query) ||
                        e.PrimaryMuscle.Contains(query) ||

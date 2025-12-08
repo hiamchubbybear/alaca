@@ -247,7 +247,7 @@ namespace fitlife_planner_back_end.Api.Configurations
                 entity.Property(e => e.Tag).HasMaxLength(100).IsRequired();
 
                 entity.HasOne(e => e.Exercise)
-                    .WithMany(ex => ex.Tags)
+                    .WithMany(ex => ex.ExerciseTags)
                     .HasForeignKey(e => e.ExerciseId)
                     .OnDelete(DeleteBehavior.Cascade);
             });

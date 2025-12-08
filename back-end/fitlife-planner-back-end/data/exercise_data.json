@@ -349,7 +349,6 @@
             "shoulders",
             "arms",
             "core"
-        ],
-        "note": "This is mock data for testing. Replace with scraped data from fitness websites."
+        ]
     }
 }

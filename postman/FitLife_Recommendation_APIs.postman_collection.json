@@ -1,0 +1,342 @@
+{
+    "info": {
+        "_postman_id": "workout-nutrition-recommendation-api",
+        "name": "FitLife Planner - Recommendation APIs",
+        "description": "APIs for workout and nutrition recommendations based on user profile (BMI, TDEE, goals)",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "1. Profile & Goals",
+            "item": [
+                {
+                    "name": "Update User Goals & Metrics",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"height\": 175,\n  \"weight\": 70,\n  \"age\": 25,\n  \"gender\": \"Male\",\n  \"activityLevel\": \"moderate\",\n  \"goal\": \"muscle_gain\",\n  \"targetWeight\": 75,\n  \"weeklyGoal\": 0.5\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/profile/goals",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "goals"
+                            ]
+                        },
+                        "description": "**Request Body:**\n- height (cm)\n- weight (kg) \n- age\n- gender: Male/Female\n- activityLevel: sedentary/light/moderate/active/very_active\n- goal: weight_loss/maintenance/muscle_gain\n- targetWeight (kg)\n- weeklyGoal (kg per week)\n\n**Response:**\n- BMI calculated\n- TDEE calculated\n- Daily calorie target\n- Macro split (protein/carbs/fat)"
+                    }
+                },
+                {
+                    "name": "Get BMI & TDEE Calculation",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/profile/metrics",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "profile",
+                                "metrics"
+                            ]
+                        },
+                        "description": "Get user's current BMI, TDEE, and calculated targets"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Workout Recommendations",
+            "item": [
+                {
+                    "name": "Get Recommended Workouts",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/recommendations/workouts?goal=muscle_gain&days=3",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "recommendations",
+                                "workouts"
+                            ],
+                            "query": [
+                                {
+                                    "key": "goal",
+                                    "value": "muscle_gain",
+                                    "description": "weight_loss/maintenance/muscle_gain"
+                                },
+                                {
+                                    "key": "days",
+                                    "value": "3",
+                                    "description": "Number of workout days per week"
+                                }
+                            ]
+                        },
+                        "description": "Get recommended workout plan based on user goal.\n\n**Query Params:**\n- goal: weight_loss | maintenance | muscle_gain\n- days: 3-6 (workout days per week)\n\n**Response:**\nArray of recommended workouts with exercises matched to goal and experience level"
+                    }
+                },
+                {
+                    "name": "Get Recommended Exercises by Muscle",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/recommendations/exercises?muscle=chest&goal=muscle_gain",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "recommendations",
+                                "exercises"
+                            ],
+                            "query": [
+                                {
+                                    "key": "muscle",
+                                    "value": "chest",
+                                    "description": "chest/back/legs/shoulders/arms/core"
+                                },
+                                {
+                                    "key": "goal",
+                                    "value": "muscle_gain"
+                                }
+                            ]
+                        },
+                        "description": "Get exercises for specific muscle group based on goal.\n\n**Returns:**\n- Exercise with calories/set\n- Recommended sets & reps\n- Rest time\n- Difficulty level"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Nutrition Recommendations",
+            "item": [
+                {
+                    "name": "Get Recommended Meal Plan",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/recommendations/meal-plan?targetCalories=2500&goal=muscle_gain",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "recommendations",
+                                "meal-plan"
+                            ],
+                            "query": [
+                                {
+                                    "key": "targetCalories",
+                                    "value": "2500",
+                                    "description": "Daily calorie target (from TDEE calculation)"
+                                },
+                                {
+                                    "key": "goal",
+                                    "value": "muscle_gain"
+                                }
+                            ]
+                        },
+                        "description": "Get recommended meal plan that matches calorie and macro targets.\n\n**Response:**\n- Breakfast/Lunch/Dinner/Snacks\n- Total calories\n- Macro breakdown\n- Matches user's goal"
+                    }
+                },
+                {
+                    "name": "Get Food Recommendations by Macro",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/recommendations/foods?macroFocus=protein&maxCalories=300",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "recommendations",
+                                "foods"
+                            ],
+                            "query": [
+                                {
+                                    "key": "macroFocus",
+                                    "value": "protein",
+                                    "description": "protein/carbs/fat"
+                                },
+                                {
+                                    "key": "maxCalories",
+                                    "value": "300"
+                                }
+                            ]
+                        },
+                        "description": "Get food items optimized for specific macro.\n\n**Filters:**\n- macroFocus: protein/carbs/fat\n- maxCalories: max calories per serving\n- minProtein: minimum protein grams (optional)"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Weekly Plan Creation",
+            "item": [
+                {
+                    "name": "Create Weekly Workout Plan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"weekStartDate\": \"2025-12-09\",\n  \"workoutDays\": [\n    {\n      \"dayOfWeek\": \"Monday\",\n      \"exercises\": [\n        {\n          \"exerciseId\": \"{{exerciseId}}\",\n          \"sets\": 4,\n          \"reps\": \"8-12\",\n          \"restSeconds\": 90\n        }\n      ]\n    },\n    {\n      \"dayOfWeek\": \"Wednesday\",\n      \"exercises\": [\n        {\n          \"exerciseId\": \"{{exerciseId2}}\",\n          \"sets\": 3,\n          \"reps\": \"10-15\",\n          \"restSeconds\": 60\n        }\n      ]\n    }\n  ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/workout-plans/weekly",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "workout-plans",
+                                "weekly"
+                            ]
+                        },
+                        "description": "Create weekly workout plan by selecting exercises from recommendations"
+                    }
+                },
+                {
+                    "name": "Create Weekly Nutrition Plan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"weekStartDate\": \"2025-12-09\",\n  \"targetDailyCalories\": 2500,\n  \"dailyMeals\": [\n    {\n      \"dayOfWeek\": \"Monday\",\n      \"meals\": [\n        {\n          \"mealType\": \"breakfast\",\n          \"foodItems\": [\n            {\n              \"foodId\": \"{{foodId}}\",\n              \"servings\": 2\n            }\n          ]\n        },\n        {\n          \"mealType\": \"lunch\",\n          \"foodItems\": [\n            {\n              \"foodId\": \"{{foodId2}}\",\n              \"servings\": 1.5\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/nutrition-plans/weekly",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "weekly"
+                            ]
+                        },
+                        "description": "Create weekly nutrition plan by selecting foods from recommendations"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "5. Exercise Library (Enhanced)",
+            "item": [
+                {
+                    "name": "Get All Exercises with Metrics",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/exercises?muscleGroup=chest&difficulty=beginner",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "exercises"
+                            ],
+                            "query": [
+                                {
+                                    "key": "muscleGroup",
+                                    "value": "chest"
+                                },
+                                {
+                                    "key": "difficulty",
+                                    "value": "beginner"
+                                }
+                            ]
+                        },
+                        "description": "Get exercises with enhanced data:\n- caloriesBurnedPerSet\n- recommendedSets\n- recommendedReps\n- restSeconds\n- instructions (step by step)\n- tags"
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "baseUrl",
+            "value": "https://alaca.onrender.com",
+            "type": "string"
+        },
+        {
+            "key": "accessToken",
+            "value": "your_jwt_token_here",
+            "type": "string"
+        },
+        {
+            "key": "exerciseId",
+            "value": "guid_of_exercise",
+            "type": "string"
+        },
+        {
+            "key": "foodId",
+            "value": "guid_of_food",
+            "type": "string"
+        }
+    ]
+}
