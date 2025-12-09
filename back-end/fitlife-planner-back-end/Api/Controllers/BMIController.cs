@@ -16,7 +16,7 @@ namespace fitlife_planner_back_end.Api.Controllers;
 public class BmiController(ILogger<BmiController> logger, BMIService bmiService)
 {
     [Authorize]
-    [HttpPost("calculate")]
+    [HttpPost("me")]
     public async Task<IActionResult> CalculateBmi(
         [FromBody] CreateBMIRecordRequestDto dto)
     {
@@ -46,8 +46,9 @@ public class BmiController(ILogger<BmiController> logger, BMIService bmiService)
         }
     }
 
-    [Authorize]
-    [HttpPost("me")]
+    // [Authorize]
+    // [Obsolete("This endpoint is deprecated. Use POST /bmi/calculate with practiceLevel and activityFactor instead.")]
+    // [HttpPost("me")]
     public async Task<IActionResult> GetMyLatestBmi([FromBody] ChoosePlanRequestDto requestDto)
     {
         try

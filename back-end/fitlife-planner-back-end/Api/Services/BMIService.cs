@@ -30,8 +30,8 @@ public class BMIService
         {
             var userId = _userContext.User.userId;
             var profileId = _userContext.User.profileId;
-            _logger.LogInformation("Nhận dữ liệu BMI: chiều cao={Height}, cân nặng={Weight}",
-                requestDto.HeightCm, requestDto.WeightKg);
+            _logger.LogInformation("Nhận dữ liệu BMI: chiều cao={Height}, cân nặng={Weight}, practiceLevel={PracticeLevel}, activityFactor={ActivityFactor}",
+                requestDto.HeightCm, requestDto.WeightKg, requestDto.PracticeLevel, requestDto.ActivityFactor);
 
             if (requestDto.HeightCm <= 0 || requestDto.WeightKg <= 0)
                 throw new InvalidDataException("Chiều cao và cân nặng phải là số dương");
@@ -63,6 +63,19 @@ public class BMIService
                 }
             }
 
+            // Parse PracticeLevel - giờ là required
+            PracticeLevel practiceLevel;
+            if (!Enum.TryParse<PracticeLevel>(requestDto.PracticeLevel, true, out practiceLevel))
+            {
+                throw new InvalidDataException($"PracticeLevel không hợp lệ. Chấp nhận: NEWBIE, EASY, MEDIUM, HARD, PRO");
+            }
+
+            // Validate ActivityFactor
+            if (requestDto.ActivityFactor <= 0)
+            {
+                throw new InvalidDataException("ActivityFactor phải lớn hơn 0");
+            }
+
             // Tạo BMI record mới với IsCurrent = true
             var record = new BMIRecord(
                 profileId: profileId,
@@ -74,17 +87,48 @@ public class BMIService
                 isComplete: false
             );
 
+            // Tính toán goal plan đầy đủ (giờ luôn luôn có)
+            record.PracticeLevel = practiceLevel;
+            record.ActivityFactor = requestDto.ActivityFactor;
+
+            double tdee = _bmiUtil.CalculateDailyCalories(
+                record.WeightKg,
+                record.HeightCm,
+                record.ActivityFactor,
+                goalPlan.WeeklyTargetKg
+            );
+
+            MacroNutrition nutrition = _bmiUtil.MapCaloriesToMacros(tdee, record.BMI);
+
+            record.Goal = new Dictionary<string, object>
+            {
+                { "plan", goalPlan },
+                { "nutrition", nutrition },
+                { "tdee", tdee }
+            };
+
+            _logger.LogInformation("Đã tính toán đầy đủ goal plan: TDEE={TDEE}, Protein={Protein}g, Carbs={Carbs}g, Fat={Fat}g",
+                tdee, nutrition.Protein, nutrition.Carbs, nutrition.Fat);
+
             _dbContext.BmiRecords.Add(record);
             await _dbContext.SaveChangesAsync();
 
             _logger.LogInformation("Đã tạo BMI record mới với ID {RecordId}, BMI = {BMI}",
                 record.BmiRecordId, record.BMI);
 
-            return new CreateBMIResponseDto(
-                bmi: record.BMI,
-                bmiRecordId: record.BmiRecordId,
-                assessment: goalPlan.Assessment
-            );
+            var response = new CreateBMIResponseDto
+            {
+                BMI = record.BMI,
+                BMIRecordID = record.BmiRecordId,
+                Assessment = goalPlan.Assessment,
+                GoalPlan = goalPlan,
+                Nutrition = nutrition,
+                DailyCalories = tdee,
+                PracticeLevel = requestDto.PracticeLevel,
+                ActivityFactor = requestDto.ActivityFactor
+            };
+
+            return response;
         }
         catch (Exception e)
         {

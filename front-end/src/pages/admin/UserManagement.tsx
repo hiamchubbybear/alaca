@@ -29,6 +29,7 @@ export function UserManagement() {
   const [editingUser, setEditingUser] = useState<User | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [roleFilter, setRoleFilter] = useState<'all' | 'Admin' | 'User'>('all')
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest')
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [dropdownTimeout, setDropdownTimeout] = useState<number | null>(null)
   const [confirmModal, setConfirmModal] = useState<ConfirmState>({
@@ -47,7 +48,7 @@ export function UserManagement() {
 
   useEffect(() => {
     filterUsers()
-  }, [users, searchTerm, roleFilter])
+  }, [users, searchTerm, roleFilter, sortBy])
 
   const loadUsers = async () => {
     setLoading(true)
@@ -80,6 +81,13 @@ export function UserManagement() {
     if (roleFilter !== 'all') {
       filtered = filtered.filter((user) => user.role === roleFilter)
     }
+
+    // Sort by createdAt
+    filtered = filtered.sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime()
+      const dateB = new Date(b.createdAt).getTime()
+      return sortBy === 'newest' ? dateB - dateA : dateA - dateB
+    })
 
     setFilteredUsers(filtered)
   }
@@ -210,6 +218,14 @@ export function UserManagement() {
             <option value="all">Tất cả</option>
             <option value="Admin">Admin</option>
             <option value="User">User</option>
+          </select>
+        </div>
+
+        <div className="filter-group">
+          <label>Sắp xếp:</label>
+          <select value={sortBy} onChange={(e) => setSortBy(e.target.value as any)}>
+            <option value="newest">Mới nhất</option>
+            <option value="oldest">Cũ nhất</option>
           </select>
         </div>
 
