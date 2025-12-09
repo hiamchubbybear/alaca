@@ -179,4 +179,35 @@ public class WorkoutScheduleController : ControllerBase
             return new ApiResponse<List<GetWorkoutScheduleResponseDTO>>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
         }
     }
+
+    /*
+    /// <summary>
+    /// Generate weekly workout plan based on user's BMI record
+    /// </summary>
+    [Authorize]
+    [HttpPost("generate-weekly-plan")]
+    public async Task<IActionResult> GenerateWeeklyPlan([FromQuery] int? weekNumber = null)
+    {
+        try
+        {
+            var week = weekNumber ?? 1;
+            var schedules = await _scheduleService.GenerateWeeklyPlan(week);
+            return new ApiResponse<object>(
+                success: true,
+                message: $"Successfully generated workout plan for week {week}",
+                data: new
+                {
+                    weekNumber = week,
+                    sessions = schedules,
+                    totalSessions = schedules.Count
+                },
+                statusCode: HttpStatusCode.Created
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<object>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+    */
 }
