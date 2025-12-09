@@ -1,9 +1,11 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { createBmiRecord, getMyBmiRecords, type PracticeLevel } from '../../../shared/api/bmiApi'
+import { getExercises, type Exercise } from '../../../shared/api/exerciseApi'
 import { uploadImage } from '../../../shared/services/cloudinaryService'
 import { getProfile, updateProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { SocialPage } from '../../social/components/SocialPage'
 
-export type MainSection = 'training' | 'nutrition' | 'progress' | 'challenge' | 'social' | 'profile'
+export type MainSection = 'training' | 'nutrition' | 'progress' | 'challenge' | 'social' | 'health' | 'profile'
 
 const sectionContent: Record<Exclude<MainSection, 'profile'>, { title: string; subtitle: string }> = {
   training: {
@@ -25,12 +27,27 @@ const sectionContent: Record<Exclude<MainSection, 'profile'>, { title: string; s
   social: {
     title: 'Cộng Đồng',
     subtitle: 'Kết nối với người dùng khác, chia sẻ bài viết và truyền cảm hứng.'
+  },
+  health: {
+    title: 'Chỉ Số Sức Khoẻ',
+    subtitle: 'Nhập cân nặng, chiều cao và mức vận động để lưu và tính BMI.'
   }
 }
 
 type NavSection = Exclude<MainSection, 'profile'>
 
-const sections: NavSection[] = ['training', 'nutrition', 'progress', 'challenge', 'social']
+const sections: NavSection[] = ['training', 'nutrition', 'progress', 'challenge', 'social', 'health']
+
+type HealthMetrics = {
+  weightKg: number
+  heightM: number
+  activityFactor: number
+  practiceLevel: PracticeLevel
+  bmi?: number
+  assessment?: string
+  dailyCalories?: number
+  recommendedSessions?: number
+}
 
 type Props = {
   activeSection: MainSection
@@ -71,6 +88,79 @@ export function LoggedInLayout({
   const [profileError, setProfileError] = useState<string | null>(null)
   const [activeProfileTab, setActiveProfileTab] = useState<'info' | 'social'>('info')
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
+  const [healthForm, setHealthForm] = useState<{
+    weightKg: string
+    heightM: string
+    activityFactor: string
+    practiceLevel: PracticeLevel
+  }>({
+    weightKg: '',
+    heightM: '',
+    activityFactor: '1.55',
+    practiceLevel: 'MEDIUM'
+  })
+  const [healthMetrics, setHealthMetrics] = useState<HealthMetrics | null>(null)
+  const [healthSaving, setHealthSaving] = useState(false)
+  const [healthError, setHealthError] = useState<string | null>(null)
+  const [healthSuccess, setHealthSuccess] = useState<string | null>(null)
+  const [healthNotice, setHealthNotice] = useState<string | null>(null)
+  const [trainingLoading, setTrainingLoading] = useState(false)
+  const [trainingError, setTrainingError] = useState<string | null>(null)
+  const [sessionCards, setSessionCards] = useState<number[]>([])
+  const [sessionItems, setSessionItems] = useState<Record<number, Array<{ name: string; muscle: string; calories: string }>>>({})
+  const [exerciseLoading, setExerciseLoading] = useState(false)
+  const [exerciseError, setExerciseError] = useState<string | null>(null)
+  const [exercises, setExercises] = useState<Exercise[]>([])
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarTab, setSidebarTab] = useState<'recommended' | 'library'>('recommended')
+  const [sidebarTarget, setSidebarTarget] = useState<{ session: number; row: number } | null>(null)
+
+  const recommendedSessionCount = useMemo(() => {
+    if (trainingLoading || trainingError) return 0
+    if (healthMetrics?.recommendedSessions) return healthMetrics.recommendedSessions
+    if (!healthMetrics?.activityFactor) return 3
+    const af = healthMetrics.activityFactor
+    if (af < 1.3) return 2
+    if (af < 1.5) return 3
+    if (af < 1.65) return 4
+    if (af < 1.8) return 5
+    return 6
+  }, [healthMetrics, trainingError, trainingLoading])
+
+  // Sync session cards with recommended count
+  useEffect(() => {
+    if (activeSection !== 'training') return
+    if (recommendedSessionCount <= 0) {
+      setSessionCards([])
+      setSessionItems({})
+      return
+    }
+    setSessionCards((prev) => {
+      if (prev.length === recommendedSessionCount) return prev
+      const next = Array.from({ length: recommendedSessionCount }, (_, i) => i + 1)
+      return next
+    })
+  }, [activeSection, recommendedSessionCount])
+
+  // Ensure items map has entries for each card
+  useEffect(() => {
+    if (activeSection !== 'training') return
+    setSessionItems((prev) => {
+      let changed = false
+      const next = { ...prev }
+      sessionCards.forEach((order) => {
+        if (!next[order]) {
+          next[order] = [
+            { name: '', muscle: '', calories: '' },
+            { name: '', muscle: '', calories: '' },
+            { name: '', muscle: '', calories: '' }
+          ]
+          changed = true
+        }
+      })
+      return changed ? next : prev
+    })
+  }, [activeSection, sessionCards])
   // Get avatar URL from profile or form, fallback to empty string
   const currentAvatarUrl = profile?.avatarUrl || profileForm.avatarUrl || ''
 
@@ -80,6 +170,25 @@ export function LoggedInLayout({
     .join('')
     .slice(0, 2)
     .toUpperCase()
+
+  // Load saved health metrics to prefill form and sidebar summary
+  useEffect(() => {
+    const stored = localStorage.getItem('healthMetrics')
+    if (!stored) return
+    try {
+      const parsed = JSON.parse(stored) as HealthMetrics
+      setHealthMetrics(parsed)
+      setHealthForm((prev) => ({
+        ...prev,
+        weightKg: parsed.weightKg ? parsed.weightKg.toString() : '',
+        heightM: parsed.heightM ? parsed.heightM.toString() : '',
+        activityFactor: parsed.activityFactor ? parsed.activityFactor.toString() : prev.activityFactor,
+        practiceLevel: parsed.practiceLevel || prev.practiceLevel
+      }))
+    } catch {
+      // ignore malformed cache
+    }
+  }, [])
 
   // Load profile data when component mounts to get avatar for sidebar
   useEffect(() => {
@@ -133,6 +242,143 @@ export function LoggedInLayout({
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setProfileForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  // Fetch latest BMI record when user enters training page to sync session recommendations
+  useEffect(() => {
+    if (activeSection !== 'training') return
+    let cancelled = false
+    ;(async () => {
+      try {
+        setTrainingLoading(true)
+        setTrainingError(null)
+        const res = await getMyBmiRecords()
+        if (!res.success || !res.data || res.data.length === 0) {
+          if (!cancelled) setTrainingError('Chưa có dữ liệu sức khoẻ. Hãy cập nhật tại “Chỉ Số Sức Khoẻ”.')
+          return
+        }
+        const current = res.data.find((r) => r.isCurrent || (r as any).IsCurrent) ?? res.data[0]
+        const bmiValue = current.BMI ?? current.bmi
+        const assessmentValue = current.Assessment ?? current.assessment
+        const activityFactorValue = current.ActivityFactor ?? current.activityFactor
+        const practiceLevelValue = (current.PracticeLevel ?? current.practiceLevel) as PracticeLevel
+        const goalObj = (current.Goal ?? current.goal) as Record<string, unknown> | undefined
+        const tdeeFromGoal = goalObj && typeof goalObj['tdee'] === 'number' ? (goalObj['tdee'] as number) : undefined
+        const planObj = goalObj && (goalObj['plan'] as Record<string, unknown> | undefined)
+        const sessionsPerWeek = planObj && typeof planObj['ExercisePerWeek'] === 'number'
+          ? (planObj['ExercisePerWeek'] as number)
+          : planObj && typeof planObj['exercisePerWeek'] === 'number'
+            ? (planObj['exercisePerWeek'] as number)
+            : undefined
+
+        const nextMetrics: HealthMetrics = {
+          weightKg: current.weightKg ?? (current as any).WeightKg ?? 0,
+          heightM: current.heightCm ? current.heightCm / 100 : (current as any).HeightCm ? ((current as any).HeightCm as number) / 100 : 0,
+          activityFactor: activityFactorValue ?? 0,
+          practiceLevel: practiceLevelValue || 'MEDIUM',
+          bmi: bmiValue,
+          assessment: assessmentValue,
+          dailyCalories: tdeeFromGoal,
+          recommendedSessions: sessionsPerWeek
+        }
+
+        if (!cancelled) {
+          setHealthMetrics(nextMetrics)
+          localStorage.setItem('healthMetrics', JSON.stringify(nextMetrics))
+        }
+      } catch {
+        if (!cancelled) setTrainingError('Không thể tải dữ liệu sức khoẻ.')
+      } finally {
+        if (!cancelled) setTrainingLoading(false)
+      }
+    })()
+
+    // Load exercise library for selection
+    ;(async () => {
+      try {
+        setExerciseLoading(true)
+        setExerciseError(null)
+        const res = await getExercises({ page: 1, pageSize: 50 })
+        if (!res.success || !res.data) {
+          setExerciseError(res.message || 'Không thể tải thư viện bài tập.')
+          return
+        }
+        setExercises(res.data.exercises || [])
+      } catch {
+        setExerciseError('Không thể tải thư viện bài tập.')
+      } finally {
+        setExerciseLoading(false)
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [activeSection])
+
+  const handleSelectSection = (section: MainSection) => {
+    setHealthNotice(null)
+    onSelectSection(section)
+  }
+
+  const recommendedExercises: Array<{ name: string; muscle: string; calories: string }> = [
+    { name: 'Lunges', muscle: 'Legs', calories: '20' },
+    { name: 'Push-ups', muscle: 'Chest', calories: '15' },
+    { name: 'Bent-over Row', muscle: 'Back', calories: '18' },
+    { name: 'Squat', muscle: 'Legs', calories: '22' },
+    { name: 'Plank', muscle: 'Core', calories: '8' },
+    { name: 'Mountain Climbers', muscle: 'Core', calories: '12' }
+  ]
+
+  const openSidebar = (session: number, row: number) => {
+    setSidebarTarget({ session, row })
+    setSidebarOpen(true)
+    setSidebarTab('recommended')
+    // lazy load exercises if not loaded
+    if (!exercises.length && !exerciseLoading && !exerciseError) {
+      ;(async () => {
+        try {
+          setExerciseLoading(true)
+          const res = await getExercises({ page: 1, pageSize: 50 })
+          if (res.success && res.data) {
+            setExercises(res.data.exercises || [])
+          } else if (!res.success) {
+            setExerciseError(res.message || 'Không thể tải thư viện bài tập.')
+          }
+        } catch {
+          setExerciseError('Không thể tải thư viện bài tập.')
+        } finally {
+          setExerciseLoading(false)
+        }
+      })()
+    }
+  }
+
+  const selectExerciseToRow = (exercise: { name?: string; title?: string; muscle?: string; primaryMuscle?: string; calories?: string | number }) => {
+    if (!sidebarTarget) return
+    const { session, row } = sidebarTarget
+    setSessionItems((prev) => {
+      const next = { ...prev }
+      const rows = next[session] ? [...next[session]] : []
+      while (rows.length < row + 1) rows.push({ name: '', muscle: '', calories: '' })
+      rows[row] = {
+        name: exercise.name || exercise.title || '',
+        muscle: exercise.muscle || exercise.primaryMuscle || '',
+        calories: exercise.calories !== undefined ? String(exercise.calories) : rows[row]?.calories || ''
+      }
+      next[session] = rows
+      return next
+    })
+    setSidebarOpen(false)
+    setSidebarTarget(null)
+  }
+  const handleHealthChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    if (name === 'practiceLevel') {
+      setHealthForm((prev) => ({ ...prev, practiceLevel: value as PracticeLevel }))
+      return
+    }
+    setHealthForm((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleAvatarFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -227,6 +473,65 @@ export function LoggedInLayout({
     }
   }
 
+  const handleHealthSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setHealthError(null)
+    setHealthSuccess(null)
+
+    const weight = parseFloat(healthForm.weightKg)
+    const height = parseFloat(healthForm.heightM)
+    const activity = parseFloat(healthForm.activityFactor)
+
+    if (Number.isNaN(weight) || Number.isNaN(height) || weight <= 0 || height <= 0) {
+      setHealthError('Vui lòng nhập cân nặng và chiều cao hợp lệ.')
+      return
+    }
+    if (Number.isNaN(activity) || activity <= 0) {
+      setHealthError('Vui lòng chọn cường độ tập luyện hợp lệ.')
+      return
+    }
+
+    try {
+      setHealthSaving(true)
+      const res = await createBmiRecord({
+        weightKg: weight,
+        heightCm: height * 100, // backend nhận cm
+        practiceLevel: healthForm.practiceLevel,
+        activityFactor: activity
+      })
+
+      if (!res.success) {
+        setHealthError(res.message || 'Không thể lưu chỉ số sức khoẻ.')
+        return
+      }
+
+      // Clear any notice that asked user to update health metrics
+      setHealthNotice(null)
+
+      const bmiValue = res.data?.bmi ?? res.data?.BMI
+      const assessmentValue = res.data?.assessment ?? res.data?.Assessment
+      const dailyCalories = res.data?.dailyCalories ?? res.data?.DailyCalories
+
+      const nextMetrics: HealthMetrics = {
+        weightKg: weight,
+        heightM: height,
+        activityFactor: activity,
+        practiceLevel: healthForm.practiceLevel,
+        bmi: bmiValue,
+        assessment: assessmentValue,
+        dailyCalories
+      }
+
+      setHealthMetrics(nextMetrics)
+      localStorage.setItem('healthMetrics', JSON.stringify(nextMetrics))
+      setHealthSuccess('Cập nhật thành công')
+    } catch {
+      setHealthError('Không thể lưu chỉ số sức khoẻ. Vui lòng thử lại.')
+    } finally {
+      setHealthSaving(false)
+    }
+  }
+
   return (
     <main className="main-layout">
       <aside className="sidebar">
@@ -236,9 +541,19 @@ export function LoggedInLayout({
               <button
                 type="button"
                 className={`sidebar-item ${activeSection === section ? 'active' : ''}`}
-                onClick={() => onSelectSection(section)}
+                onClick={() => handleSelectSection(section)}
               >
-                {section === 'nutrition' ? 'Dinh Dưỡng' : section === 'progress' ? 'Tiến Độ' : section === 'training' ? 'Luyện Tập' : section === 'challenge' ? 'Thử Thách' : section === 'social' ? 'Cộng Đồng' : 'Thông Báo'}
+                {section === 'nutrition'
+                  ? 'Dinh Dưỡng'
+                  : section === 'progress'
+                    ? 'Tiến Độ'
+                    : section === 'training'
+                      ? 'Luyện Tập'
+                      : section === 'challenge'
+                        ? 'Thử Thách'
+                        : section === 'health'
+                          ? 'Chỉ Số Sức Khoẻ'
+                          : 'Cộng Đồng'}
               </button>
             </li>
           ))}
@@ -254,7 +569,18 @@ export function LoggedInLayout({
             </div>
             <div>
               <p className="sidebar-user-name">{userName}</p>
-              <span className="sidebar-user-role">Sẵn sàng luyện tập</span>
+              {(() => {
+                const formattedBmi = healthMetrics?.bmi ? healthMetrics.bmi.toFixed(1) : '—'
+                const formattedTdee = healthMetrics?.dailyCalories
+                  ? Math.round(healthMetrics.dailyCalories).toLocaleString('vi-VN')
+                  : '—'
+                return (
+                  <span className="sidebar-user-role">
+                    BMI / TDEE<br />
+                    {healthMetrics ? `${formattedBmi} / ${formattedTdee}` : 'Chưa có dữ liệu'}
+                  </span>
+                )
+              })()}
             </div>
           </div>
           <button
@@ -329,6 +655,7 @@ export function LoggedInLayout({
             </div>
           )}
         </div>
+
       </aside>
       <section className="main-content">
         {activeSection === 'profile' ? (
@@ -576,6 +903,297 @@ export function LoggedInLayout({
                 </div>
               </aside>
             </div>
+          </div>
+        ) : activeSection === 'health' ? (
+          <div className="health-metrics">
+            <h1 className="main-content-title">Chỉ Số Sức Khoẻ</h1>
+            <p className="main-content-subtitle">Nhập cân nặng, chiều cao và mức vận động để lưu vào hồ sơ.</p>
+            {healthNotice && <p className="health-status notice">{healthNotice}</p>}
+
+            <form className="health-form" onSubmit={handleHealthSubmit}>
+              <div className="health-grid">
+                <div className="health-field">
+                  <label htmlFor="weightKg">Cân nặng (kg)</label>
+                  <input
+                    id="weightKg"
+                    name="weightKg"
+                    type="number"
+                    min="1"
+                    step="0.1"
+                    value={healthForm.weightKg}
+                    onChange={handleHealthChange}
+                    required
+                    placeholder="Ví dụ: 70"
+                  />
+                </div>
+
+                <div className="health-field">
+                  <label htmlFor="heightM">Chiều cao (m)</label>
+                  <input
+                    id="heightM"
+                    name="heightM"
+                    type="number"
+                    min="0.5"
+                    max="2.5"
+                    step="0.01"
+                    value={healthForm.heightM}
+                    onChange={handleHealthChange}
+                    required
+                    placeholder="Ví dụ: 1.75"
+                  />
+                </div>
+
+                <div className="health-field">
+                  <label htmlFor="activityFactor">Cường độ tập luyện</label>
+                  <select
+                    id="activityFactor"
+                    name="activityFactor"
+                    value={healthForm.activityFactor}
+                    onChange={handleHealthChange}
+                  >
+                    <option value="1.2">Ít vận động — 1.2</option>
+                    <option value="1.375">Vận động nhẹ — 1.375</option>
+                    <option value="1.55">Vận động vừa phải — 1.55</option>
+                    <option value="1.725">Vận động nhiều — 1.725</option>
+                    <option value="1.9">Vận động rất nhiều — 1.9</option>
+                  </select>
+                </div>
+
+                <div className="health-field">
+                  <label htmlFor="practiceLevel">Mức độ vận động</label>
+                  <select
+                    id="practiceLevel"
+                    name="practiceLevel"
+                    value={healthForm.practiceLevel}
+                    onChange={handleHealthChange}
+                  >
+                    <option value="PRO">Pro</option>
+                    <option value="HARD">Hard</option>
+                    <option value="MEDIUM">Medium</option>
+                    <option value="EASY">Easy</option>
+                    <option value="NEWBIE">Newbie</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="health-actions">
+                <button type="submit" className="btn-primary" disabled={healthSaving}>
+                  {healthSaving ? 'Đang lưu...' : 'Lưu & tính BMI'}
+                </button>
+                {healthError && <span className="health-status error">{healthError}</span>}
+                {healthSuccess && <span className="health-status success">{healthSuccess}</span>}
+              </div>
+            </form>
+
+            {healthMetrics && (
+              <div className="health-result">
+                <h3>Kết quả gần nhất</h3>
+                <div className="health-result-grid">
+                  <div className="health-result-item">
+                    <span>BMI</span>
+                    <strong>{healthMetrics.bmi ? healthMetrics.bmi.toFixed(2) : '—'}</strong>
+                  </div>
+                  <div className="health-result-item">
+                    <span>Đánh giá</span>
+                    <strong>{healthMetrics.assessment || '—'}</strong>
+                  </div>
+                  <div className="health-result-item">
+                    <span>TDEE (kcal)</span>
+                    <strong>{healthMetrics.dailyCalories ? `${Math.round(healthMetrics.dailyCalories)} kcal` : '—'}</strong>
+                  </div>
+                  <div className="health-result-item">
+                    <span>Cường độ</span>
+                    <strong>{healthMetrics.activityFactor}</strong>
+                  </div>
+                  <div className="health-result-item">
+                    <span>Mức độ</span>
+                    <strong>{healthMetrics.practiceLevel}</strong>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ) : activeSection === 'training' ? (
+          <div className="training-page">
+            <div className="training-header">
+              <div>
+                <h1 className="main-content-title">Luyện Tập</h1>
+                <p className="main-content-subtitle">Kế hoạch gợi ý dựa trên TDEE và mức vận động của bạn.</p>
+              </div>
+              <div className="training-stat">
+                <span>TDEE</span>
+                <strong>
+                  {trainingLoading
+                    ? 'Đang tải...'
+                    : trainingError
+                      ? '—'
+                      : healthMetrics?.dailyCalories
+                        ? Math.round(healthMetrics.dailyCalories).toLocaleString('vi-VN')
+                        : 'Chưa có'}
+                </strong>
+              </div>
+            </div>
+
+            {trainingError && (
+              <div className="health-status error" style={{ margin: 0 }}>
+                {trainingError}
+              </div>
+            )}
+
+            <div className="training-recommend">
+              <div className="training-recommend-text">
+                <p className="label">Số buổi/tuần (Recommend)</p>
+                <h3>
+                  {(() => {
+                    if (trainingLoading) return 'Đang tải...'
+                    if (trainingError) return '—'
+                    if (healthMetrics?.recommendedSessions) return `${healthMetrics.recommendedSessions} buổi`
+                    if (!healthMetrics?.activityFactor) return '—'
+                    const af = healthMetrics.activityFactor
+                    if (af < 1.3) return '2 buổi'
+                    if (af < 1.5) return '3 buổi'
+                    if (af < 1.65) return '4 buổi'
+                    if (af < 1.8) return '5 buổi'
+                    return '6 buổi'
+                  })()}
+                </h3>
+              </div>
+            </div>
+
+            {trainingLoading && <p className="muted">Đang tải dữ liệu...</p>}
+            {trainingError && <p className="muted">Chưa có chỉ số sức khoẻ.</p>}
+
+            {!trainingLoading && !trainingError && (
+              <div className="workout-grid">
+                {sessionCards.length === 0 && <p className="muted">Chưa có buổi tập nào.</p>}
+                {sessionCards.map((order) => (
+                  <div className="workout-card" key={`session-${order}`}>
+                    <div className="workout-card-header">
+                      <div>
+                        <p className="workout-title">Buổi {order}</p>
+                        <p className="workout-focus">Tuỳ chỉnh bài tập của bạn</p>
+                      </div>
+                      <button className="workout-menu-btn" type="button" aria-label={`Xem chi tiết buổi ${order}`}>
+                        ⋮
+                      </button>
+                      <button
+                        type="button"
+                        className="workout-remove-btn"
+                        onClick={() =>
+                          setSessionCards((prev) => prev.filter((n) => n !== order))
+                        }
+                        aria-label={`Xoá buổi ${order}`}
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <div className="workout-meta table">
+                      <div className="workout-row header">
+                        <span>Tên bài tập</span>
+                        <span>Nhóm cơ</span>
+                        <span>Calories/1 set</span>
+                        <span></span>
+                      </div>
+                      {(sessionItems[order] || []).map((item, idx) => (
+                        <div className="workout-row" key={`session-${order}-row-${idx}`}>
+                          <span>{item.name || 'Chưa có'}</span>
+                          <span>{item.muscle || '---'}</span>
+                          <span>{item.calories || '---'}</span>
+                          <button
+                            type="button"
+                            className="icon-btn"
+                            onClick={() => openSidebar(order, idx)}
+                            aria-label="Thay đổi bài tập"
+                          >
+                            ✎
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {sidebarOpen && sidebarTarget && (
+              <div className="exercise-sidebar">
+                <div className="exercise-sidebar-header">
+                  <div>
+                    <p className="sidebar-title">Buổi {sidebarTarget.session} · Dòng {sidebarTarget.row + 1}</p>
+                    <p className="sidebar-subtitle">Chọn bài tập để thêm</p>
+                  </div>
+                  <button type="button" className="workout-remove-btn" onClick={() => setSidebarOpen(false)} aria-label="Đóng">
+                    ×
+                  </button>
+                </div>
+                <div className="exercise-tabs">
+                  <button
+                    type="button"
+                    className={`exercise-tab ${sidebarTab === 'recommended' ? 'active' : ''}`}
+                    onClick={() => setSidebarTab('recommended')}
+                  >
+                    Bài tập đề xuất
+                  </button>
+                  <button
+                    type="button"
+                    className={`exercise-tab ${sidebarTab === 'library' ? 'active' : ''}`}
+                    onClick={() => setSidebarTab('library')}
+                  >
+                    Thư viện bài tập
+                  </button>
+                </div>
+
+                <div className="exercise-list">
+                  {sidebarTab === 'recommended' &&
+                    recommendedExercises.map((ex) => (
+                      <div className="exercise-item" key={`${ex.name}-${ex.muscle}`}>
+                        <div>
+                          <p className="exercise-title">{ex.name}</p>
+                          <p className="exercise-meta">
+                            {ex.muscle} · {ex.calories} cal/set
+                          </p>
+                        </div>
+                        <button type="button" className="btn-primary small" onClick={() => selectExerciseToRow(ex)}>
+                          +
+                        </button>
+                      </div>
+                    ))}
+
+                  {sidebarTab === 'library' && (
+                    <>
+                      {exerciseLoading && <p className="muted">Đang tải thư viện...</p>}
+                      {exerciseError && <p className="muted">{exerciseError}</p>}
+                      {!exerciseLoading &&
+                        !exerciseError &&
+                        exercises.map((ex) => (
+                          <div className="exercise-item" key={ex.id}>
+                            <div>
+                              <p className="exercise-title">{ex.title}</p>
+                              <p className="exercise-meta">
+                                {(ex.primaryMuscle || '---')}{' '}
+                                {ex.description ? `· ${ex.description.substring(0, 40)}...` : ''}
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              className="btn-primary small"
+                              onClick={() =>
+                                selectExerciseToRow({
+                                  name: ex.title,
+                                  muscle: ex.primaryMuscle || '',
+                                  calories: ''
+                                })
+                              }
+                            >
+                              +
+                            </button>
+                          </div>
+                        ))}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <>

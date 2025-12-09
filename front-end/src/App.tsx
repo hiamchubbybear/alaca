@@ -59,6 +59,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("accessToken")
     localStorage.removeItem("userRole")
+    localStorage.removeItem("healthMetrics")
     setIsLoggedIn(false)
     setCurrentPage("home")
   }
@@ -72,6 +73,8 @@ function App() {
   }
 
   const handleLoginSuccess = () => {
+    // clear cached health metrics to avoid showing previous user data
+    localStorage.removeItem("healthMetrics")
     setIsLoggedIn(true)
     setCurrentPage("home")
     setMainSection("social")
