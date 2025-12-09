@@ -20,6 +20,10 @@ public class GetPostResponseDto
     public DateTime UpdatedAt { get; set; }
     public string? UserVoteType { get; set; } // "Upvote", "Downvote", or null
 
+    // Admin moderation fields
+    public bool IsHidden { get; set; }
+    public string Status { get; set; } = "Accept"; // Accept, Pending, Reject
+
 
     public GetPostResponseDto(Guid postId, Guid profileId, Guid userId, string username, string? avatarUrl,
         string title, string content, string media, int likeCount, int upvoteCount, int downvoteCount,

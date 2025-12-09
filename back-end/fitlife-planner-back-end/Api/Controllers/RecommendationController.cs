@@ -2,6 +2,7 @@ using System.Net;
 using APIResponseWrapper;
 using fitlife_planner_back_end.Api.Configurations;
 using fitlife_planner_back_end.Api.Interface;
+using fitlife_planner_back_end.Api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,37 +30,71 @@ public class RecommendationController : ControllerBase
     }
 
     /// <summary>
-    /// Get recommended workouts based on user goal and workout days per week
+    /// Get recommended workouts based on user's current BMI and goal
     /// </summary>
     [HttpGet("workouts")]
     public async Task<IActionResult> GetRecommendedWorkouts(
-        [FromQuery] string goal = "muscle_gain",
-        [FromQuery] int days = 3)
+        [FromQuery] string? goal = null,
+        [FromQuery] int? days = null)
     {
         try
         {
             var userId = _userContext.User.userId;
 
-            // Get user profile to determine experience level
+            // Get user profile and current BMI record
             var profile = await _db.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+            if (profile == null)
+            {
+                return new ApiResponse<object>(
+                    success: false,
+                    message: "Profile not found. Please complete your profile first.",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
             var bmiRecord = await _db.BmiRecords
                 .Where(b => b.ProfileId == profile.ProfileId && b.IsCurrent)
                 .OrderByDescending(b => b.CreatedAt)
                 .FirstOrDefaultAsync();
 
+            if (bmiRecord == null)
+            {
+                return new ApiResponse<object>(
+                    success: false,
+                    message: "No BMI record found. Please calculate your BMI first.",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
+            // Auto-determine goal from BMI goal plan if not provided
+            var userGoal = goal ?? DetermineGoalFromBMI(bmiRecord);
+
+            // Auto-determine days from practice level if not provided
+            var workoutDays = days ?? DetermineDaysFromPracticeLevel(bmiRecord.PracticeLevel.ToString());
+
             // Determine difficulty based on goal and BMI
-            var difficulty = DetermineDifficulty(goal, bmiRecord?.BMI);
+            var difficulty = DetermineDifficulty(userGoal, bmiRecord.BMI);
 
             // Get exercises based on goal
-            var exercises = await GetExercisesByGoal(goal, difficulty);
+            var exercises = await GetExercisesByGoal(userGoal, difficulty);
 
             // Create workout plan structure
-            var workoutPlan = CreateWorkoutPlan(exercises, days, goal);
+            var workoutPlan = CreateWorkoutPlan(exercises, workoutDays, userGoal);
 
             var response = new ApiResponse<object>(
                 success: true,
                 message: "Successfully retrieved workout recommendations",
-                data: workoutPlan,
+                data: new
+                {
+                    plan = workoutPlan,
+                    userInfo = new
+                    {
+                        bmi = bmiRecord.BMI,
+                        goal = userGoal,
+                        practiceLevel = bmiRecord.PracticeLevel,
+                        recommendedDays = workoutDays
+                    }
+                },
                 statusCode: HttpStatusCode.OK
             );
 
@@ -78,19 +113,69 @@ public class RecommendationController : ControllerBase
     }
 
     /// <summary>
-    /// Get recommended exercises for specific muscle group
+    /// Get recommended exercises based on user's BMI and optional muscle group
     /// </summary>
     [HttpGet("exercises")]
     public async Task<IActionResult> GetRecommendedExercises(
-        [FromQuery] string muscle,
-        [FromQuery] string goal = "muscle_gain")
+        [FromQuery] string? muscle = null,
+        [FromQuery] string? goal = null)
     {
         try
         {
-            var exercises = await _db.ExerciseLibrary
-                .Where(e => e.PrimaryMuscle.ToLower() == muscle.ToLower() ||
-                           e.SecondaryMuscles.Contains(muscle))
-                .ToListAsync();
+            var userId = _userContext.User.userId;
+
+            // Get user profile and current BMI record
+            var profile = await _db.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+            if (profile == null)
+            {
+                return new ApiResponse<object>(
+                    success: false,
+                    message: "Profile not found. Please complete your profile first.",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
+            var bmiRecord = await _db.BmiRecords
+                .Where(b => b.ProfileId == profile.ProfileId && b.IsCurrent)
+                .OrderByDescending(b => b.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (bmiRecord == null)
+            {
+                return new ApiResponse<object>(
+                    success: false,
+                    message: "No BMI record found. Please calculate your BMI first.",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
+            // Auto-determine goal from BMI if not provided
+            var userGoal = goal ?? DetermineGoalFromBMI(bmiRecord);
+            var difficulty = DetermineDifficulty(userGoal, bmiRecord.BMI);
+
+            // Query exercises
+            var query = _db.ExerciseLibrary.AsQueryable();
+
+            // Filter by muscle if specified
+            if (!string.IsNullOrEmpty(muscle))
+            {
+                query = query.Where(e => e.PrimaryMuscle.ToLower() == muscle.ToLower() ||
+                                       e.SecondaryMuscles.Contains(muscle));
+            }
+            else
+            {
+                // If no muscle specified, get balanced recommendations
+                // Focus on compound exercises for beginners, more variety for advanced
+                if (difficulty == "beginner")
+                {
+                    query = query.Where(e => e.Tags.Contains("compound") || e.Tags.Contains("beginner"));
+                }
+            }
+
+            // Filter by difficulty
+            query = query.Where(e => e.Difficulty == difficulty || e.Difficulty == "beginner");
+
+            var exercises = await query.Take(20).ToListAsync();
 
             var result = exercises.Select(e => new
             {
@@ -114,7 +199,18 @@ public class RecommendationController : ControllerBase
             var response = new ApiResponse<object>(
                 success: true,
                 message: "Successfully retrieved exercise recommendations",
-                data: new { exercises = result, muscle, goal },
+                data: new
+                {
+                    exercises = result,
+                    muscle = muscle ?? "all",
+                    goal = userGoal,
+                    userInfo = new
+                    {
+                        bmi = bmiRecord.BMI,
+                        difficulty,
+                        practiceLevel = bmiRecord.PracticeLevel
+                    }
+                },
                 statusCode: HttpStatusCode.OK
             );
 
@@ -133,28 +229,73 @@ public class RecommendationController : ControllerBase
     }
 
     /// <summary>
-    /// Get recommended meal plan based on target calories
+    /// Get recommended meal plan based on user's current BMI and nutrition goals
     /// </summary>
     [HttpGet("meal-plan")]
     public async Task<IActionResult> GetRecommendedMealPlan(
-        [FromQuery] int targetCalories = 2000,
-        [FromQuery] string goal = "maintenance")
+        [FromQuery] int? targetCalories = null,
+        [FromQuery] string? goal = null)
     {
         try
         {
+            var userId = _userContext.User.userId;
+
+            // Get user profile and current BMI record
+            var profile = await _db.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+            if (profile == null)
+            {
+                return new ApiResponse<object>(
+                    success: false,
+                    message: "Profile not found. Please complete your profile first.",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
+            var bmiRecord = await _db.BmiRecords
+                .Where(b => b.ProfileId == profile.ProfileId && b.IsCurrent)
+                .OrderByDescending(b => b.CreatedAt)
+                .FirstOrDefaultAsync();
+
+            if (bmiRecord == null)
+            {
+                return new ApiResponse<object>(
+                    success: false,
+                    message: "No BMI record found. Please calculate your BMI first.",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
+            // Use BMI record data if parameters not provided
+            // Calculate daily calories if not provided
+            int calories;
+            if (targetCalories.HasValue)
+            {
+                calories = targetCalories.Value;
+            }
+            else
+            {
+                // Estimate TDEE: simple formula
+                // BMR (Mifflin-St Jeor) * activity factor
+                // For simplicity, use a basic TDEE estimate
+                var bmr = 10 * bmiRecord.WeightKg + 6.25 * bmiRecord.HeightCm - 5 * 30 + 5; // Assuming age 30
+                calories = (int)(bmr * bmiRecord.ActivityFactor);
+            }
+
+            var userGoal = goal ?? DetermineGoalFromBMI(bmiRecord);
+
             // Calculate macro split based on goal
-            var macros = CalculateMacros(targetCalories, goal);
+            var macros = CalculateMacros(calories, userGoal);
 
             // Get food items for each meal
-            var breakfast = await GetMealRecommendations(targetCalories * 0.25, macros, "high_protein");
-            var lunch = await GetMealRecommendations(targetCalories * 0.35, macros, "balanced");
-            var dinner = await GetMealRecommendations(targetCalories * 0.30, macros, "balanced");
-            var snacks = await GetMealRecommendations(targetCalories * 0.10, macros, "low_calorie");
+            var breakfast = await GetMealRecommendations(calories * 0.25, macros, "high_protein");
+            var lunch = await GetMealRecommendations(calories * 0.35, macros, "balanced");
+            var dinner = await GetMealRecommendations(calories * 0.30, macros, "balanced");
+            var snacks = await GetMealRecommendations(calories * 0.10, macros, "low_calorie");
 
             var mealPlan = new
             {
-                targetCalories,
-                goal,
+                targetCalories = calories,
+                goal = userGoal,
                 macros = new
                 {
                     protein = macros["protein"],
@@ -167,6 +308,12 @@ public class RecommendationController : ControllerBase
                     lunch,
                     dinner,
                     snacks
+                },
+                userInfo = new
+                {
+                    bmi = bmiRecord.BMI,
+                    practiceLevel = bmiRecord.PracticeLevel,
+                    activityFactor = bmiRecord.ActivityFactor
                 }
             };
 
@@ -255,6 +402,34 @@ public class RecommendationController : ControllerBase
         if (goal == "muscle_gain")
             return "intermediate";
         return "beginner";
+    }
+
+    private string DetermineGoalFromBMI(BMIRecord bmiRecord)
+    {
+        // Determine goal based on BMI assessment
+        // BMI < 18.5: weight gain
+        // BMI 18.5-24.9: maintenance/muscle gain
+        // BMI >= 25: weight loss
+
+        if (bmiRecord.BMI < 18.5)
+            return "muscle_gain"; // Need to gain weight
+        else if (bmiRecord.BMI >= 25)
+            return "weight_loss"; // Need to lose weight
+        else
+            return "muscle_gain"; // Healthy range, can build muscle
+    }
+
+    private int DetermineDaysFromPracticeLevel(string? practiceLevel)
+    {
+        return (practiceLevel?.ToUpper()) switch
+        {
+            "NEWBIE" => 2,
+            "EASY" => 3,
+            "MEDIUM" => 4,
+            "HARD" => 5,
+            "PRO" => 6,
+            _ => 3
+        };
     }
 
     private async Task<List<object>> GetExercisesByGoal(string goal, string difficulty)

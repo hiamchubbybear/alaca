@@ -17,6 +17,7 @@ interface Post {
   createdAt: string
   updatedAt: string
   isHidden?: boolean
+  status?: string  // Accept, Pending, Reject
 }
 
 interface ConfirmState {
@@ -34,6 +35,7 @@ export function PostManagement() {
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
   const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState<string>('all')
   const [confirmModal, setConfirmModal] = useState<ConfirmState>({
     isOpen: false,
     title: '',
@@ -51,7 +53,7 @@ export function PostManagement() {
 
   useEffect(() => {
     filterPosts()
-  }, [posts, searchTerm])
+  }, [posts, searchTerm, statusFilter])
 
   const loadPosts = async () => {
     setLoading(true)
@@ -72,6 +74,8 @@ export function PostManagement() {
 
   const filterPosts = () => {
     let filtered = posts
+
+    // Search filter
     if (searchTerm) {
       filtered = filtered.filter(post =>
         post.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -79,6 +83,18 @@ export function PostManagement() {
         post.title?.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
+
+    // Status filter
+    if (statusFilter !== 'all') {
+      if (statusFilter === 'hidden') {
+        filtered = filtered.filter(post => post.isHidden === true)
+      } else if (statusFilter === 'visible') {
+        filtered = filtered.filter(post => !post.isHidden)
+      } else {
+        filtered = filtered.filter(post => post.status === statusFilter)
+      }
+    }
+
     setFilteredPosts(filtered)
   }
 
@@ -151,6 +167,10 @@ export function PostManagement() {
           <div className="stat-label">Tổng bài viết</div>
         </div>
         <div className="stat-item">
+          <div className="stat-value">{posts.filter(p => p.isHidden).length}</div>
+          <div className="stat-label">Đã ẩn</div>
+        </div>
+        <div className="stat-item">
           <div className="stat-value">{posts.reduce((sum, p) => sum + (p.upvoteCount || 0), 0)}</div>
           <div className="stat-label">Tổng upvotes</div>
         </div>
@@ -173,6 +193,18 @@ export function PostManagement() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+        </div>
+
+        <div className="filter-group">
+          <label>Trạng thái:</label>
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+            <option value="all">Tất cả</option>
+            <option value="visible">Đang hiển thị</option>
+            <option value="hidden">Đã ẩn</option>
+            <option value="Accept">Đã duyệt</option>
+            <option value="Pending">Chờ duyệt</option>
+            <option value="Reject">Đã từ chối</option>
+          </select>
         </div>
 
         <div className="results-count">

@@ -149,6 +149,9 @@ public class Mapping
         );
 
         dto.UserVoteType = userVoteType;
+        dto.IsHidden = post.IsHidden;
+        dto.Status = post.Status.ToString();
+
         return dto;
     }
 
