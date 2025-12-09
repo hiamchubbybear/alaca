@@ -12,5 +12,9 @@ public class GetExerciseResponseDTO
     public string? VideoUrl { get; set; }
     public string? Images { get; set; }
     public List<string>? Tags { get; set; }
+    public int CaloriesBurnedPerSet { get; set; }
+    public string? RecommendedSets { get; set; }
+    public string? RecommendedReps { get; set; }
+    public int RestSeconds { get; set; }
     public DateTime CreatedAt { get; set; }
 }
