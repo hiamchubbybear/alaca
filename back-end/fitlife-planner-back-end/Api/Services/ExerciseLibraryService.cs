@@ -53,12 +53,17 @@ public class ExerciseLibraryService
             Title = dto.Title,
             Description = dto.Description,
             PrimaryMuscle = dto.PrimaryMuscle,
-            SecondaryMuscles = dto.SecondaryMuscles,
+            SecondaryMuscles = dto.SecondaryMuscles != null && dto.SecondaryMuscles.Any() ? string.Join(",", dto.SecondaryMuscles) : null,
             Equipment = dto.Equipment,
             Difficulty = dto.Difficulty,
             VideoUrl = dto.VideoUrl,
-            Images = dto.Images,
-            CreatedBy = userId
+            Images = dto.Images != null && dto.Images.Any() ? System.Text.Json.JsonSerializer.Serialize(dto.Images) : null,
+            CreatedBy = userId,
+            Instructions = dto.Instructions,
+            CaloriesBurnedPerSet = dto.CaloriesBurnedPerSet,
+            RecommendedSets = dto.RecommendedSets.ToString(),
+            RecommendedReps = dto.RecommendedReps.ToString(),
+            RestSeconds = dto.RestSeconds
         };
 
         await _dbContext.ExerciseLibrary.AddAsync(exercise);
@@ -104,7 +109,7 @@ public class ExerciseLibraryService
             Difficulty = exercise.Difficulty,
             VideoUrl = exercise.VideoUrl,
             Images = exercise.Images,
-            Tags = exercise.Tags?.Split(',').ToList() ?? new List<string>(),
+            Tags = exercise.Tags?.Split(',').ToList() ?? exercise.ExerciseTags.Select(t => t.Tag).ToList(),
             CreatedAt = exercise.CreatedAt
         };
     }
@@ -112,14 +117,45 @@ public class ExerciseLibraryService
     public async Task<GetExerciseResponseDTO> UpdateExercise(Guid id, UpdateExerciseRequestDTO dto)
     {
         var exercise = await _dbContext.ExerciseLibrary.Include(e => e.ExerciseTags).FirstOrDefaultAsync(e => e.Id == id) ?? throw new Exception("Exercise not found");
+
         if (dto.Title != null) exercise.Title = dto.Title;
         if (dto.Description != null) exercise.Description = dto.Description;
-        if (dto.Category != null) exercise.PrimaryMuscle = dto.Category;
+        if (dto.PrimaryMuscle != null) exercise.PrimaryMuscle = dto.PrimaryMuscle;
         if (dto.Difficulty != null) exercise.Difficulty = dto.Difficulty;
-        if (dto.MuscleGroup != null) exercise.PrimaryMuscle = dto.MuscleGroup;
         if (dto.Equipment != null) exercise.Equipment = dto.Equipment;
-        if (dto.Instructions != null) exercise.Description = dto.Instructions;
+        if (dto.Instructions != null) exercise.Instructions = dto.Instructions;
         if (dto.VideoUrl != null) exercise.VideoUrl = dto.VideoUrl;
+
+        // Handle new fields
+        if(dto.SecondaryMuscles != null)
+            exercise.SecondaryMuscles = dto.SecondaryMuscles.Any() ? string.Join(",", dto.SecondaryMuscles) : null;
+
+        if (dto.Images != null)
+            exercise.Images = dto.Images.Any() ? System.Text.Json.JsonSerializer.Serialize(dto.Images) : null;
+
+        if (dto.CaloriesBurnedPerSet.HasValue) exercise.CaloriesBurnedPerSet = dto.CaloriesBurnedPerSet.Value;
+        if (dto.RecommendedSets.HasValue) exercise.RecommendedSets = dto.RecommendedSets.Value.ToString();
+        if (dto.RecommendedReps.HasValue) exercise.RecommendedReps = dto.RecommendedReps.Value.ToString();
+        if (dto.RestSeconds.HasValue) exercise.RestSeconds = dto.RestSeconds.Value;
+
+        // Handle Tags Update if needed (clean up old tags and add new ones)
+        if (dto.Tags != null)
+        {
+            // Remove existing tags
+            var currentTags = _dbContext.ExerciseTags.Where(t => t.ExerciseId == exercise.Id);
+            _dbContext.ExerciseTags.RemoveRange(currentTags);
+
+            // Add new tags
+            foreach (var tag in dto.Tags)
+            {
+                await _dbContext.ExerciseTags.AddAsync(new ExerciseTag
+                {
+                    ExerciseId = exercise.Id,
+                    Tag = tag
+                });
+            }
+        }
+
         exercise.UpdatedAt = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync();
         return MapToResponseDTO(exercise);

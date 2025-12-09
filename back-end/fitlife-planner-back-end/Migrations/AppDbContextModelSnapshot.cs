@@ -1153,6 +1153,10 @@ namespace fitlife_planner_back_end.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("VideoUrl")
+                        .HasMaxLength(512)
+                        .HasColumnType("varchar(512)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Workouts");

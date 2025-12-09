@@ -8,6 +8,7 @@ public class GetWorkoutResponseDTO
     public string? Description { get; set; }
     public int? DurationMin { get; set; }
     public string? Intensity { get; set; }
+    public string? VideoUrl { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<WorkoutExerciseDetailDTO>? Exercises { get; set; }
 }
@@ -17,6 +18,7 @@ public class WorkoutExerciseDetailDTO
     public Guid Id { get; set; }
     public Guid ExerciseId { get; set; }
     public string ExerciseTitle { get; set; }
+    public string? ExerciseVideoUrl { get; set; }
     public int? OrderIndex { get; set; }
     public int? Sets { get; set; }
     public string? Reps { get; set; }

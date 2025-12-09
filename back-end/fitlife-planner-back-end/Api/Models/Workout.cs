@@ -10,6 +10,7 @@ public class Workout
     public string? Description { get; set; }
     public int? DurationMin { get; set; }
     public string? Intensity { get; set; } // low, medium, high
+    public string? VideoUrl { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 

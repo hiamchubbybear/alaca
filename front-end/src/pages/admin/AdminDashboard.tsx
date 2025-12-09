@@ -2,11 +2,12 @@ import { useState } from 'react'
 import './AdminDashboard.css'
 import { Analytics } from './Analytics'
 import { ChallengeManagement } from './ChallengeManagement'
+import { ExerciseManagement } from './ExerciseManagement'
 import { NutritionManagement } from './NutritionManagement'
 import { PostManagement } from './PostManagement'
 import { UserManagement } from './UserManagement'
 
-type AdminSection = 'users' | 'analytics' | 'posts' | 'nutrition' | 'challenges'
+type AdminSection = 'users' | 'analytics' | 'posts' | 'nutrition' | 'challenges' | 'exercises'
 
 export function AdminDashboard() {
   const [activeSection, setActiveSection] = useState<AdminSection>('users')
@@ -33,6 +34,12 @@ export function AdminDashboard() {
             onClick={() => { setActiveSection('users'); setShowSidebar(false) }}
           >
             Quản Lý Người Dùng
+          </button>
+          <button
+            className={activeSection === 'exercises' ? 'active' : ''}
+            onClick={() => { setActiveSection('exercises'); setShowSidebar(false) }}
+          >
+            Quản Lý Bài Tập
           </button>
           <button
             className={activeSection === 'nutrition' ? 'active' : ''}
@@ -73,6 +80,7 @@ export function AdminDashboard() {
           </button>
           <h1>
             {activeSection === 'users' && 'Quản Lý Người Dùng'}
+            {activeSection === 'exercises' && 'Quản Lý Bài Tập'}
             {activeSection === 'nutrition' && 'Quản Lý Dinh Dưỡng'}
             {activeSection === 'posts' && 'Quản Lý Bài Đăng'}
             {activeSection === 'challenges' && 'Quản Lý Thử Thách'}
@@ -82,6 +90,7 @@ export function AdminDashboard() {
 
         <div className="admin-content">
           {activeSection === 'users' && <UserManagement />}
+          {activeSection === 'exercises' && <ExerciseManagement />}
           {activeSection === 'nutrition' && <NutritionManagement />}
           {activeSection === 'posts' && <PostManagement />}
           {activeSection === 'challenges' && <ChallengeManagement />}

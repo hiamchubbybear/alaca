@@ -1,70 +1,72 @@
 {
     "workouts": [
         {
-            "title": "Full Body Beginner",
-            "description": "Complete full body workout for beginners covering all major muscle groups",
+            "title": "Toàn thân cho người mới",
+            "description": "Bài tập toàn thân hoàn chỉnh cho người mới bắt đầu, bao gồm tất cả các nhóm cơ chính",
             "intensity": "moderate",
             "estimatedDuration": 45,
+            "videoUrl": "https://www.youtube.com/watch?v=XWdJv0pZ5_k",
             "exercises": [
                 {
-                    "exerciseTitle": "Push-up",
+                    "exerciseTitle": "Hít đất",
                     "sets": 3,
                     "reps": "10-15",
                     "restSeconds": 60,
                     "orderIndex": 0
                 },
                 {
-                    "exerciseTitle": "Squat",
+                    "exerciseTitle": "Squat với thanh đòn",
                     "sets": 3,
                     "reps": "12-15",
                     "restSeconds": 90,
                     "orderIndex": 1
                 },
                 {
-                    "exerciseTitle": "Dumbbell Row",
+                    "exerciseTitle": "Kéo tạ đơn một tay",
                     "sets": 3,
-                    "reps": "10-12 per arm",
+                    "reps": "10-12 mỗi tay",
                     "restSeconds": 60,
                     "orderIndex": 2
                 },
                 {
                     "exerciseTitle": "Plank",
                     "sets": 3,
-                    "reps": "30-45s hold",
+                    "reps": "30-45s",
                     "restSeconds": 60,
                     "orderIndex": 3
                 }
             ]
         },
         {
-            "title": "Upper Body Strength",
-            "description": "Focused workout for building upper body strength and muscle",
+            "title": "Sức mạnh thân trên",
+            "description": "Bài tập tập trung xây dựng sức mạnh và cơ bắp phần thân trên",
             "intensity": "high",
             "estimatedDuration": 60,
+            "videoUrl": "https://www.youtube.com/watch?v=uyD2iT3wFvQ",
             "exercises": [
                 {
-                    "exerciseTitle": "Bench Press",
+                    "exerciseTitle": "Đẩy ngực nằm ghế phẳng",
                     "sets": 4,
                     "reps": "8-12",
                     "restSeconds": 90,
                     "orderIndex": 0
                 },
                 {
-                    "exerciseTitle": "Pull-up",
+                    "exerciseTitle": "Hít xà đơn",
                     "sets": 4,
                     "reps": "6-10",
                     "restSeconds": 90,
                     "orderIndex": 1
                 },
                 {
-                    "exerciseTitle": "Overhead Press",
+                    "exerciseTitle": "Đẩy vai với đòn",
                     "sets": 3,
                     "reps": "8-10",
                     "restSeconds": 90,
                     "orderIndex": 2
                 },
                 {
-                    "exerciseTitle": "Bicep Curl",
+                    "exerciseTitle": "Cuốn tạ tay trước",
                     "sets": 3,
                     "reps": "10-15",
                     "restSeconds": 60,
@@ -73,92 +75,65 @@
             ]
         },
         {
-            "title": "Lower Body Power",
-            "description": "Intense lower body workout focusing on legs and glutes",
+            "title": "Sức mạnh thân dưới",
+            "description": "Bài tập thân dưới cường độ cao tập trung vào chân và mông",
             "intensity": "high",
             "estimatedDuration": 50,
+            "videoUrl": "https://www.youtube.com/watch?v=J3v7G0g_1fE",
             "exercises": [
                 {
-                    "exerciseTitle": "Squat",
+                    "exerciseTitle": "Squat với thanh đòn",
                     "sets": 4,
                     "reps": "8-12",
                     "restSeconds": 120,
                     "orderIndex": 0
                 },
                 {
-                    "exerciseTitle": "Deadlift",
+                    "exerciseTitle": "Deadlift (Kéo tạ)",
                     "sets": 4,
                     "reps": "6-8",
                     "restSeconds": 180,
                     "orderIndex": 1
                 },
                 {
-                    "exerciseTitle": "Lunges",
+                    "exerciseTitle": "Chùng chân (Lunges)",
                     "sets": 3,
-                    "reps": "10-12 per leg",
+                    "reps": "10-12 mỗi chân",
                     "restSeconds": 60,
                     "orderIndex": 2
                 }
             ]
         },
         {
-            "title": "Push Day - Chest, Shoulders, Triceps",
-            "description": "Push movements targeting chest, shoulders, and triceps",
+            "title": "Ngày tập đẩy (Ngực, Vai, Tay sau)",
+            "description": "Các động tác đẩy tập trung vào ngực, vai và tay sau",
             "intensity": "high",
             "estimatedDuration": 55,
+            "videoUrl": "https://www.youtube.com/watch?v=8I1k_yE7_yQ",
             "exercises": [
                 {
-                    "exerciseTitle": "Bench Press",
+                    "exerciseTitle": "Đẩy ngực nằm ghế phẳng",
                     "sets": 4,
                     "reps": "8-12",
                     "restSeconds": 90,
                     "orderIndex": 0
                 },
                 {
-                    "exerciseTitle": "Overhead Press",
+                    "exerciseTitle": "Đẩy vai với đòn",
                     "sets": 3,
                     "reps": "8-10",
                     "restSeconds": 90,
                     "orderIndex": 1
                 },
                 {
-                    "exerciseTitle": "Push-up",
+                    "exerciseTitle": "Hít đất",
                     "sets": 3,
                     "reps": "15-20",
                     "restSeconds": 60,
                     "orderIndex": 2
-                }
-            ]
-        },
-        {
-            "title": "Pull Day - Back & Biceps",
-            "description": "Pull movements for back development and bicep growth",
-            "intensity": "high",
-            "estimatedDuration": 55,
-            "exercises": [
-                {
-                    "exerciseTitle": "Deadlift",
-                    "sets": 4,
-                    "reps": "6-8",
-                    "restSeconds": 180,
-                    "orderIndex": 0
                 },
                 {
-                    "exerciseTitle": "Pull-up",
-                    "sets": 4,
-                    "reps": "6-10",
-                    "restSeconds": 90,
-                    "orderIndex": 1
-                },
-                {
-                    "exerciseTitle": "Dumbbell Row",
-                    "sets": 3,
-                    "reps": "10-12 per arm",
-                    "restSeconds": 60,
-                    "orderIndex": 2
-                },
-                {
-                    "exerciseTitle": "Bicep Curl",
+                    "exerciseTitle": "Duỗi tay sau qua đầu",
                     "sets": 3,
                     "reps": "10-15",
                     "restSeconds": 60,
@@ -167,33 +142,555 @@
             ]
         },
         {
-            "title": "Core & Abs Focused",
-            "description": "Dedicated core and abdominal strengthening workout",
+            "title": "Ngày tập kéo (Lưng, Tay trước)",
+            "description": "Các động tác kéo để phát triển lưng và tay trước",
+            "intensity": "high",
+            "estimatedDuration": 55,
+            "videoUrl": "https://www.youtube.com/watch?v=F3xO_Xy0_0U",
+            "exercises": [
+                {
+                    "exerciseTitle": "Deadlift (Kéo tạ)",
+                    "sets": 4,
+                    "reps": "6-8",
+                    "restSeconds": 180,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Hít xà đơn",
+                    "sets": 4,
+                    "reps": "6-10",
+                    "restSeconds": 90,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Kéo tạ đơn một tay",
+                    "sets": 3,
+                    "reps": "10-12 mỗi tay",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Cuốn tạ tay trước",
+                    "sets": 3,
+                    "reps": "10-15",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Tập trung bụng & Cốt lõi",
+            "description": "Bài tập chuyên sâu cho cơ lõi và cơ bụng",
             "intensity": "moderate",
             "estimatedDuration": 30,
+            "videoUrl": "https://www.youtube.com/watch?v=Zc2gE_1g4_c",
             "exercises": [
                 {
                     "exerciseTitle": "Plank",
                     "sets": 4,
-                    "reps": "45-60s hold",
+                    "reps": "45-60s",
                     "restSeconds": 60,
                     "orderIndex": 0
                 },
                 {
-                    "exerciseTitle": "Deadlift",
+                    "exerciseTitle": "Gập bụng xoay người kiểu Nga",
                     "sets": 3,
+                    "reps": "20 tổng cộng",
+                    "restSeconds": 45,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Leo núi mô phỏng",
+                    "sets": 3,
+                    "reps": "30-45s",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                }
+            ]
+        },
+        {
+            "title": "HIIT Cardio tại nhà",
+            "description": "Tập luyện cường độ cao ngắt quãng tại nhà không cần dụng cụ",
+            "intensity": "high",
+            "estimatedDuration": 25,
+            "videoUrl": "https://www.youtube.com/watch?v=M5zB6cW_2pU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Burpee",
+                    "sets": 4,
+                    "reps": "15",
+                    "restSeconds": 60,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Leo núi mô phỏng",
+                    "sets": 4,
+                    "reps": "45s",
+                    "restSeconds": 45,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Squat bật nhảy",
+                    "sets": 4,
+                    "reps": "15",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Hít đất",
+                    "sets": 4,
+                    "reps": "Tối đa",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Chân đùi hủy diệt",
+            "description": "Bài tập chân nặng để tăng cơ",
+            "intensity": "high",
+            "estimatedDuration": 70,
+            "videoUrl": "https://www.youtube.com/watch?v=Jc4hM_6kEgU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Squat với thanh đòn",
+                    "sets": 5,
+                    "reps": "5",
+                    "restSeconds": 180,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Romanian Deadlift",
+                    "sets": 4,
                     "reps": "8-10",
+                    "restSeconds": 120,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Đạp đùi máy",
+                    "sets": 4,
+                    "reps": "12-15",
                     "restSeconds": 90,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Nhón bắp chân",
+                    "sets": 5,
+                    "reps": "15-20",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Tay to vạm vỡ",
+            "description": "Bài tập superset cho tay trước và tay sau",
+            "intensity": "moderate",
+            "estimatedDuration": 40,
+            "videoUrl": "https://www.youtube.com/watch?v=Kz6qP_4l_gU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Cuốn tạ tay trước",
+                    "sets": 3,
+                    "reps": "12-15",
+                    "restSeconds": 60,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Duỗi tay sau qua đầu",
+                    "sets": 3,
+                    "reps": "12-15",
+                    "restSeconds": 60,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Cuốn tạ búa",
+                    "sets": 3,
+                    "reps": "12",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Chống đẩy tay sau",
+                    "sets": 3,
+                    "reps": "Tối đa",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Lưng xô chữ V",
+            "description": "Tập trung vào độ rộng và độ dày của lưng",
+            "intensity": "high",
+            "estimatedDuration": 50,
+            "videoUrl": "https://www.youtube.com/watch?v=Qp_8gV_2kcU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Hít xà đơn",
+                    "sets": 4,
+                    "reps": "Tối đa",
+                    "restSeconds": 90,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Kéo xô máy",
+                    "sets": 4,
+                    "reps": "10-12",
+                    "restSeconds": 60,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Kéo tạ đơn một tay",
+                    "sets": 3,
+                    "reps": "12",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Kéo cáp về mặt",
+                    "sets": 3,
+                    "reps": "15",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Bơm ngực căng trào",
+            "description": "Bài tập ngực dựa trên khối lượng vận động cao (volume)",
+            "intensity": "moderate",
+            "estimatedDuration": 45,
+            "videoUrl": "https://www.youtube.com/watch?v=9bZk_7gU_2k",
+            "exercises": [
+                {
+                    "exerciseTitle": "Đẩy ngực nằm ghế phẳng",
+                    "sets": 4,
+                    "reps": "10",
+                    "restSeconds": 90,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Đẩy ngực ghế dốc",
+                    "sets": 3,
+                    "reps": "10-12",
+                    "restSeconds": 90,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Ép ngực tạ đôi",
+                    "sets": 3,
+                    "reps": "12-15",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Hít đất",
+                    "sets": 2,
+                    "reps": "Tối đa",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "30 Phút Bodyweight Tốc hành",
+            "description": "Đốt mỡ toàn thân nhanh chóng",
+            "intensity": "high",
+            "estimatedDuration": 30,
+            "videoUrl": "https://www.youtube.com/watch?v=Lm_8gq_3fU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Squat với thanh đòn",
+                    "sets": 3,
+                    "reps": "20",
+                    "restSeconds": 30,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Hít đất",
+                    "sets": 3,
+                    "reps": "15",
+                    "restSeconds": 30,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Chùng chân (Lunges)",
+                    "sets": 3,
+                    "reps": "10 mỗi bên",
+                    "restSeconds": 30,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Plank",
+                    "sets": 3,
+                    "reps": "45s",
+                    "restSeconds": 30,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Xây dựng vòng 3",
+            "description": "Tập trung vào chuỗi cơ sau và mông",
+            "intensity": "moderate",
+            "estimatedDuration": 45,
+            "videoUrl": "https://www.youtube.com/watch?v=Op_7gT_1fE",
+            "exercises": [
+                {
+                    "exerciseTitle": "Nâng hông (Cây cầu)",
+                    "sets": 4,
+                    "reps": "20",
+                    "restSeconds": 60,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Romanian Deadlift",
+                    "sets": 4,
+                    "reps": "12",
+                    "restSeconds": 90,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Chùng chân (Lunges)",
+                    "sets": 3,
+                    "reps": "12 mỗi bên",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Chùng chân sang bên",
+                    "sets": 3,
+                    "reps": "12 mỗi bên",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Thể lực vận động viên",
+            "description": "Cải thiện sức bền tim mạch và sự nhanh nhẹn",
+            "intensity": "high",
+            "estimatedDuration": 40,
+            "videoUrl": "https://www.youtube.com/watch?v=Qr_9gY_5fU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Squat bật nhảy",
+                    "sets": 4,
+                    "reps": "15",
+                    "restSeconds": 60,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Leo núi mô phỏng",
+                    "sets": 4,
+                    "reps": "60s",
+                    "restSeconds": 60,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Burpee",
+                    "sets": 3,
+                    "reps": "12",
+                    "restSeconds": 90,
+                    "orderIndex": 2
+                }
+            ]
+        },
+        {
+            "title": "Vai to như đá tảng",
+            "description": "Phát triển toàn diện cơ vai",
+            "intensity": "high",
+            "estimatedDuration": 45,
+            "videoUrl": "https://www.youtube.com/watch?v=Zn_8gK_4fU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Đẩy vai với đòn",
+                    "sets": 4,
+                    "reps": "8",
+                    "restSeconds": 90,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Nâng vai sang bên",
+                    "sets": 3,
+                    "reps": "15",
+                    "restSeconds": 60,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Kéo cáp về mặt",
+                    "sets": 3,
+                    "reps": "15",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Squat trước",
+                    "sets": 3,
+                    "reps": "10",
+                    "restSeconds": 90,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Tập trung đùi trước",
+            "description": "Cho đôi chân khỏe mạnh",
+            "intensity": "high",
+            "estimatedDuration": 50,
+            "videoUrl": "https://www.youtube.com/watch?v=Ty_9gO_2fU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Squat trước",
+                    "sets": 4,
+                    "reps": "8",
+                    "restSeconds": 120,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Đá đùi trước",
+                    "sets": 4,
+                    "reps": "15",
+                    "restSeconds": 60,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Đạp đùi máy",
+                    "sets": 3,
+                    "reps": "12",
+                    "restSeconds": 90,
+                    "orderIndex": 2
+                }
+            ]
+        },
+        {
+            "title": "Tổng hợp 3 bài Powerlifting",
+            "description": "Thực hành 3 bài tập cơ bản: Squat, Bench, Deadlift",
+            "intensity": "high",
+            "estimatedDuration": 90,
+            "videoUrl": "https://www.youtube.com/watch?v=Xq_7gL_3fU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Squat với thanh đòn",
+                    "sets": 5,
+                    "reps": "3-5",
+                    "restSeconds": 180,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Đẩy ngực nằm ghế phẳng",
+                    "sets": 5,
+                    "reps": "3-5",
+                    "restSeconds": 180,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Deadlift (Kéo tạ)",
+                    "sets": 3,
+                    "reps": "3-5",
+                    "restSeconds": 240,
+                    "orderIndex": 2
+                }
+            ]
+        },
+        {
+            "title": "Vòng tròn máy tập cho người mới",
+            "description": "Bài tập dễ dàng theo dõi với máy tập",
+            "intensity": "low",
+            "estimatedDuration": 35,
+            "videoUrl": "https://www.youtube.com/watch?v=Wm_6gP_9fU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Kéo xô máy",
+                    "sets": 3,
+                    "reps": "12",
+                    "restSeconds": 60,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Đạp đùi máy",
+                    "sets": 3,
+                    "reps": "12",
+                    "restSeconds": 60,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Ép ngực tạ đôi",
+                    "sets": 3,
+                    "reps": "12",
+                    "restSeconds": 60,
+                    "orderIndex": 2
+                },
+                {
+                    "exerciseTitle": "Móc đùi sau",
+                    "sets": 3,
+                    "reps": "12",
+                    "restSeconds": 60,
+                    "orderIndex": 3
+                }
+            ]
+        },
+        {
+            "title": "Vận động buổi sáng",
+            "description": "Đánh thức cơ thể",
+            "intensity": "low",
+            "estimatedDuration": 20,
+            "videoUrl": "https://www.youtube.com/watch?v=Qn_5gH_8fU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Squat với thanh đòn",
+                    "sets": 2,
+                    "reps": "15",
+                    "restSeconds": 45,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Chùng chân (Lunges)",
+                    "sets": 2,
+                    "reps": "10 mỗi bên",
+                    "restSeconds": 45,
+                    "orderIndex": 1
+                },
+                {
+                    "exerciseTitle": "Plank",
+                    "sets": 2,
+                    "reps": "30s",
+                    "restSeconds": 45,
+                    "orderIndex": 2
+                }
+            ]
+        },
+        {
+            "title": "Thử thách Plank",
+            "description": "Bạn có thể giữ được bao lâu?",
+            "intensity": "high",
+            "estimatedDuration": 15,
+            "videoUrl": "https://www.youtube.com/watch?v=Vz_4gN_7fU",
+            "exercises": [
+                {
+                    "exerciseTitle": "Plank",
+                    "sets": 5,
+                    "reps": "Giữ tối đa",
+                    "restSeconds": 60,
+                    "orderIndex": 0
+                },
+                {
+                    "exerciseTitle": "Gập bụng xoay người kiểu Nga",
+                    "sets": 3,
+                    "reps": "30",
+                    "restSeconds": 45,
                     "orderIndex": 1
                 }
             ]
         }
     ],
     "metadata": {
-        "total_workouts": 6,
+        "total_workouts": 20,
         "intensity_distribution": {
-            "moderate": 2,
-            "high": 4
+            "low": 2,
+            "moderate": 5,
+            "high": 13
         },
         "workout_types": [
             "full_body",
@@ -201,7 +698,10 @@
             "lower_body",
             "push",
             "pull",
-            "core"
+            "core",
+            "hiit",
+            "cardio",
+            "strength"
         ]
     }
 }

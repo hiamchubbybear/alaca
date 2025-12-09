@@ -114,12 +114,14 @@ public class WorkoutService
             Description = workout.Description,
             DurationMin = workout.DurationMin,
             Intensity = workout.Intensity,
+            VideoUrl = workout.VideoUrl,
             CreatedAt = workout.CreatedAt,
             Exercises = workout.Exercises?.Select(we => new WorkoutExerciseDetailDTO
             {
                 Id = we.Id,
                 ExerciseId = we.ExerciseId,
                 ExerciseTitle = we.Exercise?.Title ?? "",
+                ExerciseVideoUrl = we.Exercise?.VideoUrl,
                 OrderIndex = we.OrderIndex,
                 Sets = we.Sets,
                 Reps = we.Reps,

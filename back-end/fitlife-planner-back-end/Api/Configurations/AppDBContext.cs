@@ -261,6 +261,7 @@ namespace fitlife_planner_back_end.Api.Configurations
                 entity.Property(e => e.Title).HasMaxLength(255).IsRequired();
                 entity.Property(e => e.Description).HasColumnType("text");
                 entity.Property(e => e.Intensity).HasMaxLength(50);
+                entity.Property(e => e.VideoUrl).HasMaxLength(512);
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.Property(e => e.UpdatedAt).HasColumnType("datetime");
             });

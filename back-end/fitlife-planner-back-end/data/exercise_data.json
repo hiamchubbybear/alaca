@@ -1,8 +1,8 @@
 {
     "exercises": [
         {
-            "title": "Bench Press",
-            "description": "Compound chest exercise performed lying on a bench pressing a barbell",
+            "title": "Đẩy ngực nằm ghế phẳng",
+            "description": "Bài tập ngực phức hợp thực hiện nằm trên ghế và đẩy tạ đòn",
             "primaryMuscle": "chest",
             "secondaryMuscles": [
                 "triceps",
@@ -14,18 +14,15 @@
             ],
             "difficulty": "intermediate",
             "instructions": [
-                "Lie flat on bench with feet firmly on floor",
-                "Grip barbell slightly wider than shoulder width",
-                "Unrack bar and position over mid-chest",
-                "Lower bar slowly to chest",
-                "Press bar up explosively until arms fully extended",
-                "Repeat for desired reps"
+                "Nằm phẳng trên ghế",
+                "Nắm thanh đòn rộng hơn vai",
+                "Hạ tạ xuống ngực",
+                "Đẩy tạ lên"
             ],
-            "videoUrl": "",
+            "videoUrl": "https://www.youtube.com/watch?v=rT7DgCr-3pg",
             "images": [],
             "tags": [
                 "compound",
-                "strength",
                 "push",
                 "chest"
             ],
@@ -35,8 +32,8 @@
             "restSeconds": 90
         },
         {
-            "title": "Squat",
-            "description": "Fundamental lower body compound exercise",
+            "title": "Squat với thanh đòn",
+            "description": "Bài tập phức hợp cơ bản cho phần thân dưới",
             "primaryMuscle": "legs",
             "secondaryMuscles": [
                 "glutes",
@@ -49,20 +46,17 @@
             ],
             "difficulty": "intermediate",
             "instructions": [
-                "Position barbell on upper back",
-                "Stand with feet shoulder-width apart",
-                "Lower body by bending knees and hips",
-                "Descend until thighs parallel to ground",
-                "Drive through heels to return to start",
-                "Keep chest up and core tight throughout"
+                "Đặt thanh đòn lên vai sau",
+                "Chân rộng bằng vai",
+                "Ngồi xổm xuống",
+                "Đứng lên trở lại"
             ],
-            "videoUrl": "",
+            "videoUrl": "https://www.youtube.com/watch?v=bEv6CCg2BC8",
             "images": [],
             "tags": [
                 "compound",
-                "strength",
                 "legs",
-                "lower_body"
+                "strength"
             ],
             "caloriesBurnedPerSet": 20,
             "recommendedSets": "3-5",
@@ -70,100 +64,30 @@
             "restSeconds": 120
         },
         {
-            "title": "Pull-up",
-            "description": "Bodyweight back exercise pulling yourself up to a bar",
-            "primaryMuscle": "back",
-            "secondaryMuscles": [
-                "biceps",
-                "shoulders",
-                "core"
-            ],
-            "equipment": [
-                "pull_up_bar"
-            ],
-            "difficulty": "intermediate",
-            "instructions": [
-                "Hang from bar with overhand grip",
-                "Hands slightly wider than shoulders",
-                "Pull body up until chin over bar",
-                "Lower with control to full extension",
-                "Avoid swinging or kipping"
-            ],
-            "videoUrl": "",
-            "images": [],
-            "tags": [
-                "compound",
-                "bodyweight",
-                "pull",
-                "back"
-            ],
-            "caloriesBurnedPerSet": 12,
-            "recommendedSets": "3-4",
-            "recommendedReps": "6-12",
-            "restSeconds": 90
-        },
-        {
-            "title": "Push-up",
-            "description": "Classic bodyweight chest and tricep exercise",
-            "primaryMuscle": "chest",
-            "secondaryMuscles": [
-                "triceps",
-                "shoulders",
-                "core"
-            ],
-            "equipment": [
-                "none"
-            ],
-            "difficulty": "beginner",
-            "instructions": [
-                "Start in plank position, hands shoulder-width",
-                "Lower body until chest nearly touches ground",
-                "Keep elbows at 45-degree angle",
-                "Push back up to start position",
-                "Maintain straight line from head to heels"
-            ],
-            "videoUrl": "",
-            "images": [],
-            "tags": [
-                "bodyweight",
-                "push",
-                "chest",
-                "beginner_friendly"
-            ],
-            "caloriesBurnedPerSet": 8,
-            "recommendedSets": "3-4",
-            "recommendedReps": "10-20",
-            "restSeconds": 60
-        },
-        {
-            "title": "Deadlift",
-            "description": "Full-body compound lift focusing on posterior chain",
+            "title": "Deadlift (Kéo tạ)",
+            "description": "Bài tập toàn thân tập trung vào chuỗi cơ sau",
             "primaryMuscle": "back",
             "secondaryMuscles": [
                 "glutes",
                 "hamstrings",
-                "core",
-                "forearms"
+                "core"
             ],
             "equipment": [
                 "barbell"
             ],
             "difficulty": "advanced",
             "instructions": [
-                "Stand with feet hip-width, bar over mid-foot",
-                "Bend at hips and knees to grip bar",
-                "Keep back straight, chest up",
-                "Drive through heels, extend hips and knees",
-                "Stand fully upright",
-                "Lower bar with control"
+                "Chân rộng bằng hông",
+                "Nắm thanh đòn",
+                "Nâng tạ bằng chân và lưng",
+                "Đứng thẳng người"
             ],
-            "videoUrl": "",
+            "videoUrl": "https://www.youtube.com/watch?v=op9kVnSso6Q",
             "images": [],
             "tags": [
                 "compound",
-                "strength",
                 "full_body",
-                "posterior_chain"
+                "strength"
             ],
             "caloriesBurnedPerSet": 25,
             "recommendedSets": "3-5",
@@ -171,32 +95,58 @@
             "restSeconds": 180
         },
         {
-            "title": "Overhead Press",
-            "description": "Shoulder press performed standing with barbell",
+            "title": "Đẩy vai với đòn",
+            "description": "Bài tập đẩy vai thực hiện ở tư thế đứng với tạ đòn",
             "primaryMuscle": "shoulders",
             "secondaryMuscles": [
                 "triceps",
-                "core",
-                "upper_chest"
+                "core"
             ],
             "equipment": [
                 "barbell"
             ],
             "difficulty": "intermediate",
             "instructions": [
-                "Stand with barbell at shoulder height",
-                "Grip slightly wider than shoulders",
-                "Press bar overhead until arms locked",
-                "Lower with control to shoulders",
-                "Keep core tight, avoid leaning back"
+                "Thanh đòn ngang vai",
+                "Đẩy tạ qua đầu",
+                "Khóa khớp tay",
+                "Hạ xuống từ từ"
             ],
-            "videoUrl": "",
+            "videoUrl": "https://www.youtube.com/watch?v=2yjwXTZQDDI",
             "images": [],
             "tags": [
                 "compound",
-                "strength",
                 "push",
                 "shoulders"
+            ],
+            "caloriesBurnedPerSet": 12,
+            "recommendedSets": "3-4",
+            "recommendedReps": "8-10",
+            "restSeconds": 90
+        },
+        {
+            "title": "Hít xà đơn",
+            "description": "Bài tập lưng sử dụng trọng lượng cơ thể",
+            "primaryMuscle": "back",
+            "secondaryMuscles": [
+                "biceps",
+                "shoulders"
+            ],
+            "equipment": [
+                "pull_up_bar"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Treo người lên xà",
+                "Kéo người lên qua xà",
+                "Hạ người xuống từ từ"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=eGo4IYlbE5g",
+            "images": [],
+            "tags": [
+                "compound",
+                "pull",
+                "bodyweight"
             ],
             "caloriesBurnedPerSet": 12,
             "recommendedSets": "3-4",
@@ -204,106 +154,8 @@
             "restSeconds": 90
         },
         {
-            "title": "Plank",
-            "description": "Isometric core strengthening exercise",
-            "primaryMuscle": "core",
-            "secondaryMuscles": [
-                "shoulders",
-                "glutes"
-            ],
-            "equipment": [
-                "none"
-            ],
-            "difficulty": "beginner",
-            "instructions": [
-                "Start in forearm plank position",
-                "Elbows under shoulders",
-                "Body in straight line",
-                "Engage core, squeeze glutes",
-                "Hold position for time",
-                "Breathe normally"
-            ],
-            "videoUrl": "",
-            "images": [],
-            "tags": [
-                "bodyweight",
-                "core",
-                "isometric",
-                "beginner_friendly"
-            ],
-            "caloriesBurnedPerSet": 5,
-            "recommendedSets": "3",
-            "recommendedReps": "30-60s hold",
-            "restSeconds": 60
-        },
-        {
-            "title": "Bicep Curl",
-            "description": "Isolation exercise for biceps",
-            "primaryMuscle": "biceps",
-            "secondaryMuscles": [
-                "forearms"
-            ],
-            "equipment": [
-                "dumbbells"
-            ],
-            "difficulty": "beginner",
-            "instructions": [
-                "Stand with dumbbells at sides",
-                "Curl weights up to shoulders",
-                "Keep elbows stationary",
-                "Squeeze biceps at top",
-                "Lower with control",
-                "Avoid swinging"
-            ],
-            "videoUrl": "",
-            "images": [],
-            "tags": [
-                "isolation",
-                "arms",
-                "biceps",
-                "beginner_friendly"
-            ],
-            "caloriesBurnedPerSet": 6,
-            "recommendedSets": "3-4",
-            "recommendedReps": "10-15",
-            "restSeconds": 60
-        },
-        {
-            "title": "Lunges",
-            "description": "Unilateral leg exercise for strength and balance",
-            "primaryMuscle": "legs",
-            "secondaryMuscles": [
-                "glutes",
-                "core"
-            ],
-            "equipment": [
-                "none"
-            ],
-            "difficulty": "beginner",
-            "instructions": [
-                "Stand with feet hip-width apart",
-                "Step forward with one leg",
-                "Lower hips until both knees at 90 degrees",
-                "Push back to start position",
-                "Alternate legs",
-                "Keep torso upright"
-            ],
-            "videoUrl": "",
-            "images": [],
-            "tags": [
-                "bodyweight",
-                "legs",
-                "unilateral",
-                "beginner_friendly"
-            ],
-            "caloriesBurnedPerSet": 10,
-            "recommendedSets": "3",
-            "recommendedReps": "10-12 per leg",
-            "restSeconds": 60
-        },
-        {
-            "title": "Dumbbell Row",
-            "description": "Back exercise performed with one arm at a time",
+            "title": "Kéo tạ đơn một tay",
+            "description": "Bài tập lưng từng bên",
             "primaryMuscle": "back",
             "secondaryMuscles": [
                 "biceps",
@@ -315,32 +167,706 @@
             ],
             "difficulty": "beginner",
             "instructions": [
-                "Place one knee and hand on bench",
-                "Hold dumbbell in other hand",
-                "Pull dumbbell to hip",
-                "Squeeze shoulder blade",
-                "Lower with control",
-                "Keep back flat"
+                "Đặt tay và gối lên ghế",
+                "Kéo tạ đơn lên hông",
+                "Hạ xuống có kiểm soát"
             ],
-            "videoUrl": "",
+            "videoUrl": "https://www.youtube.com/watch?v=pYcpY20QaE8",
             "images": [],
             "tags": [
                 "unilateral",
                 "pull",
                 "back"
             ],
+            "caloriesBurnedPerSet": 10,
+            "recommendedSets": "3-4",
+            "recommendedReps": "10-12",
+            "restSeconds": 60
+        },
+        {
+            "title": "Hít đất",
+            "description": "Bài tập ngực cổ điển bằng trọng lượng cơ thể",
+            "primaryMuscle": "chest",
+            "secondaryMuscles": [
+                "triceps",
+                "shoulders",
+                "core"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Tư thế plank",
+                "Hạ ngực sát đất",
+                "Đẩy người lên trở lại"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=IODxDxX7oi4",
+            "images": [],
+            "tags": [
+                "bodyweight",
+                "push",
+                "chest"
+            ],
             "caloriesBurnedPerSet": 8,
             "recommendedSets": "3-4",
-            "recommendedReps": "10-12 per arm",
+            "recommendedReps": "10-20",
+            "restSeconds": 60
+        },
+        {
+            "title": "Chùng chân (Lunges)",
+            "description": "Bài tập chân từng bên",
+            "primaryMuscle": "legs",
+            "secondaryMuscles": [
+                "glutes",
+                "core"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Bước một chân tới trước",
+                "Hạ thấp hông",
+                "Đẩy người lùi lại",
+                "Đổi chân"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=QOVaHwm-Q6U",
+            "images": [],
+            "tags": [
+                "bodyweight",
+                "legs"
+            ],
+            "caloriesBurnedPerSet": 10,
+            "recommendedSets": "3",
+            "recommendedReps": "10-12 per leg",
+            "restSeconds": 60
+        },
+        {
+            "title": "Plank",
+            "description": "Bài tập ổn định cơ lõi",
+            "primaryMuscle": "core",
+            "secondaryMuscles": [
+                "shoulders",
+                "glutes"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Chống bằng cẳng tay",
+                "Giữ người thẳng",
+                "Gồng bụng và giữ"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=ASdvN_XEl_c",
+            "images": [],
+            "tags": [
+                "core",
+                "static"
+            ],
+            "caloriesBurnedPerSet": 5,
+            "recommendedSets": "3",
+            "recommendedReps": "45-60s",
+            "restSeconds": 60
+        },
+        {
+            "title": "Cuốn tạ tay trước",
+            "description": "Bài tập cô lập cho cơ tay trước (nhị đầu)",
+            "primaryMuscle": "biceps",
+            "secondaryMuscles": [
+                "forearms"
+            ],
+            "equipment": [
+                "dumbbells"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Cầm tạ đôi",
+                "Cuốn tạ lên vai",
+                "Hạ xuống từ từ"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=ykJmrZ5v0Oo",
+            "images": [],
+            "tags": [
+                "isolation",
+                "arms"
+            ],
+            "caloriesBurnedPerSet": 6,
+            "recommendedSets": "3-4",
+            "recommendedReps": "10-15",
+            "restSeconds": 60
+        },
+        {
+            "title": "Duỗi tay sau qua đầu",
+            "description": "Bài tập duỗi cơ tam đầu qua đầu",
+            "primaryMuscle": "triceps",
+            "secondaryMuscles": [
+                "shoulders"
+            ],
+            "equipment": [
+                "dumbbell"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Cầm tạ qua đầu",
+                "Hạ tạ ra sau gáy",
+                "Duỗi thẳng tay lên"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=nRiJVZDpdL0",
+            "images": [],
+            "tags": [
+                "isolation",
+                "arms"
+            ],
+            "caloriesBurnedPerSet": 7,
+            "recommendedSets": "3",
+            "recommendedReps": "10-15",
+            "restSeconds": 60
+        },
+        {
+            "title": "Đạp đùi máy",
+            "description": "Bài tập chân với máy",
+            "primaryMuscle": "legs",
+            "secondaryMuscles": [
+                "glutes"
+            ],
+            "equipment": [
+                "machine"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Ngồi vào máy",
+                "Đạp bàn đạp ra xa",
+                "Hạ xuống chậm rãi"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=IZxyjW7MPJQ",
+            "images": [],
+            "tags": [
+                "machine",
+                "legs"
+            ],
+            "caloriesBurnedPerSet": 15,
+            "recommendedSets": "3-4",
+            "recommendedReps": "10-12",
+            "restSeconds": 90
+        },
+        {
+            "title": "Kéo xô máy",
+            "description": "Bài tập lưng xô với máy cáp",
+            "primaryMuscle": "back",
+            "secondaryMuscles": [
+                "biceps"
+            ],
+            "equipment": [
+                "cable_machine"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Ngồi vào máy",
+                "Kéo thanh đòn về ngực",
+                "Thả lên từ từ"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=CAwf7n6Luuc",
+            "images": [],
+            "tags": [
+                "machine",
+                "back"
+            ],
+            "caloriesBurnedPerSet": 10,
+            "recommendedSets": "3-4",
+            "recommendedReps": "10-12",
+            "restSeconds": 60
+        },
+        {
+            "title": "Ép ngực tạ đôi",
+            "description": "Bài tập cô lập cơ ngực",
+            "primaryMuscle": "chest",
+            "secondaryMuscles": [
+                "shoulders"
+            ],
+            "equipment": [
+                "dumbbells",
+                "bench"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Nằm trên ghế",
+                "Dang tay sang hai bên",
+                "Khép tay lại phía trên ngực"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=eozdVDA78K0",
+            "images": [],
+            "tags": [
+                "isolation",
+                "chest"
+            ],
+            "caloriesBurnedPerSet": 8,
+            "recommendedSets": "3",
+            "recommendedReps": "12-15",
+            "restSeconds": 60
+        },
+        {
+            "title": "Nâng vai sang bên",
+            "description": "Bài tập cô lập cơ vai giữa",
+            "primaryMuscle": "shoulders",
+            "secondaryMuscles": [
+                "traps"
+            ],
+            "equipment": [
+                "dumbbells"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Đứng thẳng cầm tạ",
+                "Nâng tay sang ngang",
+                "Hạ xuống chậm"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=3VcKaXpzqRo",
+            "images": [],
+            "tags": [
+                "isolation",
+                "shoulders"
+            ],
+            "caloriesBurnedPerSet": 6,
+            "recommendedSets": "3-4",
+            "recommendedReps": "12-15",
+            "restSeconds": 60
+        },
+        {
+            "title": "Gập bụng xoay người kiểu Nga",
+            "description": "Bài tập cơ lõi xoay người",
+            "primaryMuscle": "core",
+            "secondaryMuscles": [
+                "obliques"
+            ],
+            "equipment": [
+                "none",
+                "dumbbell"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Ngồi trên sàn",
+                "Ngả người ra sau",
+                "Xoay thân sang trái và phải"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=wkD8rjkodUI",
+            "images": [],
+            "tags": [
+                "core",
+                "abs"
+            ],
+            "caloriesBurnedPerSet": 8,
+            "recommendedSets": "3",
+            "recommendedReps": "20 total",
+            "restSeconds": 45
+        },
+        {
+            "title": "Đá đùi trước",
+            "description": "Bài tập cô lập cơ đùi trước",
+            "primaryMuscle": "legs",
+            "secondaryMuscles": [],
+            "equipment": [
+                "machine"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Ngồi vào máy",
+                "Đá chân lên thẳng",
+                "Hạ xuống chậm"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=YyvSfVjQeL0",
+            "images": [],
+            "tags": [
+                "isolation",
+                "legs",
+                "machine"
+            ],
+            "caloriesBurnedPerSet": 8,
+            "recommendedSets": "3",
+            "recommendedReps": "12-15",
+            "restSeconds": 60
+        },
+        {
+            "title": "Móc đùi sau",
+            "description": "Bài tập cô lập cơ đùi sau",
+            "primaryMuscle": "hamstrings",
+            "secondaryMuscles": [],
+            "equipment": [
+                "machine"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Nằm sấp trên máy",
+                "Gập chân lên mông",
+                "Hạ xuống"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=ELOCsoDSmrg",
+            "images": [],
+            "tags": [
+                "isolation",
+                "legs",
+                "machine"
+            ],
+            "caloriesBurnedPerSet": 8,
+            "recommendedSets": "3",
+            "recommendedReps": "12-15",
+            "restSeconds": 60
+        },
+        {
+            "title": "Nhón bắp chân",
+            "description": "Bài tập cô lập bắp chân",
+            "primaryMuscle": "calves",
+            "secondaryMuscles": [],
+            "equipment": [
+                "machine",
+                "dumbbell"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Đứng trên mép bục",
+                "Nhón gót lên cao",
+                "Hạ gót xuống thấp"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=gwLzBJYoWlI",
+            "images": [],
+            "tags": [
+                "isolation",
+                "calves"
+            ],
+            "caloriesBurnedPerSet": 5,
+            "recommendedSets": "4",
+            "recommendedReps": "15-20",
+            "restSeconds": 45
+        },
+        {
+            "title": "Leo núi mô phỏng",
+            "description": "Bài tập cardio và cơ lõi động",
+            "primaryMuscle": "core",
+            "secondaryMuscles": [
+                "shoulders",
+                "legs"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Tư thế plank",
+                "Co gối lên ngực luôn phiên",
+                "Tốc độ nhanh"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=nmwgirgXLYM",
+            "images": [],
+            "tags": [
+                "cardio",
+                "core",
+                "bodyweight"
+            ],
+            "caloriesBurnedPerSet": 15,
+            "recommendedSets": "3",
+            "recommendedReps": "30-45s",
+            "restSeconds": 60
+        },
+        {
+            "title": "Burpee",
+            "description": "Bài tập bùng nổ toàn thân",
+            "primaryMuscle": "full_body",
+            "secondaryMuscles": [
+                "legs",
+                "chest",
+                "core"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "advanced",
+            "instructions": [
+                "Ngồi xổm",
+                "Búng chân ra sau plank",
+                "Hít đất",
+                "Thu chân về",
+                "Bật nhảy"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=TU8QYVW0gDU",
+            "images": [],
+            "tags": [
+                "cardio",
+                "high_intensity"
+            ],
+            "caloriesBurnedPerSet": 20,
+            "recommendedSets": "3",
+            "recommendedReps": "10-15",
+            "restSeconds": 90
+        },
+        {
+            "title": "Kéo cáp về mặt",
+            "description": "Bài tập vai sau và chóp xoay vai",
+            "primaryMuscle": "shoulders",
+            "secondaryMuscles": [
+                "upper_back"
+            ],
+            "equipment": [
+                "cable_machine",
+                "rope"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Cầm dây thừng cao ngang mặt",
+                "Kéo về phía mặt",
+                "Ép bả vai sau"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=rep-qVOkqgk",
+            "images": [],
+            "tags": [
+                "isolation",
+                "shoulders",
+                "posture"
+            ],
+            "caloriesBurnedPerSet": 8,
+            "recommendedSets": "3",
+            "recommendedReps": "12-15",
+            "restSeconds": 60
+        },
+        {
+            "title": "Cuốn tạ búa",
+            "description": "Cuốn tay trước với lòng bàn tay hướng vào nhau",
+            "primaryMuscle": "biceps",
+            "secondaryMuscles": [
+                "forearms"
+            ],
+            "equipment": [
+                "dumbbells"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Lòng bàn tay hướng vào nhau",
+                "Cuốn tạ lên",
+                "Hạ xuống"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=zC3nLlEvin4",
+            "images": [],
+            "tags": [
+                "isolation",
+                "arms"
+            ],
+            "caloriesBurnedPerSet": 6,
+            "recommendedSets": "3",
+            "recommendedReps": "10-12",
+            "restSeconds": 60
+        },
+        {
+            "title": "Chống đẩy tay sau",
+            "description": "Bài tập tay sau với trọng lượng cơ thể",
+            "primaryMuscle": "triceps",
+            "secondaryMuscles": [
+                "shoulders",
+                "chest"
+            ],
+            "equipment": [
+                "bars",
+                "bench"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Chống tay lên xà kép",
+                "Hạ người bằng cách gập khuỷu tay",
+                "Đẩy người lên"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=2z8JmcrW-As",
+            "images": [],
+            "tags": [
+                "bodyweight",
+                "arms"
+            ],
+            "caloriesBurnedPerSet": 10,
+            "recommendedSets": "3",
+            "recommendedReps": "8-12",
+            "restSeconds": 90
+        },
+        {
+            "title": "Đẩy ngực ghế dốc",
+            "description": "Đẩy ngực tập trung vào ngực trên",
+            "primaryMuscle": "chest",
+            "secondaryMuscles": [
+                "shoulders",
+                "triceps"
+            ],
+            "equipment": [
+                "barbell",
+                "bench"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Chỉnh ghế dốc 30-45 độ",
+                "Đẩy tạ lên từ ngực",
+                "Hạ xuống"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=SrqOu55lrJU",
+            "images": [],
+            "tags": [
+                "compound",
+                "push",
+                "chest"
+            ],
+            "caloriesBurnedPerSet": 12,
+            "recommendedSets": "3-4",
+            "recommendedReps": "8-10",
+            "restSeconds": 90
+        },
+        {
+            "title": "Romanian Deadlift",
+            "description": "Deadlift tập trung đùi sau và mông",
+            "primaryMuscle": "hamstrings",
+            "secondaryMuscles": [
+                "glutes",
+                "lower_back"
+            ],
+            "equipment": [
+                "barbell"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Gối hơi chùng",
+                "Gập hông",
+                "Hạ tạ dọc theo chân",
+                "Kéo lên"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=JCXUYuzwNrM",
+            "images": [],
+            "tags": [
+                "compound",
+                "legs",
+                "posterior_chain"
+            ],
+            "caloriesBurnedPerSet": 15,
+            "recommendedSets": "3-4",
+            "recommendedReps": "8-12",
+            "restSeconds": 90
+        },
+        {
+            "title": "Squat trước",
+            "description": "Biến thể squat tập trung đùi trước",
+            "primaryMuscle": "legs",
+            "secondaryMuscles": [
+                "core",
+                "upper_back"
+            ],
+            "equipment": [
+                "barbell"
+            ],
+            "difficulty": "advanced",
+            "instructions": [
+                "Thanh đòn đặt trên vai trước",
+                "Giữ khuỷu tay cao",
+                "Ngồi xổm",
+                "Đứng lên"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=HHxN6z0CnLE",
+            "images": [],
+            "tags": [
+                "compound",
+                "legs"
+            ],
+            "caloriesBurnedPerSet": 18,
+            "recommendedSets": "3-4",
+            "recommendedReps": "6-10",
+            "restSeconds": 120
+        },
+        {
+            "title": "Nâng hông (Cây cầu)",
+            "description": "Bài tập cô lập cơ mông",
+            "primaryMuscle": "glutes",
+            "secondaryMuscles": [
+                "hamstrings"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Nằm ngửa",
+                "Gập gối",
+                "Nâng hông lên cao",
+                "Siết chặt mông"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=O-iKaY1_Ilk",
+            "images": [],
+            "tags": [
+                "bodyweight",
+                "glutes"
+            ],
+            "caloriesBurnedPerSet": 8,
+            "recommendedSets": "3",
+            "recommendedReps": "15-20",
+            "restSeconds": 60
+        },
+        {
+            "title": "Squat bật nhảy",
+            "description": "Bài tập sức mạnh bùng nổ cho chân",
+            "primaryMuscle": "legs",
+            "secondaryMuscles": [
+                "calves",
+                "glutes"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "intermediate",
+            "instructions": [
+                "Ngồi xổm xuống",
+                "Bật nhảy thật mạnh lên cao",
+                "Tiếp đất nhẹ nhàng"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=De3Gl-nC7IQ",
+            "images": [],
+            "tags": [
+                "plyometric",
+                "legs",
+                "cardio"
+            ],
+            "caloriesBurnedPerSet": 12,
+            "recommendedSets": "3",
+            "recommendedReps": "10-15",
+            "restSeconds": 90
+        },
+        {
+            "title": "Chùng chân sang bên",
+            "description": "Di chuyển ngang tập chân",
+            "primaryMuscle": "legs",
+            "secondaryMuscles": [
+                "glutes",
+                "groin"
+            ],
+            "equipment": [
+                "none"
+            ],
+            "difficulty": "beginner",
+            "instructions": [
+                "Bước sang ngang",
+                "Gập một bên gối",
+                "Chân kia thẳng",
+                "Trở về"
+            ],
+            "videoUrl": "https://www.youtube.com/watch?v=FUX6Pz8vV0s",
+            "images": [],
+            "tags": [
+                "bodyweight",
+                "legs",
+                "lateral"
+            ],
+            "caloriesBurnedPerSet": 10,
+            "recommendedSets": "3",
+            "recommendedReps": "10 each side",
             "restSeconds": 60
         }
     ],
     "metadata": {
-        "total_exercises": 10,
+        "total_exercises": 30,
         "difficulty_distribution": {
-            "beginner": 5,
-            "intermediate": 4,
-            "advanced": 1
+            "beginner": 13,
+            "intermediate": 14,
+            "advanced": 3
         },
         "muscle_groups_covered": [
             "chest",
@@ -348,7 +874,8 @@
             "legs",
             "shoulders",
             "arms",
-            "core"
+            "core",
+            "full_body"
         ]
     }
 }

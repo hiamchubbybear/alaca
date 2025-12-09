@@ -227,6 +227,7 @@ public class DataSeederService
                     Description = workoutDto.Description,
                     Intensity = workoutDto.Intensity,
                     DurationMin = workoutDto.EstimatedDuration,
+                    VideoUrl = workoutDto.VideoUrl,
                     CreatedAt = DateTime.UtcNow
                 };
 
@@ -386,6 +387,9 @@ public class WorkoutDataItem
 
     [System.Text.Json.Serialization.JsonPropertyName("estimatedDuration")]
     public int EstimatedDuration { get; set; }
+
+    [System.Text.Json.Serialization.JsonPropertyName("videoUrl")]
+    public string VideoUrl { get; set; } = string.Empty;
 
     [System.Text.Json.Serialization.JsonPropertyName("exercises")]
     public List<WorkoutExerciseDataItem> Exercises { get; set; } = new();
