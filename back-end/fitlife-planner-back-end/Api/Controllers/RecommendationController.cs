@@ -168,7 +168,10 @@ public class RecommendationController : ControllerBase
                 // Focus on compound exercises for beginners, more variety for advanced
                 if (difficulty == "beginner")
                 {
-                    query = query.Where(e => e.Tags.Contains("compound") || e.Tags.Contains("beginner"));
+                    query = query.Where(e => e.Tags.Contains("compound") ||
+                                             e.Tags.Contains("bodyweight") ||
+                                             e.Tags.Contains("machine") ||
+                                             e.Tags.Contains("isolation"));
                 }
             }
 
@@ -176,6 +179,21 @@ public class RecommendationController : ControllerBase
             query = query.Where(e => e.Difficulty == difficulty || e.Difficulty == "beginner");
 
             var exercises = await query.Take(20).ToListAsync();
+
+            // Fallback: if no exercises found with specific filters, get any exercises for the difficulty
+            if (!exercises.Any())
+            {
+                var fallbackQuery = _db.ExerciseLibrary.AsQueryable();
+                // Try relaxed difficulty filter
+                fallbackQuery = fallbackQuery.Where(e => e.Difficulty == difficulty || e.Difficulty == "beginner");
+                exercises = await fallbackQuery.Take(20).ToListAsync();
+            }
+
+            // Ultimate fallback: get any exercises
+            if (!exercises.Any())
+            {
+                exercises = await _db.ExerciseLibrary.Take(20).ToListAsync();
+            }
 
             var result = exercises.Select(e => new
             {
@@ -434,25 +452,53 @@ public class RecommendationController : ControllerBase
 
     private async Task<List<object>> GetExercisesByGoal(string goal, string difficulty)
     {
-        var query = _db.ExerciseLibrary.AsQueryable();
+        var baseQuery = _db.ExerciseLibrary.AsQueryable();
 
         // Filter by difficulty
         if (!string.IsNullOrEmpty(difficulty))
         {
-            query = query.Where(e => e.Difficulty == difficulty || e.Difficulty == "beginner");
+            var diffLower = difficulty.ToLower();
+            if (diffLower == "beginner")
+                baseQuery = baseQuery.Where(e => e.Difficulty == "beginner");
+            else
+                baseQuery = baseQuery.Where(e => e.Difficulty == difficulty || e.Difficulty == "beginner");
         }
 
+        List<ExerciseLibrary> exercises;
+
         // Filter by goal-specific tags
-        var exercises = goal.ToLower() switch
+        if (goal.ToLower() == "weight_loss")
         {
-            "weight_loss" => await query.Where(e => e.Tags.Contains("cardio") ||
-                                                    e.Tags.Contains("bodyweight"))
-                                       .Take(20).ToListAsync(),
-            "muscle_gain" => await query.Where(e => e.Tags.Contains("strength") ||
-                                                    e.Tags.Contains("compound"))
-                                        .Take(20).ToListAsync(),
-            _ => await query.Take(20).ToListAsync()
-        };
+            exercises = await baseQuery.Where(e => e.Tags.Contains("cardio") ||
+                                                 e.Tags.Contains("bodyweight") ||
+                                                 e.Tags.Contains("high_intensity") ||
+                                                 e.Tags.Contains("full_body") ||
+                                                 e.Tags.Contains("legs") ||
+                                                 e.Tags.Contains("compound"))
+                                    .Take(20).ToListAsync();
+        }
+        else if (goal.ToLower() == "muscle_gain")
+        {
+            exercises = await baseQuery.Where(e => e.Tags.Contains("strength") ||
+                                                 e.Tags.Contains("compound") ||
+                                                 e.Tags.Contains("isolation") ||
+                                                 e.Tags.Contains("machine") ||
+                                                 e.Tags.Contains("bodyweight") ||
+                                                 e.Tags.Contains("push") ||
+                                                 e.Tags.Contains("pull") ||
+                                                 e.Tags.Contains("legs"))
+                                    .Take(20).ToListAsync();
+        }
+        else
+        {
+            exercises = await baseQuery.Take(20).ToListAsync();
+        }
+
+        // Fallback if specific filtering yielded zero results
+        if (!exercises.Any())
+        {
+            exercises = await baseQuery.Take(20).ToListAsync();
+        }
 
         return exercises.Select(e => new
         {
@@ -508,28 +554,46 @@ public class RecommendationController : ControllerBase
 
     private async Task<object> GetMealRecommendations(double targetCalories, Dictionary<string, int> macros, string type)
     {
-        var foods = await _db.FoodItems
+        var query = _db.FoodItems
             .Where(f => f.CaloriesKcal <= targetCalories * 1.2)
-            .OrderBy(f => Math.Abs((double)f.CaloriesKcal - targetCalories))
-            .Take(5)
-            .Select(f => new
-            {
-                f.Id,
-                f.Name,
-                f.CaloriesKcal,
-                f.ProteinG,
-                f.CarbsG,
-                f.FatG,
-                f.ServingSize,
-                f.ServingAmount
-            })
-            .ToListAsync();
+            .OrderBy(f => Math.Abs((double)(f.CaloriesKcal ?? 0) - targetCalories));
+
+        var foodsList = await query.Take(5).Select(f => new
+        {
+            f.Id,
+            f.Name,
+            f.CaloriesKcal,
+            f.ProteinG,
+            f.CarbsG,
+            f.FatG,
+            f.ServingSize,
+            f.ServingAmount
+        }).ToListAsync();
+
+        if (!foodsList.Any())
+        {
+            // Fallback: get foods closest to target calories without upper bound
+            foodsList = await _db.FoodItems
+                .OrderBy(f => Math.Abs((double)(f.CaloriesKcal ?? 0) - targetCalories))
+                .Take(5)
+                .Select(f => new
+                {
+                    f.Id,
+                    f.Name,
+                    f.CaloriesKcal,
+                    f.ProteinG,
+                    f.CarbsG,
+                    f.FatG,
+                    f.ServingSize,
+                    f.ServingAmount
+                }).ToListAsync();
+        }
 
         return new
         {
             targetCalories = (int)targetCalories,
             type,
-            recommendedFoods = foods
+            recommendedFoods = foodsList
         };
     }
 
