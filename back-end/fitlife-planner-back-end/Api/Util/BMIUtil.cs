@@ -14,82 +14,82 @@ public class BMIUtil
         {
             Min = float.MinValue, Max = 16f,
             Plan = new BMIGoalPlan
-                { PlanId = 1, Assessment = "Underweight - Severe", WeeklyTargetKg = 0.5f, ExercisePerWeek = 2 }
+                { PlanId = 1, Assessment = "Thiếu cân nặng - Mức độ nghiêm trọng", WeeklyTargetKg = 0.5f, ExercisePerWeek = 2, NextGoal = "Tăng cân từ từ để đạt cân nặng khỏe mạnh" }
         },
         new()
         {
             Min = 16f, Max = 17f,
             Plan = new BMIGoalPlan
-                { PlanId = 2, Assessment = "Underweight - Moderate", WeeklyTargetKg = 0.4f, ExercisePerWeek = 2 }
+                { PlanId = 2, Assessment = "Thiếu cân nặng - Mức độ trung bình", WeeklyTargetKg = 0.4f, ExercisePerWeek = 2, NextGoal = "Tăng cân đều đặn để cải thiện sức khỏe" }
         },
         new()
         {
             Min = 17f, Max = 18f,
             Plan = new BMIGoalPlan
-                { PlanId = 3, Assessment = "Underweight - Mild", WeeklyTargetKg = 0.3f, ExercisePerWeek = 2 }
+                { PlanId = 3, Assessment = "Thiếu cân nặng - Mức độ nhẹ", WeeklyTargetKg = 0.3f, ExercisePerWeek = 2, NextGoal = "Tăng cân để vào vùng cân nặng lý tưởng" }
         },
         new()
         {
             Min = 18f, Max = 18.5f,
             Plan = new BMIGoalPlan
-                { PlanId = 4, Assessment = "Underweight - Slight", WeeklyTargetKg = 0.25f, ExercisePerWeek = 2 }
+                { PlanId = 4, Assessment = "Thiếu cân nặng - Mức độ rất nhẹ", WeeklyTargetKg = 0.25f, ExercisePerWeek = 2, NextGoal = "Tăng cân nhẹ để đạt BMI chuẩn" }
         },
         new()
         {
             Min = 18.5f, Max = 19.5f,
-            Plan = new BMIGoalPlan { PlanId = 5, Assessment = "Normal - Low", WeeklyTargetKg = 0f, ExercisePerWeek = 3 }
+            Plan = new BMIGoalPlan { PlanId = 5, Assessment = "Cân nặng bình thường - Mức thấp", WeeklyTargetKg = 0f, ExercisePerWeek = 3, NextGoal = "Giữ cân hoặc tăng nhẹ để đạt mức tối ưu" }
         },
         new()
         {
             Min = 19.5f, Max = 21f,
-            Plan = new BMIGoalPlan { PlanId = 6, Assessment = "Normal - Mid", WeeklyTargetKg = 0f, ExercisePerWeek = 3 }
+            Plan = new BMIGoalPlan { PlanId = 6, Assessment = "Cân nặng bình thường - Mức trung bình", WeeklyTargetKg = 0f, ExercisePerWeek = 3, NextGoal = "Duy trì cân nặng hiện tại, rất lý tưởng" }
         },
         new()
         {
             Min = 21f, Max = 23f,
             Plan = new BMIGoalPlan
-                { PlanId = 7, Assessment = "Normal - High", WeeklyTargetKg = 0f, ExercisePerWeek = 3 }
+                { PlanId = 7, Assessment = "Cân nặng bình thường - Mức cao", WeeklyTargetKg = 0f, ExercisePerWeek = 3, NextGoal = "Duy trì cân nặng, tăng cơ giảm mỡ" }
         },
         new()
         {
             Min = 23f, Max = 25f,
-            Plan = new BMIGoalPlan { PlanId = 8, Assessment = "Normal - Top", WeeklyTargetKg = 0f, ExercisePerWeek = 3 }
+            Plan = new BMIGoalPlan { PlanId = 8, Assessment = "Cân nặng bình thường - Mức giới hạn trên", WeeklyTargetKg = 0f, ExercisePerWeek = 3, NextGoal = "Giữ cân hoặc giảm nhẹ để tránh thừa cân" }
         },
         new()
         {
             Min = 25f, Max = 27f,
             Plan = new BMIGoalPlan
-                { PlanId = 9, Assessment = "Overweight - Low", WeeklyTargetKg = -0.25f, ExercisePerWeek = 4 }
+                { PlanId = 9, Assessment = "Thừa cân - Mức độ nhẹ", WeeklyTargetKg = -0.25f, ExercisePerWeek = 4, NextGoal = "Giảm cân nhẹ để trở về BMI chuẩn" }
         },
         new()
         {
             Min = 27f, Max = 29f,
             Plan = new BMIGoalPlan
-                { PlanId = 10, Assessment = "Overweight - Mid", WeeklyTargetKg = -0.4f, ExercisePerWeek = 4 }
+                { PlanId = 10, Assessment = "Thừa cân - Mức độ trung bình", WeeklyTargetKg = -0.4f, ExercisePerWeek = 4, NextGoal = "Giảm cân đều đặn để cải thiện sức khỏe" }
         },
         new()
         {
             Min = 29f, Max = 30f,
             Plan = new BMIGoalPlan
-                { PlanId = 11, Assessment = "Overweight - High", WeeklyTargetKg = -0.5f, ExercisePerWeek = 4 }
+                { PlanId = 11, Assessment = "Thừa cân - Mức độ cao", WeeklyTargetKg = -0.5f, ExercisePerWeek = 4, NextGoal = "Giảm cân tích cực để tránh béo phì" }
         },
         new()
         {
             Min = 30f, Max = 32f,
             Plan = new BMIGoalPlan
-                { PlanId = 12, Assessment = "Obese - Low", WeeklyTargetKg = -0.5f, ExercisePerWeek = 5 }
+                { PlanId = 12, Assessment = "Béo phì - Độ 1", WeeklyTargetKg = -0.5f, ExercisePerWeek = 5, NextGoal = "Giảm cân để giảm nguy cơ bệnh tật" }
         },
         new()
         {
             Min = 32f, Max = 35f,
             Plan = new BMIGoalPlan
-                { PlanId = 13, Assessment = "Obese - Mid", WeeklyTargetKg = -0.75f, ExercisePerWeek = 5 }
+                { PlanId = 13, Assessment = "Béo phì - Độ 2", WeeklyTargetKg = -0.75f, ExercisePerWeek = 5, NextGoal = "Giảm cân nghiêm túc, tư vấn bác sĩ" }
         },
         new()
         {
             Min = 35f, Max = float.MaxValue,
             Plan = new BMIGoalPlan
-                { PlanId = 14, Assessment = "Obese - High", WeeklyTargetKg = -1f, ExercisePerWeek = 6 }
+                { PlanId = 14, Assessment = "Béo phì - Độ 3 (Nghiêm trọng)", WeeklyTargetKg = -1f, ExercisePerWeek = 6, NextGoal = "Giảm cân khẩn cấp, cần sự hỗ trợ y tế" }
         },
     };
 

@@ -6,6 +6,7 @@ public class BMIGoalPlan
     public string Assessment { get; set; } = "";
     public float WeeklyTargetKg { get; set; }
     public int ExercisePerWeek { get; set; }
+    public string NextGoal { get; set; } = "";
 }
 
 public class BmiPlanRange

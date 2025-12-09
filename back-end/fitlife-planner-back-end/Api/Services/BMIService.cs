@@ -30,23 +30,23 @@ public class BMIService
         {
             var userId = _userContext.User.userId;
             var profileId = _userContext.User.profileId;
-            _logger.LogInformation("Received BMI input: height={Height}, weight={Weight}",
+            _logger.LogInformation("Nhận dữ liệu BMI: chiều cao={Height}, cân nặng={Weight}",
                 requestDto.HeightCm, requestDto.WeightKg);
 
             if (requestDto.HeightCm <= 0 || requestDto.WeightKg <= 0)
-                throw new InvalidDataException("Height and weight must be positive");
+                throw new InvalidDataException("Chiều cao và cân nặng phải là số dương");
 
             double bmi = _bmiUtil.CalculateBMI(requestDto.HeightCm, requestDto.WeightKg);
 
             var goalPlan = _bmiUtil.GetGoalPlanByBmi(bmi);
             if (goalPlan == null)
-                throw new Exception("BMI goal plan not found");
+                throw new Exception("Không tìm thấy kế hoạch BMI phù hợp");
             var profile = await _dbContext.Profiles
                 .FirstOrDefaultAsync(p => p.ProfileId == profileId);
             if (profile.UserId != userId)
-                throw new Exception("User id  does not match");
+                throw new Exception("ID người dùng không khớp");
             if (profile == null)
-                throw new Exception("Profile not found. Cannot create BMI record.");
+                throw new Exception("Không tìm thấy hồ sơ. Không thể tạo bản ghi BMI.");
             var record = new BMIRecord(
                 profileId: profileId,
                 heightCm: requestDto.HeightCm,
@@ -67,7 +67,7 @@ public class BMIService
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Failed to create BMI record");
+            _logger.LogError(e, "Tạo bản ghi BMI thất bại");
             throw;
         }
     }
@@ -77,10 +77,10 @@ public class BMIService
     {
         Guid userId = _userContext.User.userId;
         var profileId = _userContext.User.profileId;
-        _logger.LogInformation("User id choose plan is {}", userId);
+        _logger.LogInformation("Người dùng ID {} chọn kế hoạch", userId);
         var record =
             await _dbContext.BmiRecords.FirstOrDefaultAsync(r => r.ProfileId == profileId && r.IsCurrent == true);
-        if (record == null) throw new KeyNotFoundException("BMI record not found");
+        if (record == null) throw new KeyNotFoundException("Không tìm thấy bản ghi BMI");
         record.PracticeLevel = request.PracticeLevel;
         record.ActivityFactor = request.ActivityFactor;
         var goalPlan = _bmiUtil.GetGoalPlanByBmi(record.BMI);
