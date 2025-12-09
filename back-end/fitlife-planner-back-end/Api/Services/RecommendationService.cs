@@ -372,6 +372,13 @@ public class RecommendationService
             if (exercise.PrimaryMuscle?.ToLower().Contains("back") == true) priority += 25;
             if (exercise.PrimaryMuscle?.ToLower().Contains("legs") == true) priority += 25;
         }
+        else
+        {
+            // Maintenance - Balanced
+            if (exercise.Tags?.ToLower().Contains("compound") == true) priority += 20;
+            if (exercise.PrimaryMuscle?.ToLower().Contains("core") == true) priority += 15;
+            if (exercise.PrimaryMuscle?.ToLower().Contains("full") == true) priority += 15;
+        }
 
         return priority;
     }

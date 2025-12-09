@@ -3,6 +3,7 @@ import { createBmiRecord, getMyBmiRecords, type PracticeLevel } from '../../../s
 import { getExerciseRecommendations, getExercises, type Exercise } from '../../../shared/api/exerciseApi'
 import { createCustomWeeklySchedule, getMySchedule, type ScheduleResponse } from '../../../shared/api/workoutScheduleApi'
 import { uploadImage } from '../../../shared/services/cloudinaryService'
+import { ChatWidget } from '../../chat/components/ChatWidget'
 import { getProfile, updateProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { SocialPage } from '../../social/components/SocialPage'
 
@@ -115,7 +116,6 @@ export function LoggedInLayout({
   const [exerciseError, setExerciseError] = useState<string | null>(null)
   const [exercises, setExercises] = useState<Exercise[]>([])
   const [recommendedExercises, setRecommendedExercises] = useState<Exercise[]>([])
-  const [recommendedLoading, setRecommendedLoading] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarTab, setSidebarTab] = useState<'recommended' | 'library'>('recommended')
   const [sidebarTarget, setSidebarTarget] = useState<{ session: number; row: number } | null>(null)
@@ -378,11 +378,7 @@ export function LoggedInLayout({
 
         if (bmiRes.success && bmiRes.data && bmiRes.data.length > 0) {
           const latest = bmiRes.data.sort(
-            (a, b) => {
-              const dateA = a.recordedAt || a.RecordedAt || ''
-              const dateB = b.recordedAt || b.RecordedAt || ''
-              return new Date(dateB).getTime() - new Date(dateA).getTime()
-            }
+            (a, b) => new Date(b.recordedAt || b.RecordedAt || 0).getTime() - new Date(a.recordedAt || a.RecordedAt || 0).getTime()
           )[0]
 
           // Extract dailyCalories and recommendedSessions from Goal if available
@@ -414,12 +410,12 @@ export function LoggedInLayout({
           setHealthMetrics({
             weightKg: latest.weightKg || 0,
             heightM: latest.heightCm ? latest.heightCm / 100 : 0,
-            activityFactor: latest.activityFactor || latest.ActivityFactor || 1.55,
-            practiceLevel: (latest.practiceLevel || latest.PracticeLevel || 'MEDIUM') as PracticeLevel,
-            bmi: latest.bmi || latest.BMI,
-            assessment: latest.assessment || latest.Assessment,
-            dailyCalories: dailyCalories,
-            recommendedSessions: recommendedSessions
+            activityFactor: latest.activityFactor || 1.2,
+            practiceLevel: latest.practiceLevel || 'MEDIUM',
+            bmi: latest.bmi,
+            assessment: latest.assessment,
+            // dailyCalories is not on BmiRecord type, defaulting
+            dailyCalories: undefined
           })
 
           // Only if no custom schedule is found, use BMI logic (handled by default effect)
@@ -463,7 +459,6 @@ export function LoggedInLayout({
 
   useEffect(() => {
     if (activeSection !== 'training') return
-    let cancelled = false
 
     // Load exercise library for selection
     ;(async () => {
@@ -486,7 +481,6 @@ export function LoggedInLayout({
     // Load recommended exercises based on BMI
     ;(async () => {
       try {
-        setRecommendedLoading(true)
         const response = await getExerciseRecommendations()
         if (response.data?.exercises) {
           setRecommendedExercises(response.data.exercises)
@@ -494,13 +488,9 @@ export function LoggedInLayout({
       } catch (error) {
         console.error('Failed to load recommended exercises:', error)
       } finally {
-        setRecommendedLoading(false)
       }
     })()
 
-    return () => {
-      cancelled = true
-    }
   }, [activeSection])
 
   const handleSelectSection = async (section: MainSection) => {
@@ -622,7 +612,7 @@ export function LoggedInLayout({
       const sessions = sessionCards.map(sessionNumber => {
         const sessionExerciseRequests = (sessionItems[sessionNumber] || [])
           .filter(item => item.name) // Only include rows with exercises
-          .map((item, index) => {
+          .map((item) => {
             // Find exercise ID from library
             const exercise = [...recommendedExercises, ...exercises].find(
               ex => ex.title === item.name
@@ -1860,6 +1850,7 @@ export function LoggedInLayout({
           </>
         )}
       </section>
+      <ChatWidget />
 
       {/* Exercise Detail Modal */}
       {exerciseDetailModal && (
