@@ -261,9 +261,9 @@ export function LoggedInLayout({
         setHealthLoading(true)
         setHealthError(null)
         const res = await getMyBmiRecords()
-        
+
         const metrics = loadHealthMetricsFromResponse(res)
-        
+
         if (metrics) {
           setHealthForm({
             weightKg: metrics.weightKg ? metrics.weightKg.toString() : '',
@@ -367,7 +367,7 @@ export function LoggedInLayout({
             return
           }
         }
-        
+
         setTrainingLoading(true)
 
         // Parallel fetch: BMI records and Custom Schedule
@@ -415,7 +415,7 @@ export function LoggedInLayout({
             bmi: latest.bmi,
             assessment: latest.assessment,
             // dailyCalories is not on BmiRecord type, defaulting
-            dailyCalories: undefined
+            dailyCalories: dailyCalories
           })
 
           // Only if no custom schedule is found, use BMI logic (handled by default effect)
@@ -495,7 +495,7 @@ export function LoggedInLayout({
 
   const handleSelectSection = async (section: MainSection) => {
     setHealthNotice(null)
-    
+
     // If user tries to access training page without health metrics, redirect to health page
     if (section === 'training') {
       // Check if we have health metrics
@@ -514,7 +514,7 @@ export function LoggedInLayout({
         } catch (error) {
           console.error('Failed to check health metrics:', error)
         }
-        
+
         // No health metrics found, redirect to health page
         setHealthNotice('Vui lòng nhập chỉ số sức khoẻ trước khi sử dụng tính năng Tập luyện.')
         onSelectSection('health')
@@ -522,7 +522,7 @@ export function LoggedInLayout({
         return
       }
     }
-    
+
     onSelectSection(section)
   }
 
@@ -553,32 +553,32 @@ export function LoggedInLayout({
   // Convert YouTube URL to embed URL
   const convertToEmbedUrl = (url: string | null | undefined): string | null => {
     if (!url) return null
-    
+
     // If already an embed URL, return as is
     if (url.includes('/embed/')) {
       return url
     }
-    
+
     // Extract video ID from various YouTube URL formats
     let videoId: string | null = null
-    
+
     // Format: https://www.youtube.com/watch?v=VIDEO_ID
     const watchMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)
     if (watchMatch) {
       videoId = watchMatch[1]
     }
-    
+
     // Format: https://www.youtube.com/v/VIDEO_ID
     const vMatch = url.match(/youtube\.com\/v\/([^&\n?#]+)/)
     if (vMatch) {
       videoId = vMatch[1]
     }
-    
+
     // If we found a video ID, return embed URL
     if (videoId) {
       return `https://www.youtube.com/embed/${videoId}`
     }
-    
+
     // If no video ID found, return null
     return null
   }
@@ -888,7 +888,7 @@ export function LoggedInLayout({
 
       setHealthSuccess('Cập nhật thành công')
       setIsEditingHealth(false) // Switch to view mode after saving
-      
+
       // If user is on training page, refresh training data to update recommended sessions
       if (activeSection === 'training') {
         try {
@@ -941,7 +941,7 @@ export function LoggedInLayout({
           console.error('Failed to refresh training data:', error)
         }
       }
-      
+
       // Auto-hide success message after 3 seconds
       setTimeout(() => setHealthSuccess(null), 3000)
     } catch {
@@ -998,7 +998,7 @@ export function LoggedInLayout({
                   return null
               }
             }
-            
+
             return (
             <li key={section}>
               <button
@@ -1375,7 +1375,7 @@ export function LoggedInLayout({
           <div className="health-metrics">
             <h1 className="main-content-title">Chỉ Số Sức Khoẻ</h1>
             <p className="main-content-subtitle">
-              {isEditingHealth 
+              {isEditingHealth
                 ? 'Nhập cân nặng, chiều cao và mức vận động để lưu vào hồ sơ.'
                 : 'Xem và quản lý chỉ số sức khoẻ của bạn.'}
             </p>
@@ -1454,9 +1454,9 @@ export function LoggedInLayout({
                 <button type="submit" className="btn-primary" disabled={healthSaving}>
                     {healthSaving ? 'Đang lưu...' : 'Lưu'}
                   </button>
-                  <button 
-                    type="button" 
-                    className="btn-secondary" 
+                  <button
+                    type="button"
+                    className="btn-secondary"
                     onClick={() => {
                       setIsEditingHealth(false)
                       setHealthError(null)
@@ -1519,9 +1519,9 @@ export function LoggedInLayout({
                   <p className="muted">Bạn chưa có dữ liệu chỉ số sức khoẻ. Hãy nhập thông tin để bắt đầu.</p>
                 )}
                 <div className="health-actions">
-                  <button 
-                    type="button" 
-                    className="btn-primary" 
+                  <button
+                    type="button"
+                    className="btn-primary"
                     onClick={() => setIsEditingHealth(true)}
                   >
                     Chỉnh sửa
