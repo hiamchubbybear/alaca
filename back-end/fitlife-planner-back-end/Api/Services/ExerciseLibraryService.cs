@@ -105,6 +105,10 @@ public class ExerciseLibraryService
             VideoUrl = exercise.VideoUrl,
             Images = exercise.Images,
             Tags = exercise.Tags?.Split(',').ToList() ?? new List<string>(),
+            CaloriesBurnedPerSet = exercise.CaloriesBurnedPerSet,
+            RecommendedSets = exercise.RecommendedSets,
+            RecommendedReps = exercise.RecommendedReps,
+            RestSeconds = exercise.RestSeconds,
             CreatedAt = exercise.CreatedAt
         };
     }
