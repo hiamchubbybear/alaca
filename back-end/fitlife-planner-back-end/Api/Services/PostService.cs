@@ -54,11 +54,50 @@ public class PostService(
         );
     }
 
-    public async Task<PaginatedList<GetPostResponseDto>> GetAllPostsByLikeAsync(PaginationParameters paginationParameters)
+    public async Task<PaginatedList<GetPostResponseDto>> GetAllPostsAsyncByUser(PaginationParameters paginationParameters)
+    {
+        // Get posts with profiles included
+        var query = dbContext.Posts
+            .Where(p => p.Status == Status.Accept)
+            .Include(p => p.Profile)
+            .OrderByDescending(p => p.CreatedAt);
+
+        var totalCount = await query.CountAsync();
+
+        var posts = await query
+            .Skip((paginationParameters.PageNumber - 1) * paginationParameters.PageSize)
+            .Take(paginationParameters.PageSize)
+            .ToListAsync();
+
+        var postDtos = new List<GetPostResponseDto>();
+
+        foreach (var post in posts)
+        {
+            if (post.Profile != null)
+            {
+                var user = await dbContext.Users.FindAsync(post.Profile.UserId);
+                if (user != null)
+                {
+                    var currentUserId = userContext.User.userId;
+                    postDtos.Add(mapping.GetPostMapper(post, post.Profile, user, currentUserId));
+                }
+            }
+        }
+
+        return new PaginatedList<GetPostResponseDto>(
+            postDtos,
+            totalCount,
+            paginationParameters.PageNumber,
+            paginationParameters.PageSize
+        );
+    }
+
+    public async Task<PaginatedList<GetPostResponseDto>> GetAllPostsByLikeAsync(
+        PaginationParameters paginationParameters)
     {
         // Get only accepted posts with profiles included, ordered by like count
         var query = dbContext.Posts
-            .Where(p => p.Status == Status.Accept)  // Only show accepted posts
+            .Where(p => p.Status == Status.Accept) // Only show accepted posts
             .Include(p => p.Profile)
             .OrderByDescending(p => p.LikeCount);
 
@@ -100,12 +139,12 @@ public class PostService(
         }
 
         var post = await dbContext.Posts
-            .Include(p => p.Profile)
-            .FirstOrDefaultAsync(p => p.PostId == postId)
-            ?? throw new KeyNotFoundException("Post not found");
+                       .Include(p => p.Profile)
+                       .FirstOrDefaultAsync(p => p.PostId == postId)
+                   ?? throw new KeyNotFoundException("Post not found");
 
         var user = await dbContext.Users.FindAsync(post.Profile.UserId)
-            ?? throw new KeyNotFoundException("User not found");
+                   ?? throw new KeyNotFoundException("User not found");
 
         var currentUserId = userContext.User.userId;
         var response = mapping.GetPostMapper(post, post.Profile, user, currentUserId);
@@ -121,7 +160,7 @@ public class PostService(
             throw new KeyNotFoundException("Profile not found");
 
         var user = await dbContext.Users.FindAsync(userId)
-            ?? throw new KeyNotFoundException("User not found");
+                   ?? throw new KeyNotFoundException("User not found");
 
         var posts = await dbContext.Posts
             .Where(p => p.ProfileId == profile.ProfileId)
@@ -245,7 +284,7 @@ public class PostService(
         return true;
     }
 
-    public async Task<CreatePostResponseDto> CreatePost( CreatePostRequestDto dto)
+    public async Task<CreatePostResponseDto> CreatePost(CreatePostRequestDto dto)
     {
         var profileId = userContext.User.profileId;
         var post = mapping.InsertPostMapper(dto, profileId);
@@ -303,7 +342,7 @@ public class PostService(
 
         // Check if post exists
         var post = await dbContext.Posts.FindAsync(postId)
-            ?? throw new KeyNotFoundException("Post not found");
+                   ?? throw new KeyNotFoundException("Post not found");
 
         // Check if user already voted
         var existingVote = await dbContext.PostVotes
@@ -370,7 +409,7 @@ public class PostService(
             return false; // No vote to remove
 
         var post = await dbContext.Posts.FindAsync(postId)
-            ?? throw new KeyNotFoundException("Post not found");
+                   ?? throw new KeyNotFoundException("Post not found");
 
         // Decrease vote count
         if (vote.VoteType == VoteType.Upvote)

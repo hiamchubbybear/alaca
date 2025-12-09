@@ -38,9 +38,9 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
     }
 
 
-    // [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     [Authorize]
-    [HttpGet("all")]
+    [HttpGet("/admin/all")]
     public async Task<IActionResult> GetAllPost([FromQuery] PaginationParameters pagination)
     {
         var posts = await postService.GetAllPostsAsync(pagination);
@@ -53,6 +53,19 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
         return response.ToActionResult();
     }
 
+    [Authorize]
+    [HttpGet("/all")]
+    public async Task<IActionResult> GetAllPostByUser([FromQuery] PaginationParameters pagination)
+    {
+        var posts = await postService.GetAllPostsAsyncByUser(pagination);
+        var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
+            success: true,
+            message: "Successfully retrieved posts",
+            data: posts,
+            statusCode: HttpStatusCode.OK
+        );
+        return response.ToActionResult();
+    }
     // Public feed - no auth required
     [HttpGet("feed")]
     [Authorize]
