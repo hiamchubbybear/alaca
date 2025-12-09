@@ -25,11 +25,14 @@ public class FoodItemController : ControllerBase
 
     [Authorize]
     [HttpGet]
-    public async Task<IActionResult> GetAllFoodItems([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    public async Task<IActionResult> GetAllFoodItems(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 20,
+        [FromQuery] string? category = null)
     {
         try
         {
-            var foodItems = await _foodItemService.GetAllFoodItems(page, pageSize);
+            var foodItems = await _foodItemService.GetAllFoodItems(page, pageSize, category);
             var response = new ApiResponse<List<GetFoodItemResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved food items",

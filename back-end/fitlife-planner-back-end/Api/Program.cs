@@ -167,8 +167,8 @@ if (app.Environment.IsDevelopment())
 }
 
 // CRITICAL: Map controllers to enable API routes
-app.MapControllers();
 
+app.MapControllers();
 app.Run();
 
 public partial class Program

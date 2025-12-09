@@ -14,7 +14,8 @@ public class FoodItem
     public decimal? FatG { get; set; }
     public decimal? FiberG { get; set; }
     public int? SodiumMg { get; set; }
-    public string? Micronutrients { get; set; } 
+    public string? Micronutrients { get; set; }
+    public string? Category { get; set; } // protein, carbs, vegetables, fruits, dairy, etc.
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
 }

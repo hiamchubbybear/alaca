@@ -12,4 +12,5 @@ public class CreateFoodItemRequestDTO
     public decimal? FiberG { get; set; }
     public int? SodiumMg { get; set; }
     public string? Micronutrients { get; set; } // JSON
+    public string? Category { get; set; }
 }

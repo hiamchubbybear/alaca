@@ -12,4 +12,5 @@ public class UpdateFoodItemRequestDTO
     public decimal? FiberG { get; set; }
     public int? SodiumMg { get; set; }
     public string? Micronutrients { get; set; }
+    public string? Category { get; set; }
 }

@@ -1,9 +1,12 @@
 import { useState } from 'react'
-import { UserManagement } from './UserManagement'
-import { Analytics } from './Analytics'
 import './AdminDashboard.css'
+import { Analytics } from './Analytics'
+import { ChallengeManagement } from './ChallengeManagement'
+import { NutritionManagement } from './NutritionManagement'
+import { PostManagement } from './PostManagement'
+import { UserManagement } from './UserManagement'
 
-type AdminSection = 'users' | 'analytics' | 'posts'
+type AdminSection = 'users' | 'analytics' | 'posts' | 'nutrition' | 'challenges'
 
 export function AdminDashboard() {
   const [activeSection, setActiveSection] = useState<AdminSection>('users')
@@ -32,16 +35,28 @@ export function AdminDashboard() {
             Quản Lý Người Dùng
           </button>
           <button
-            className={activeSection === 'analytics' ? 'active' : ''}
-            onClick={() => { setActiveSection('analytics'); setShowSidebar(false) }}
+            className={activeSection === 'nutrition' ? 'active' : ''}
+            onClick={() => { setActiveSection('nutrition'); setShowSidebar(false) }}
           >
-            Phân Tích
+            Quản Lý Dinh Dưỡng
           </button>
           <button
             className={activeSection === 'posts' ? 'active' : ''}
             onClick={() => { setActiveSection('posts'); setShowSidebar(false) }}
           >
-            Bài Viết
+            Quản Lý Bài Đăng
+          </button>
+          <button
+            className={activeSection === 'challenges' ? 'active' : ''}
+            onClick={() => { setActiveSection('challenges'); setShowSidebar(false) }}
+          >
+            Quản Lý Thử Thách
+          </button>
+          <button
+            className={activeSection === 'analytics' ? 'active' : ''}
+            onClick={() => { setActiveSection('analytics'); setShowSidebar(false) }}
+          >
+            Thống Kê & Báo Cáo
           </button>
         </nav>
 
@@ -58,15 +73,19 @@ export function AdminDashboard() {
           </button>
           <h1>
             {activeSection === 'users' && 'Quản Lý Người Dùng'}
-            {activeSection === 'analytics' && 'Phân Tích Thống Kê'}
-            {activeSection === 'posts' && 'Quản Lý Bài Viết'}
+            {activeSection === 'nutrition' && 'Quản Lý Dinh Dưỡng'}
+            {activeSection === 'posts' && 'Quản Lý Bài Đăng'}
+            {activeSection === 'challenges' && 'Quản Lý Thử Thách'}
+            {activeSection === 'analytics' && 'Thống Kê & Báo Cáo'}
           </h1>
         </header>
 
         <div className="admin-content">
           {activeSection === 'users' && <UserManagement />}
+          {activeSection === 'nutrition' && <NutritionManagement />}
+          {activeSection === 'posts' && <PostManagement />}
+          {activeSection === 'challenges' && <ChallengeManagement />}
           {activeSection === 'analytics' && <Analytics />}
-          {activeSection === 'posts' && <div className="coming-soon">Quản lý bài viết - Đang phát triển</div>}
         </div>
       </main>
     </div>

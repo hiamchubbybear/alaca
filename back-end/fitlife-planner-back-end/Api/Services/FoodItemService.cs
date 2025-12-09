@@ -20,10 +20,17 @@ public class FoodItemService
         _userContext = userContext;
     }
 
-    public virtual async Task<object> GetAllFoodItems(int page = 1, int pageSize = 20)
+    public virtual async Task<object> GetAllFoodItems(int page = 1, int pageSize = 20, string? category = null)
     {
         var skip = (page - 1) * pageSize;
-        var query = _dbContext.FoodItems;
+        var query = _dbContext.FoodItems.AsQueryable();
+
+        // Filter by category if provided
+        if (!string.IsNullOrEmpty(category))
+        {
+            query = query.Where(f => f.Category == category);
+        }
+
         var total = await query.CountAsync();
         var foodItems = await query.Skip(skip).Take(pageSize).ToListAsync();
         return new { foodItems = foodItems.Select(f => MapToResponseDTO(f)), total, page, pageSize };
@@ -47,6 +54,7 @@ public class FoodItemService
             FiberG = foodItem.FiberG,
             SodiumMg = foodItem.SodiumMg,
             Micronutrients = foodItem.Micronutrients,
+            Category = foodItem.Category,
             CreatedAt = foodItem.CreatedAt
         };
     }
@@ -64,7 +72,8 @@ public class FoodItemService
             FatG = dto.FatG,
             FiberG = dto.FiberG,
             SodiumMg = dto.SodiumMg,
-            Micronutrients = dto.Micronutrients
+            Micronutrients = dto.Micronutrients,
+            Category = dto.Category
         };
 
         await _dbContext.FoodItems.AddAsync(foodItem);
@@ -83,6 +92,7 @@ public class FoodItemService
             FiberG = foodItem.FiberG,
             SodiumMg = foodItem.SodiumMg,
             Micronutrients = foodItem.Micronutrients,
+            Category = foodItem.Category,
             CreatedAt = foodItem.CreatedAt
         };
     }
@@ -110,6 +120,7 @@ public class FoodItemService
         if (dto.FiberG.HasValue) foodItem.FiberG = dto.FiberG;
         if (dto.SodiumMg.HasValue) foodItem.SodiumMg = dto.SodiumMg;
         if (dto.Micronutrients != null) foodItem.Micronutrients = dto.Micronutrients;
+        if (dto.Category != null) foodItem.Category = dto.Category;
         foodItem.UpdatedAt = DateTime.UtcNow;
         await _dbContext.SaveChangesAsync();
         return MapToResponseDTO(foodItem);
@@ -130,6 +141,7 @@ public class FoodItemService
             FiberG = f.FiberG,
             SodiumMg = f.SodiumMg,
             Micronutrients = f.Micronutrients,
+            Category = f.Category,
             CreatedAt = f.CreatedAt
         };
     }

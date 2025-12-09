@@ -76,32 +76,33 @@ public class BmiController(ILogger<BmiController> logger, BMIService bmiService)
         }
     }
 
-    // [Authorize(Roles = "Admin")]
-    // [HttpGet("user/{userId}")]
-    // public async Task<IActionResult> GetBMIByUserId(Guid userId)
-    // {
-    //     try
-    //     {
-    //         var result = await _bmiService.GetBMIsByUserId(userId);
-    //
-    //         var response = new ApiResponse<List<GetBmiResponseDto>>(
-    //             success: true,
-    //             message: "Successfully retrieved BMI records",
-    //             data: result,
-    //             statusCode: HttpStatusCode.OK
-    //         );
-    //         return response.ToActionResult();
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         var response = new ApiResponse<List<GetBmiResponseDto>>(
-    //             success: false,
-    //             message: e.Message,
-    //             statusCode: HttpStatusCode.BadRequest
-    //         );
-    //         return response.ToActionResult();
-    //     }
-    // }
+    [Authorize]
+    [HttpGet("my-records")]
+    public async Task<IActionResult> GetBMIByUserId()
+    {
+        try
+        {
+
+            var result = await bmiService.GetBMIsByUserId();
+
+            var response = new ApiResponse<List<GetBmiResponseDto>>(
+                success: true,
+                message: "Successfully retrieved BMI records",
+                data: result,
+                statusCode: HttpStatusCode.OK
+            );
+            return response.ToActionResult();
+        }
+        catch (Exception e)
+        {
+            var response = new ApiResponse<List<GetBmiResponseDto>>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            );
+            return response.ToActionResult();
+        }
+    }
 
     // [Authorize(Roles = "Admin")]
     // [HttpGet("all")]
