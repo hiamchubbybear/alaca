@@ -30,7 +30,7 @@ public class WorkoutScheduleController : ControllerBase
         try
         {
             var schedules = await _scheduleService.GetMySchedule();
-            var response = new ApiResponse<List<GetWorkoutScheduleResponseDTO>>(
+            var response = new ApiResponse<List<GetScheduleResponseDTO>>(
                 success: true,
                 message: "Successfully retrieved workout schedule",
                 data: schedules,
@@ -41,7 +41,7 @@ public class WorkoutScheduleController : ControllerBase
         }
         catch (Exception e)
         {
-            var response = new ApiResponse<List<GetWorkoutScheduleResponseDTO>>(
+            var response = new ApiResponse<List<GetScheduleResponseDTO>>(
                 success: false,
                 message: e.Message,
                 statusCode: HttpStatusCode.BadRequest
@@ -210,4 +210,19 @@ public class WorkoutScheduleController : ControllerBase
         }
     }
     */
+
+    [Authorize]
+    [HttpPost("custom-week")]
+    public async Task<IActionResult> CreateCustomWeeklySchedule([FromBody] CreateCustomScheduleRequestDTO dto)
+    {
+        try
+        {
+            var result = await _scheduleService.CreateCustomWeeklySchedule(dto);
+             return new ApiResponse<List<GetScheduleResponseDTO>>(success: true, message: "Successfully created custom weekly schedule", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
+        }
+        catch (Exception e)
+        {
+             return new ApiResponse<List<GetScheduleResponseDTO>>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
 }

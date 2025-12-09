@@ -1,5 +1,5 @@
-// export const API_BASE_URL = 'https://alaca.onrender.com'
-export const API_BASE_URL = 'http://localhost:5000'
+export const API_BASE_URL = 'https://alaca.onrender.com'
+// export const API_BASE_URL = 'http://localhost:5000'
 
 export type ApiResponse<TData = unknown> = {
   success: boolean

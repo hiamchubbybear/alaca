@@ -118,7 +118,6 @@ Console.WriteLine($"Using MySQL connection: {connString}");
 
 var app = builder.Build();
 
-// CRITICAL: CORS must be before Authentication/Authorization
 app.UseCors(p => p
     .WithOrigins("http://localhost:3000", "http://localhost:5173", "https://alaca.onrender.com", "https://alaca.vercel.app")
     .AllowAnyHeader()

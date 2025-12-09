@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { createBmiRecord, getMyBmiRecords, type PracticeLevel } from '../../../shared/api/bmiApi'
-import { getExercises, type Exercise } from '../../../shared/api/exerciseApi'
+import { getExerciseRecommendations, getExercises, type Exercise } from '../../../shared/api/exerciseApi'
+import { createCustomWeeklySchedule, getMySchedule, type ScheduleResponse } from '../../../shared/api/workoutScheduleApi'
 import { uploadImage } from '../../../shared/services/cloudinaryService'
 import { getProfile, updateProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { SocialPage } from '../../social/components/SocialPage'
@@ -111,9 +112,15 @@ export function LoggedInLayout({
   const [exerciseLoading, setExerciseLoading] = useState(false)
   const [exerciseError, setExerciseError] = useState<string | null>(null)
   const [exercises, setExercises] = useState<Exercise[]>([])
+  const [recommendedExercises, setRecommendedExercises] = useState<Exercise[]>([])
+  const [recommendedLoading, setRecommendedLoading] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [sidebarTab, setSidebarTab] = useState<'recommended' | 'library'>('recommended')
   const [sidebarTarget, setSidebarTarget] = useState<{ session: number; row: number } | null>(null)
+  const [exerciseDetailModal, setExerciseDetailModal] = useState<Exercise | null>(null)
+  const [savingSchedule, setSavingSchedule] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [saveSuccess, setSaveSuccess] = useState<string | null>(null)
 
   const recommendedSessionCount = useMemo(() => {
     if (trainingLoading || trainingError) return 0
@@ -150,11 +157,7 @@ export function LoggedInLayout({
       const next = { ...prev }
       sessionCards.forEach((order) => {
         if (!next[order]) {
-          next[order] = [
-            { name: '', muscle: '', calories: '' },
-            { name: '', muscle: '', calories: '' },
-            { name: '', muscle: '', calories: '' }
-          ]
+          next[order] = [] // Start with empty array, user will add exercises
           changed = true
         }
       })
@@ -247,58 +250,81 @@ export function LoggedInLayout({
   // Fetch latest BMI record when user enters training page to sync session recommendations
   useEffect(() => {
     if (activeSection !== 'training') return
-    let cancelled = false
+
     ;(async () => {
       try {
         setTrainingLoading(true)
-        setTrainingError(null)
-        const res = await getMyBmiRecords()
-        if (!res.success || !res.data || res.data.length === 0) {
-          if (!cancelled) setTrainingError('Chưa có dữ liệu sức khoẻ. Hãy cập nhật tại “Chỉ Số Sức Khoẻ”.')
-          return
-        }
-        const current = res.data.find((r) => r.isCurrent || (r as any).IsCurrent) ?? res.data[0]
-        const bmiValue = current.BMI ?? current.bmi
-        const assessmentValue = current.Assessment ?? current.assessment
-        const activityFactorValue = current.ActivityFactor ?? current.activityFactor
-        const practiceLevelValue = (current.PracticeLevel ?? current.practiceLevel) as PracticeLevel
-        const goalObj = (current.Goal ?? current.goal) as Record<string, unknown> | undefined
-        const tdeeFromGoal = goalObj && typeof goalObj['tdee'] === 'number' ? (goalObj['tdee'] as number) : undefined
-        const planObj = goalObj && (goalObj['plan'] as Record<string, unknown> | undefined)
-        const sessionsPerWeek = planObj && typeof planObj['ExercisePerWeek'] === 'number'
-          ? (planObj['ExercisePerWeek'] as number)
-          : planObj && typeof planObj['exercisePerWeek'] === 'number'
-            ? (planObj['exercisePerWeek'] as number)
-            : undefined
 
-        const nextMetrics: HealthMetrics = {
-          weightKg: current.weightKg ?? (current as any).WeightKg ?? 0,
-          heightM: current.heightCm ? current.heightCm / 100 : (current as any).HeightCm ? ((current as any).HeightCm as number) / 100 : 0,
-          activityFactor: activityFactorValue ?? 0,
-          practiceLevel: practiceLevelValue || 'MEDIUM',
-          bmi: bmiValue,
-          assessment: assessmentValue,
-          dailyCalories: tdeeFromGoal,
-          recommendedSessions: sessionsPerWeek
+        // Parallel fetch: BMI records and Custom Schedule
+        const [bmiRes, scheduleRes] = await Promise.all([
+           getMyBmiRecords(),
+           getMySchedule()
+        ])
+
+        if (bmiRes.success && bmiRes.data && bmiRes.data.length > 0) {
+          const latest = bmiRes.data.sort(
+            (a, b) => new Date(b.measuredAt).getTime() - new Date(a.measuredAt).getTime()
+          )[0]
+
+          setHealthMetrics({
+            weightKg: latest.weightKg,
+            heightM: latest.heightCm / 100,
+            activityFactor: latest.activityFactor,
+            practiceLevel: latest.practiceLevel,
+            bmi: latest.bmi,
+            assessment: latest.assessment,
+            dailyCalories: latest.dailyCalories
+          })
+
+          // Only if no custom schedule is found, use BMI logic (handled by default effect)
         }
 
-        if (!cancelled) {
-          setHealthMetrics(nextMetrics)
-          localStorage.setItem('healthMetrics', JSON.stringify(nextMetrics))
+        if (scheduleRes.success && scheduleRes.data && scheduleRes.data.length > 0) {
+            const schedules = scheduleRes.data as ScheduleResponse[]
+
+            // Extract unique session numbers
+            const sessionNums = Array.from(new Set(schedules.map(s => s.sessionNumber))).sort((a,b) => a - b)
+            setSessionCards(sessionNums)
+
+            setSessionItems(prev => {
+                const next = { ...prev }
+                schedules.forEach(s => {
+                    const rowItems = s.exercises.map(ex => ({
+                        name: ex.exerciseTitle,
+                        muscle: '', // API doesn't return muscle yet, could fetch or join
+                        calories: '' // API doesn't return calories logic here yet
+                    }))
+
+                    // Add empty row for adding more
+                    // rowItems.push({ name: '', muscle: '', calories: '' })
+
+                    next[s.sessionNumber] = rowItems
+                })
+                return next
+            })
         }
-      } catch {
-        if (!cancelled) setTrainingError('Không thể tải dữ liệu sức khoẻ.')
-      } finally {
-        if (!cancelled) setTrainingLoading(false)
+
+        setTrainingLoading(false)
+      } catch (error) {
+        console.error('Failed to load training data', error)
+        setTrainingError('Failed to load training data')
+        setTrainingLoading(false)
       }
     })()
+  }, [activeSection])
+
+
+
+  useEffect(() => {
+    if (activeSection !== 'training') return
+    let cancelled = false
 
     // Load exercise library for selection
     ;(async () => {
       try {
         setExerciseLoading(true)
         setExerciseError(null)
-        const res = await getExercises({ page: 1, pageSize: 50 })
+        const res = await getExercises(1, 50)
         if (!res.success || !res.data) {
           setExerciseError(res.message || 'Không thể tải thư viện bài tập.')
           return
@@ -308,6 +334,21 @@ export function LoggedInLayout({
         setExerciseError('Không thể tải thư viện bài tập.')
       } finally {
         setExerciseLoading(false)
+      }
+    })()
+
+    // Load recommended exercises based on BMI
+    ;(async () => {
+      try {
+        setRecommendedLoading(true)
+        const response = await getExerciseRecommendations()
+        if (response.data?.exercises) {
+          setRecommendedExercises(response.data.exercises)
+        }
+      } catch (error) {
+        console.error('Failed to load recommended exercises:', error)
+      } finally {
+        setRecommendedLoading(false)
       }
     })()
 
@@ -321,15 +362,6 @@ export function LoggedInLayout({
     onSelectSection(section)
   }
 
-  const recommendedExercises: Array<{ name: string; muscle: string; calories: string }> = [
-    { name: 'Lunges', muscle: 'Legs', calories: '20' },
-    { name: 'Push-ups', muscle: 'Chest', calories: '15' },
-    { name: 'Bent-over Row', muscle: 'Back', calories: '18' },
-    { name: 'Squat', muscle: 'Legs', calories: '22' },
-    { name: 'Plank', muscle: 'Core', calories: '8' },
-    { name: 'Mountain Climbers', muscle: 'Core', calories: '12' }
-  ]
-
   const openSidebar = (session: number, row: number) => {
     setSidebarTarget({ session, row })
     setSidebarOpen(true)
@@ -339,11 +371,11 @@ export function LoggedInLayout({
       ;(async () => {
         try {
           setExerciseLoading(true)
-          const res = await getExercises({ page: 1, pageSize: 50 })
-          if (res.success && res.data) {
+          const res = await getExercises(1, 50)
+          if (res.data?.exercises) {
             setExercises(res.data.exercises || [])
-          } else if (!res.success) {
-            setExerciseError(res.message || 'Không thể tải thư viện bài tập.')
+          } else {
+            setExerciseError('Không thể tải thư viện bài tập.')
           }
         } catch {
           setExerciseError('Không thể tải thư viện bài tập.')
@@ -372,6 +404,65 @@ export function LoggedInLayout({
     setSidebarOpen(false)
     setSidebarTarget(null)
   }
+
+  const handleSaveSchedule = async () => {
+    try {
+      setSavingSchedule(true)
+      setSaveError(null)
+      setSaveSuccess(null)
+
+      // Map sessionItems to API format
+      const sessions = sessionCards.map(sessionNumber => {
+        const sessionExerciseRequests = (sessionItems[sessionNumber] || [])
+          .filter(item => item.name) // Only include rows with exercises
+          .map((item, index) => {
+            // Find exercise ID from library
+            const exercise = [...recommendedExercises, ...exercises].find(
+              ex => ex.title === item.name
+            )
+
+            return {
+              exerciseId: exercise?.id || '',
+              sets: 3, // Default values - could be made editable
+              reps: 10,
+              restSeconds: 60,
+              notes: ''
+            }
+          })
+          .filter(ex => ex.exerciseId) // Only include if we found the exercise
+
+        return {
+          sessionNumber,
+          sessionName: `Buổi ${sessionNumber}`,
+          exercises: sessionExerciseRequests
+        }
+      }).filter(session => session.exercises.length > 0) // Only include sessions with exercises
+
+      if (sessions.length === 0) {
+        setSaveError('Vui lòng thêm ít nhất một bài tập vào lịch tập!')
+        return
+      }
+
+      const response = await createCustomWeeklySchedule({
+        weekNumber: 1, // Could be made dynamic
+        sessions
+      })
+
+      if (response.success || response.data) {
+        setSaveSuccess('Đã lưu lịch tập thành công!')
+        // Auto-hide success message after 3 seconds
+        setTimeout(() => setSaveSuccess(null), 3000)
+      } else {
+        setSaveError(response.message || 'Không thể lưu lịch tập')
+      }
+    } catch (error) {
+      console.error('Save schedule error:', error)
+      setSaveError('Đã xảy ra lỗi khi lưu lịch tập')
+    } finally {
+      setSavingSchedule(false)
+    }
+  }
+
   const handleHealthChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     if (name === 'practiceLevel') {
@@ -951,11 +1042,11 @@ export function LoggedInLayout({
                     value={healthForm.activityFactor}
                     onChange={handleHealthChange}
                   >
-                    <option value="1.2">Ít vận động — 1.2</option>
-                    <option value="1.375">Vận động nhẹ — 1.375</option>
-                    <option value="1.55">Vận động vừa phải — 1.55</option>
-                    <option value="1.725">Vận động nhiều — 1.725</option>
-                    <option value="1.9">Vận động rất nhiều — 1.9</option>
+                    <option value="1.2">Ít vận động</option>
+                    <option value="1.375">Vận động nhẹ</option>
+                    <option value="1.55">Vận động vừa phải</option>
+                    <option value="1.725">Vận động nhiều</option>
+                    <option value="1.9">Vận động rất nhiều</option>
                   </select>
                 </div>
 
@@ -967,11 +1058,11 @@ export function LoggedInLayout({
                     value={healthForm.practiceLevel}
                     onChange={handleHealthChange}
                   >
-                    <option value="PRO">Pro</option>
-                    <option value="HARD">Hard</option>
-                    <option value="MEDIUM">Medium</option>
-                    <option value="EASY">Easy</option>
-                    <option value="NEWBIE">Newbie</option>
+                    <option value="PRO">Chuyên nghiệp</option>
+                    <option value="HARD">Cao cấp</option>
+                    <option value="MEDIUM">Trung cấp</option>
+                    <option value="EASY">Dễ</option>
+                    <option value="NEWBIE">Bắt đầu</option>
                   </select>
                 </div>
               </div>
@@ -1073,9 +1164,7 @@ export function LoggedInLayout({
                         <p className="workout-title">Buổi {order}</p>
                         <p className="workout-focus">Tuỳ chỉnh bài tập của bạn</p>
                       </div>
-                      <button className="workout-menu-btn" type="button" aria-label={`Xem chi tiết buổi ${order}`}>
-                        ⋮
-                      </button>
+
                       <button
                         type="button"
                         className="workout-remove-btn"
@@ -1099,19 +1188,98 @@ export function LoggedInLayout({
                           <span>{item.name || 'Chưa có'}</span>
                           <span>{item.muscle || '---'}</span>
                           <span>{item.calories || '---'}</span>
-                          <button
-                            type="button"
-                            className="icon-btn"
-                            onClick={() => openSidebar(order, idx)}
-                            aria-label="Thay đổi bài tập"
-                          >
-                            ✎
-                          </button>
+                          <div className="row-actions">
+                            <button
+                              type="button"
+                              className="btn-detail"
+                              onClick={() => {
+                                // Find exercise from library by name
+                                const exercise = [...recommendedExercises, ...exercises].find(
+                                  ex => ex.title === item.name
+                                )
+                                if (exercise) {
+                                  setExerciseDetailModal(exercise)
+                                }
+                              }}
+                              aria-label="Xem chi tiết"
+                              title="Xem chi tiết"
+                            >
+                              Chi tiết
+                            </button>
+                            <button
+                              type="button"
+                              className="btn-edit"
+                              onClick={() => openSidebar(order, idx)}
+                              aria-label="Thay đổi bài tập"
+                              title="Chỉnh sửa"
+                            >
+                              Sửa
+                            </button>
+                          </div>
                         </div>
                       ))}
+                      <div className="workout-row add-exercise-row">
+                        <button
+                          type="button"
+                          className="btn-add-exercise"
+                          onClick={() => {
+                            // Add empty row first
+                            setSessionItems(prev => ({
+                              ...prev,
+                              [order]: [...(prev[order] || []), { name: '', muscle: '', calories: '' }]
+                            }))
+                            // Open sidebar for the new row
+                            const newIdx = (sessionItems[order] || []).length
+                            openSidebar(order, newIdx)
+                          }}
+                        >
+                          <span>+ Thêm bài tập</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            {!trainingLoading && !trainingError && (
+              <div className="workout-actions">
+                <button
+                  type="button"
+                  className="btn-add-session"
+                  onClick={() => {
+                    const nextSessionNumber = sessionCards.length > 0
+                      ? Math.max(...sessionCards) + 1
+                      : 1
+                    setSessionCards(prev => [...prev, nextSessionNumber])
+                  }}
+                >
+                  Thêm buổi tập
+                </button>
+
+                {sessionCards.length > 0 && (
+                  <button
+                    type="button"
+                    className="btn-save-schedule"
+                    onClick={handleSaveSchedule}
+                    disabled={savingSchedule}
+                  >
+                    {savingSchedule ? 'Đang lưu...' : 'Lưu lịch tập'}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Save Status Messages */}
+            {saveSuccess && (
+              <div className="status-message success">
+                {saveSuccess}
+              </div>
+            )}
+            {saveError && (
+              <div className="status-message error">
+                {saveError}
               </div>
             )}
 
@@ -1146,14 +1314,30 @@ export function LoggedInLayout({
                 <div className="exercise-list">
                   {sidebarTab === 'recommended' &&
                     recommendedExercises.map((ex) => (
-                      <div className="exercise-item" key={`${ex.name}-${ex.muscle}`}>
+                      <div
+                        className="exercise-item clickable"
+                        key={ex.id}
+                        onClick={() => setExerciseDetailModal(ex)}
+                        style={{ cursor: 'pointer' }}
+                      >
                         <div>
-                          <p className="exercise-title">{ex.name}</p>
+                          <p className="exercise-title">{ex.title}</p>
                           <p className="exercise-meta">
-                            {ex.muscle} · {ex.calories} cal/set
+                            {ex.primaryMuscle} · {ex.caloriesBurnedPerSet} cal/set
                           </p>
                         </div>
-                        <button type="button" className="btn-primary small" onClick={() => selectExerciseToRow(ex)}>
+                        <button
+                          type="button"
+                          className="btn-primary small"
+                          onClick={(e) => {
+                            e.stopPropagation() // Prevent modal from opening
+                            selectExerciseToRow({
+                              name: ex.title,
+                              muscle: ex.primaryMuscle,
+                              calories: ex.caloriesBurnedPerSet
+                            })
+                          }}
+                        >
                           +
                         </button>
                       </div>
@@ -1166,7 +1350,12 @@ export function LoggedInLayout({
                       {!exerciseLoading &&
                         !exerciseError &&
                         exercises.map((ex) => (
-                          <div className="exercise-item" key={ex.id}>
+                          <div
+                            className="exercise-item clickable"
+                            key={ex.id}
+                            onClick={() => setExerciseDetailModal(ex)}
+                            style={{ cursor: 'pointer' }}
+                          >
                             <div>
                               <p className="exercise-title">{ex.title}</p>
                               <p className="exercise-meta">
@@ -1177,13 +1366,14 @@ export function LoggedInLayout({
                             <button
                               type="button"
                               className="btn-primary small"
-                              onClick={() =>
+                              onClick={(e) => {
+                                e.stopPropagation()
                                 selectExerciseToRow({
                                   name: ex.title,
                                   muscle: ex.primaryMuscle || '',
                                   calories: ''
                                 })
-                              }
+                              }}
                             >
                               +
                             </button>
@@ -1207,6 +1397,111 @@ export function LoggedInLayout({
           </>
         )}
       </section>
+
+      {/* Exercise Detail Modal */}
+      {exerciseDetailModal && (
+        <div className="modal-overlay" onClick={() => setExerciseDetailModal(null)}>
+          <div className="modal-content exercise-detail-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{exerciseDetailModal.title}</h2>
+              <button
+                type="button"
+                className="modal-close"
+                onClick={() => setExerciseDetailModal(null)}
+              >
+                ×
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="exercise-detail-section">
+                <h3>Thông tin cơ bản</h3>
+                <div className="exercise-info-grid">
+                  <div className="info-item">
+                    <span className="info-label">Nhóm cơ chính:</span>
+                    <span className="info-value">{exerciseDetailModal.primaryMuscle}</span>
+                  </div>
+                  {exerciseDetailModal.secondaryMuscles && (
+                    <div className="info-item">
+                      <span className="info-label">Nhóm cơ phụ:</span>
+                      <span className="info-value">
+                        {Array.isArray(exerciseDetailModal.secondaryMuscles)
+                          ? exerciseDetailModal.secondaryMuscles.join(', ')
+                          : exerciseDetailModal.secondaryMuscles}
+                      </span>
+                    </div>
+                  )}
+                  <div className="info-item">
+                    <span className="info-label">Độ khó:</span>
+                    <span className="info-value">{exerciseDetailModal.difficulty || 'Trung bình'}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Thiết bị:</span>
+                    <span className="info-value">{exerciseDetailModal.equipment || 'Không cần'}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Calories/set:</span>
+                    <span className="info-value">{exerciseDetailModal.caloriesBurnedPerSet || 15}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Sets đề xuất:</span>
+                    <span className="info-value">{exerciseDetailModal.recommendedSets || 3}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Reps đề xuất:</span>
+                    <span className="info-value">{exerciseDetailModal.recommendedReps || 10}</span>
+                  </div>
+                  <div className="info-item">
+                    <span className="info-label">Thời gian nghỉ:</span>
+                    <span className="info-value">{exerciseDetailModal.restSeconds || 60}s</span>
+                  </div>
+                </div>
+              </div>
+
+              {exerciseDetailModal.description && (
+                <div className="exercise-detail-section">
+                  <h3>Mô tả</h3>
+                  <p>{exerciseDetailModal.description}</p>
+                </div>
+              )}
+
+              {exerciseDetailModal.instructions && (
+                <div className="exercise-detail-section">
+                  <h3>Hướng dẫn thực hiện</h3>
+                  <p style={{ whiteSpace: 'pre-line' }}>{exerciseDetailModal.instructions}</p>
+                </div>
+              )}
+
+              {exerciseDetailModal.videoUrl && (
+                <div className="exercise-detail-section">
+                  <h3>Video hướng dẫn</h3>
+                  <div className="video-container">
+                    <iframe
+                      width="100%"
+                      height="315"
+                      src={exerciseDetailModal.videoUrl}
+                      title={exerciseDetailModal.title}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                </div>
+              )}
+
+              {exerciseDetailModal.images && Array.isArray(exerciseDetailModal.images) && exerciseDetailModal.images.length > 0 && (
+                <div className="exercise-detail-section">
+                  <h3>Hình ảnh</h3>
+                  <div className="exercise-images">
+                    {exerciseDetailModal.images.map((img, idx) => (
+                      <img key={idx} src={img} alt={`${exerciseDetailModal.title} ${idx + 1}`} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   )
 }

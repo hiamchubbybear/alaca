@@ -27,6 +27,7 @@ namespace fitlife_planner_back_end.Api.Configurations
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<WorkoutExercise> WorkoutExercises { get; set; }
         public DbSet<WorkoutSchedule> WorkoutSchedules { get; set; }
+        public DbSet<ScheduledExercise> ScheduledExercises { get; set; }
 
         // Progress & Challenges
         public DbSet<ProgressEntry> ProgressEntries { get; set; }
@@ -290,7 +291,7 @@ namespace fitlife_planner_back_end.Api.Configurations
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).HasColumnType("char(36)");
                 entity.Property(e => e.UserId).HasColumnType("char(36)").IsRequired();
-                entity.Property(e => e.WorkoutId).HasColumnType("char(36)").IsRequired();
+                entity.Property(e => e.WorkoutId).HasColumnType("char(36)").IsRequired(false);
                 entity.Property(e => e.Status).HasMaxLength(50).HasDefaultValue("planned");
                 entity.Property(e => e.CreatedAt).HasColumnType("datetime").HasDefaultValueSql("CURRENT_TIMESTAMP");
 

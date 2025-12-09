@@ -835,6 +835,45 @@ namespace fitlife_planner_back_end.Migrations
                     b.ToTable("Reviews");
                 });
 
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ScheduledExercise", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ExerciseId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("OrderIndex")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Reps")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RestSeconds")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ScheduleId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Sets")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.HasIndex("ScheduleId");
+
+                    b.ToTable("ScheduledExercises");
+                });
+
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.StatsUserWeekly", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1180,6 +1219,12 @@ namespace fitlife_planner_back_end.Migrations
                     b.Property<TimeSpan?>("ScheduledTime")
                         .HasColumnType("time(6)");
 
+                    b.Property<string>("SessionName")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("SessionNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -1190,7 +1235,10 @@ namespace fitlife_planner_back_end.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("WorkoutId")
+                    b.Property<int>("WeekNumber")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("WorkoutId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -1328,6 +1376,25 @@ namespace fitlife_planner_back_end.Migrations
                         .HasForeignKey("fitlife_planner_back_end.Api.Models.Profile", "UserId1");
                 });
 
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ScheduledExercise", b =>
+                {
+                    b.HasOne("fitlife_planner_back_end.Api.Models.ExerciseLibrary", "Exercise")
+                        .WithMany()
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fitlife_planner_back_end.Api.Models.WorkoutSchedule", "Schedule")
+                        .WithMany("ScheduledExercises")
+                        .HasForeignKey("ScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exercise");
+
+                    b.Navigation("Schedule");
+                });
+
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Streak", b =>
                 {
                     b.HasOne("fitlife_planner_back_end.Api.Models.User", "User")
@@ -1412,8 +1479,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasOne("fitlife_planner_back_end.Api.Models.Workout", "Workout")
                         .WithMany()
                         .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Workout");
                 });
@@ -1448,6 +1514,11 @@ namespace fitlife_planner_back_end.Migrations
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Workout", b =>
                 {
                     b.Navigation("Exercises");
+                });
+
+            modelBuilder.Entity("fitlife_planner_back_end.Api.Models.WorkoutSchedule", b =>
+                {
+                    b.Navigation("ScheduledExercises");
                 });
 #pragma warning restore 612, 618
         }
