@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using fitlife_planner_back_end.Api.Enums;
 
 namespace fitlife_planner_back_end.Api.Models;
@@ -18,6 +19,11 @@ public class Post
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public Status Status { get; set; }
+
+    // Computed property - not mapped to DB
+    [NotMapped]
+    public bool IsHidden => Status == Status.Reject;
+
     public Profile Profile { get; set; }
 
     public Post()

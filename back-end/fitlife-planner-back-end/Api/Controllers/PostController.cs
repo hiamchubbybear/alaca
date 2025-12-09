@@ -38,23 +38,8 @@ public class PostController(ILogger<ProfileController> logger, PostService postS
     }
 
 
-    [Authorize(Roles = "Admin")]
     [Authorize]
-    [HttpGet("/admin/all")]
-    public async Task<IActionResult> GetAllPost([FromQuery] PaginationParameters pagination)
-    {
-        var posts = await postService.GetAllPostsAsync(pagination);
-        var response = new ApiResponse<PaginatedList<GetPostResponseDto>>(
-            success: true,
-            message: "Successfully retrieved posts",
-            data: posts,
-            statusCode: HttpStatusCode.OK
-        );
-        return response.ToActionResult();
-    }
-
-    [Authorize]
-    [HttpGet("/all")]
+    [HttpGet("all")]
     public async Task<IActionResult> GetAllPostByUser([FromQuery] PaginationParameters pagination)
     {
         var posts = await postService.GetAllPostsAsyncByUser(pagination);

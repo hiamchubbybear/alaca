@@ -2,7 +2,7 @@ import { request } from '../../shared/api/apiClient'
 
 // Get all posts for admin (with pagination)
 export const getAllPosts = async (page: number, pageSize: number) => {
-  return request<never, any>(`/post/admin/all?page=${page}&pageSize=${pageSize}`, {
+  return request<never, any>(`/post/admin/all?pageNumber=${page}&pageSize=${pageSize}`, {
     method: 'GET',
     auth: true
   })
