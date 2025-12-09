@@ -91,7 +91,7 @@ export function ChallengeManagement() {
     setFilteredChallenges(filtered)
   }
 
-  const handleDelete = async (challengeId: string, title: string) => {
+  const handleDelete = async (_challengeId: string, title: string) => {
     setConfirmModal({
       isOpen: true,
       title: 'Xóa Thử Thách',
