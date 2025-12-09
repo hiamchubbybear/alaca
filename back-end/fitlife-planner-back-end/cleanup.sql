@@ -1,0 +1,35 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS `__EFMigrationsHistory`;
+DROP TABLE IF EXISTS `UserAchievements`;
+DROP TABLE IF EXISTS `ChallengeParticipants`;
+DROP TABLE IF EXISTS `WorkoutExercises`;
+DROP TABLE IF EXISTS `NutritionPlanItems`;
+DROP TABLE IF EXISTS `ExerciseTags`;
+DROP TABLE IF EXISTS `PostComments`;
+DROP TABLE IF EXISTS `PostLikes`;
+DROP TABLE IF EXISTS `PostVotes`;
+DROP TABLE IF EXISTS `UserFollowers`;
+DROP TABLE IF EXISTS `PasswordResetTokens`;
+DROP TABLE IF EXISTS `ScheduledExercises`;
+DROP TABLE IF EXISTS `WorkoutSchedules`;
+DROP TABLE IF EXISTS `Messages`;
+DROP TABLE IF EXISTS `Reviews`;
+DROP TABLE IF EXISTS `Notifications`;
+DROP TABLE IF EXISTS `UserSettings`;
+DROP TABLE IF EXISTS `StatsUserWeekly`;
+DROP TABLE IF EXISTS `Streaks`;
+DROP TABLE IF EXISTS `BmiRecords`;
+DROP TABLE IF EXISTS `Posts`;
+DROP TABLE IF EXISTS `Workouts`;
+DROP TABLE IF EXISTS `ExerciseLibrary`;
+DROP TABLE IF EXISTS `NutritionPlans`;
+DROP TABLE IF EXISTS `FoodItems`;
+DROP TABLE IF EXISTS `Challenges`;
+DROP TABLE IF EXISTS `Achievements`;
+DROP TABLE IF EXISTS `ProgressEntries`;
+DROP TABLE IF EXISTS `Tokens`;
+DROP TABLE IF EXISTS `Profiles`;
+DROP TABLE IF EXISTS `Users`;
+
+SET FOREIGN_KEY_CHECKS = 1;
