@@ -12,7 +12,7 @@ export type ApiResponse<TData = unknown> = {
 export async function request<TReq, TRes>(
   path: string,
   options: {
-    method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
     body?: TReq
     auth?: boolean
   } = {}

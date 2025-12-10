@@ -1,3 +1,5 @@
+using fitlife_planner_back_end.Api.Models;
+
 namespace fitlife_planner_back_end.Api.DTOs.Responses;
 
 public class GetNutritionPlanResponseDTO
@@ -21,6 +23,9 @@ public class GetNutritionPlanItemResponseDTO
     public string? MealTime { get; set; }
     public Guid FoodItemId { get; set; }
     public string FoodItemName { get; set; }
+    public FoodItem? FoodItem { get; set; }
     public double ServingCount { get; set; }
     public string? Notes { get; set; }
+    public string? Date { get; set; }
+    public bool IsCompleted { get; set; }
 }

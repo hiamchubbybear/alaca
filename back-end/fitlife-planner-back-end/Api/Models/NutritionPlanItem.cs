@@ -10,7 +10,12 @@ public class NutritionPlanItem
     public Guid FoodItemId { get; set; }
     public decimal? ServingCount { get; set; }
     public string? Notes { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime? Date { get; set; }
+    public bool IsCompleted { get; set; } = false;
+    public DateTime CreatedAt { get; set; } = TimeZoneInfo.ConvertTimeFromUtc(
+        DateTime.UtcNow,
+        TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
+    );
 
     // Navigation properties
     public NutritionPlan? NutritionPlan { get; set; }

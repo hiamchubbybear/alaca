@@ -6,4 +6,5 @@ public class AddNutritionPlanItemRequestDTO
     public Guid FoodItemId { get; set; }
     public decimal? ServingCount { get; set; }
     public string? Notes { get; set; }
+    public DateTime? Date { get; set; }
 }

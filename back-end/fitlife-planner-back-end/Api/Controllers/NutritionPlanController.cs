@@ -222,4 +222,109 @@ public class NutritionPlanController : ControllerBase
             return new ApiResponse<NutritionSummaryDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
         }
     }
+
+    /// <summary>
+    /// Auto-generate balanced meal plan for a specific date
+    /// </summary>
+    [Authorize]
+    [HttpPost("{id:guid}/generate-daily")]
+    public async Task<IActionResult> GenerateDailyMealPlan(Guid id, [FromBody] GenerateMealPlanRequestDTO dto)
+    {
+        try
+        {
+            var plan = await _nutritionPlanService.GenerateDailyMealPlan(id, dto.Date, dto.CaloriesTarget);
+            return new ApiResponse<GetNutritionPlanResponseDTO>(
+                success: true,
+                message: "Successfully generated daily meal plan",
+                data: plan,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetNutritionPlanResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
+
+    /// <summary>
+    /// Mark a meal item as completed or uncompleted
+    /// </summary>
+    [Authorize]
+    [HttpPatch("{planId:guid}/items/{itemId:guid}/complete")]
+    public async Task<IActionResult> MarkMealItemCompleted(Guid planId, Guid itemId, [FromBody] MarkMealCompletedRequestDTO dto)
+    {
+        try
+        {
+            var item = await _nutritionPlanService.MarkMealItemCompleted(planId, itemId, dto.IsCompleted);
+            return new ApiResponse<GetNutritionPlanItemResponseDTO>(
+                success: true,
+                message: dto.IsCompleted ? "Meal marked as completed" : "Meal marked as incomplete",
+                data: item,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetNutritionPlanItemResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPost("weekly")]
+    public async Task<IActionResult> CreateWeeklyNutritionPlan([FromBody] CreateWeeklyNutritionPlanRequestDTO dto)
+    {
+        try
+        {
+            var plan = await _nutritionPlanService.CreateWeeklyNutritionPlan(dto.WeekStartDate);
+            return new ApiResponse<GetNutritionPlanResponseDTO>(
+                success: true,
+                message: "Weekly nutrition plan created successfully",
+                data: plan,
+                statusCode: HttpStatusCode.Created
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetNutritionPlanResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPut("{planId}/items/{itemId}")]
+    public async Task<IActionResult> UpdateNutritionPlanItem(
+        Guid planId,
+        Guid itemId,
+        [FromBody] UpdateNutritionPlanItemRequestDTO dto)
+    {
+        try
+        {
+            var item = await _nutritionPlanService.UpdateNutritionPlanItem(planId, itemId, dto);
+            return new ApiResponse<GetNutritionPlanItemResponseDTO>(
+                success: true,
+                message: "Nutrition plan item updated successfully",
+                data: item,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<GetNutritionPlanItemResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
 }

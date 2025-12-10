@@ -112,6 +112,7 @@ public class WeeklyPlanController : ControllerBase
         }
     }
 
+    /*
     /// <summary>
     /// Create weekly nutrition plan
     /// </summary>
@@ -195,6 +196,7 @@ public class WeeklyPlanController : ControllerBase
             ).ToActionResult();
         }
     }
+    */
 
     #region Helper Methods
 

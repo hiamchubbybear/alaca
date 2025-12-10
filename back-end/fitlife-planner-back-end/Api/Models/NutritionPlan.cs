@@ -13,7 +13,10 @@ public class NutritionPlan
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
     public string? Visibility { get; set; } // private, public, friends
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = TimeZoneInfo.ConvertTimeFromUtc(
+        DateTime.UtcNow,
+        TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
+    );
     public DateTime? UpdatedAt { get; set; }
 
     // Navigation properties

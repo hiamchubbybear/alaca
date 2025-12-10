@@ -21,6 +21,8 @@ export interface NutritionPlanItem {
   foodItem: FoodItem
   servingCount?: number
   notes?: string
+  date?: string
+  isCompleted?: boolean
 }
 
 export interface NutritionPlan {
@@ -31,6 +33,7 @@ export interface NutritionPlan {
   startDate?: string
   endDate?: string
   visibility?: string
+  caloriesTargetKcal?: number
   items: NutritionPlanItem[]
   // Helper props computed possibly or from backend
   totalCalories?: number
@@ -60,6 +63,7 @@ export interface CreateNutritionPlanRequest {
   startDate?: string
   endDate?: string
   visibility?: string
+  caloriesTargetKcal?: number
 }
 
 export interface AddNutritionPlanItemRequest {
@@ -67,6 +71,7 @@ export interface AddNutritionPlanItemRequest {
   servingCount: number
   mealTime?: string
   notes?: string
+  date?: string
 }
 
 export interface NutritionSummary {
