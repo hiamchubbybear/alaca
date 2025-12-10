@@ -22,3 +22,4 @@ export interface HealthMetrics {
   dailyCalories?: number
   recommendedSessions?: number
 }
+export type DashboardSection = MainSection

@@ -3,6 +3,7 @@ import { getMyBmiRecords } from '../../../shared/api/bmiApi'
 import { ChatWidget } from '../../chat/components/ChatWidget'
 import { HealthMetricsSection } from '../../health/components/HealthMetricsSection'
 import { loadHealthMetricsFromResponse } from '../../health/utils'
+import { NutritionSection } from '../../nutrition/components/NutritionSection'
 import { getProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { ProfileSection } from '../../profile/components/ProfileSection'
 import { SocialPage } from '../../social/components/SocialPage'
@@ -220,6 +221,8 @@ export function LoggedInLayout({
             setHealthMetrics={setHealthMetrics}
             onNavigateToHealth={() => onSelectSection('health')}
           />
+        ) : activeSection === 'nutrition' ? (
+          <NutritionSection />
         ) : (
           <>
             {activeSection === 'social' && <SocialPage />}
