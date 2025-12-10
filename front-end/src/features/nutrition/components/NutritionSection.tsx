@@ -62,14 +62,6 @@ const TrashIcon = () => (
   </svg>
 )
 
-const SaveIcon = () => (
-  <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
-    <path d='M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z' />
-    <polyline points='17 21 17 13 7 13 7 21' />
-    <polyline points='7 3 7 8 15 8' />
-  </svg>
-)
-
 const PlateIcon = () => (
   <svg width='48' height='48' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.5'>
     <circle cx='12' cy='12' r='10' />
@@ -137,7 +129,7 @@ const AlertTriangleIcon = () => (
 
 export function NutritionSection() {
   // Calendar State
-  const [currentDate, setCurrentDate] = useState(new Date())
+  const [currentDate] = useState(new Date())
   const [selectedDateStr, setSelectedDateStr] = useState(() => {
     const today = new Date()
     const year = today.getFullYear()
@@ -364,8 +356,7 @@ export function NutritionSection() {
             date: selectedDateStr,
             mealTime: activeMealType,
             foodItemId: food.id,
-            servingCount: servingCount,
-            isCompleted: false
+            servingCount: servingCount
           })
           loadPlans()
           setShowSearch(false)
@@ -516,20 +507,6 @@ export function NutritionSection() {
           }
         }
       )
-    }
-  }
-
-  const handleSave = async () => {
-    if (!selectedItem || !currentPlan) return
-
-    try {
-      const res = await markItemCompleted(currentPlan.id, selectedItem.id, !selectedItem.isCompleted)
-      if (res.success) {
-        alert(selectedItem.isCompleted ? 'Đã đánh dấu chưa hoàn thành' : 'Đã lưu và đánh dấu hoàn thành!')
-        loadPlans()
-      }
-    } catch {
-      alert('Failed to save')
     }
   }
 
