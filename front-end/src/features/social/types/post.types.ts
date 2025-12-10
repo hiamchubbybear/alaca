@@ -24,6 +24,12 @@ export interface CreatePostRequest {
   media: string
 }
 
+export interface UpdatePostRequest {
+  title: string
+  content: string
+  media: string
+}
+
 export interface CreatePostResponse {
   postId: string
   profileId: string
@@ -33,6 +39,15 @@ export interface CreatePostResponse {
   likeCount: number
   commentCount: number
   createdAt: string
+  updatedAt: string
+  // Add update response type fields if needed, usually same as CreatePostResponse or Post
+}
+
+export interface UpdatePostResponse {
+  postId: string
+  title: string
+  content: string
+  media: string
   updatedAt: string
 }
 

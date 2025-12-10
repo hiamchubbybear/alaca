@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react'
 import { getMyNotifications, markAllAsRead, markAsRead, type Notification } from '../api/notificationApi'
 import './NotificationPage.css'
 
-export function NotificationPage() {
+interface NotificationPageProps {
+  isOverlay?: boolean
+  onClose?: () => void
+}
+
+export function NotificationPage({ isOverlay = false, onClose }: NotificationPageProps) {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -37,7 +42,6 @@ export function NotificationPage() {
 
       const res = await markAsRead(notificationId)
       if (!res.success) {
-        // Revert if failed (optional, but good practice)
         console.error('Lỗi khi đánh dấu đã đọc')
       }
     } catch (err) {
@@ -60,7 +64,7 @@ export function NotificationPage() {
 
   if (loading) {
     return (
-      <div className='section-page'>
+      <div className={isOverlay ? 'notification-overlay-container' : 'section-page'}>
         <div className='loading-state'>Đang tải thông báo...</div>
       </div>
     )
@@ -68,7 +72,7 @@ export function NotificationPage() {
 
   if (error) {
     return (
-      <div className='section-page'>
+      <div className={isOverlay ? 'notification-overlay-container' : 'section-page'}>
         <div className='error-state'>
           <p>{error}</p>
           <button onClick={loadNotifications} className='btn-primary'>
@@ -80,19 +84,49 @@ export function NotificationPage() {
   }
 
   return (
-    <div className='section-page'>
-      <div className='section-header'>
-        <h1 className='main-content-title'>Thông Báo</h1>
-        {unreadCount > 0 && (
-          <button className='btn-secondary' onClick={handleMarkAllAsRead}>
-            Đánh dấu tất cả đã đọc ({unreadCount})
-          </button>
-        )}
+    <div className={isOverlay ? 'notification-overlay-container' : 'section-page'}>
+      <div className='section-header' style={isOverlay ? { padding: '16px', borderBottom: '1px solid #eee' } : {}}>
+        <h1 className='main-content-title' style={isOverlay ? { fontSize: '18px', margin: 0 } : {}}>
+          Thông Báo
+        </h1>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          {unreadCount > 0 && (
+            <button
+              className='btn-secondary'
+              onClick={handleMarkAllAsRead}
+              style={isOverlay ? { fontSize: '12px', padding: '4px 8px' } : {}}
+            >
+              {isOverlay ? 'Đọc tất cả' : `Đánh dấu tất cả đã đọc (${unreadCount})`}
+            </button>
+          )}
+          {isOverlay && onClose && (
+            <button
+              className='btn-icon'
+              onClick={onClose}
+              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='20'
+                height='20'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
+              >
+                <line x1='18' y1='6' x2='6' y2='18'></line>
+                <line x1='6' y1='6' x2='18' y2='18'></line>
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
-      <div className='notification-filters'>
+      <div className='notification-filters' style={isOverlay ? { padding: '8px 16px' } : {}}>
         <button className={`filter-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>
-          Tất cả ({notifications.length})
+          Tất cả
         </button>
         <button className={`filter-btn ${filter === 'unread' ? 'active' : ''}`} onClick={() => setFilter('unread')}>
           Chưa đọc ({unreadCount})
@@ -100,32 +134,33 @@ export function NotificationPage() {
       </div>
 
       {filteredNotifications.length === 0 ? (
-        <div className='empty-state'>
-          <h2>{filter === 'unread' ? 'Không Có Thông Báo Chưa Đọc' : 'Không Có Thông Báo'}</h2>
+        <div className='empty-state' style={isOverlay ? { padding: '32px 16px' } : {}}>
+          <h2>{filter === 'unread' ? 'Không có tin mới' : 'Hộp thư trống'}</h2>
           <p>Bạn đã xem hết thông báo!</p>
         </div>
       ) : (
-        <div className='notification-list-page'>
+        <div
+          className='notification-list-page'
+          style={isOverlay ? { maxHeight: '400px', overflowY: 'auto', padding: '0' } : {}}
+        >
           {filteredNotifications.map((notification) => (
             <div
               key={notification.id}
               className={`notification-card ${notification.isRead ? 'read' : 'unread'} ${notification.type === 'warning' ? 'warning' : ''}`}
               onClick={() => !notification.isRead && handleMarkAsRead(notification.id)}
+              style={
+                isOverlay ? { borderRadius: 0, margin: 0, borderBottom: '1px solid #eee', padding: '12px 16px' } : {}
+              }
             >
               <div className='notification-header'>
-                <h3>{notification.title}</h3>
+                <h3 style={isOverlay ? { fontSize: '14px' } : {}}>{notification.title}</h3>
                 {!notification.isRead && <span className='unread-badge'>Mới</span>}
               </div>
-              <p className='notification-body'>{notification.body}</p>
+              <p className='notification-body' style={isOverlay ? { fontSize: '13px', margin: '4px 0' } : {}}>
+                {notification.body}
+              </p>
               <div className='notification-footer'>
                 <span className='notification-time'>{new Date(notification.createdAt).toLocaleString('vi-VN')}</span>
-                <span className={`notification-type type-${notification.type}`}>
-                  {notification.type === 'system'
-                    ? 'Hệ thống'
-                    : notification.type === 'warning'
-                      ? 'Cảnh báo'
-                      : 'Cá nhân'}
-                </span>
               </div>
             </div>
           ))}

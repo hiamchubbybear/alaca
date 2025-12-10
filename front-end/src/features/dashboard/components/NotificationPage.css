@@ -167,3 +167,24 @@
 .error-state button {
   margin-top: 16px;
 }
+
+/* Overlay Mode Styles */
+.notification-overlay-container {
+  width: 100%;
+  background: white;
+  color: #333;
+}
+
+/* Custom Scrollbar for Overlay */
+.notification-overlay-container .notification-list-page::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notification-overlay-container .notification-list-page::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.notification-overlay-container .notification-list-page::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}

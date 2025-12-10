@@ -1,16 +1,4 @@
-import { API_BASE_URL } from './apiClient'
-
-export interface CreateScheduleRequest {
-  weekNumber: number
-  sessions: SessionRequest[]
-}
-
-export interface SessionRequest {
-  sessionNumber: number
-  sessionName?: string
-  scheduledDate?: string
-  exercises: ExerciseRequest[]
-}
+import { request, type ApiResponse } from './apiClient'
 
 export interface ExerciseRequest {
   exerciseId: string
@@ -20,42 +8,52 @@ export interface ExerciseRequest {
   notes?: string
 }
 
-export interface ScheduleResponse {
-  scheduleId: string
+export interface DailyPlanRequest {
+  sessionNumber: number
+  sessionName?: string
+  scheduledDate?: string
+  exercises: ExerciseRequest[]
+}
+
+export interface CreateScheduleRequest {
   weekNumber: number
+  dailyPlans: DailyPlanRequest[]
+}
+
+export interface ExerciseResponse {
+  id: string
+  exerciseId: string
+  exerciseTitle: string
+  sets: number
+  reps: number
+  restSeconds: number
+  notes: string
+}
+
+export interface DailyPlan {
+  scheduleId?: string
+  weekNumber?: number
   sessionNumber: number
   sessionName: string
-  scheduledDate: string
-  exercises: {
-    id: string
-    exerciseId: string
-    exerciseTitle: string
-    sets: number
-    reps: number
-    restSeconds: number
-    notes: string
-  }[]
+  scheduledDate?: string
+  exercises: ExerciseResponse[]
 }
 
-export async function createCustomWeeklySchedule(data: CreateScheduleRequest) {
-  const response = await fetch(`${API_BASE_URL}/workout-schedules/custom-week`, {
+export interface WeeklyPlan {
+  dailyPlans: DailyPlan[]
+}
+
+export async function saveSchedule(payload: CreateScheduleRequest): Promise<ApiResponse<WeeklyPlan>> {
+  return request<CreateScheduleRequest, WeeklyPlan>('/workout-schedules/custom-week', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`
-    },
-    body: JSON.stringify(data)
+    body: payload,
+    auth: true
   })
-  return response.json()
 }
 
-export async function getMySchedule() {
-  const response = await fetch(`${API_BASE_URL}/workout-schedules/me`, {
+export async function getLatestSchedule(): Promise<ApiResponse<WeeklyPlan>> {
+  return request<undefined, WeeklyPlan>('/workout-schedules/me', {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}`
-    }
+    auth: true
   })
-  return response.json()
 }

@@ -8,7 +8,8 @@ export function useVote(posts: Post[], updatePost: (postId: string, updater: (po
     const post = posts.find((p) => p.postId === postId)
     if (!post) return
 
-    const currentVote = votedPosts.get(postId)
+    // Fix: Use post.userVote as source of truth instead of possibly empty local map
+    const currentVote = post.userVote
     const isUpvoted = currentVote === 'upvote'
     const isDownvoted = currentVote === 'downvote'
 
@@ -86,7 +87,8 @@ export function useVote(posts: Post[], updatePost: (postId: string, updater: (po
     const post = posts.find((p) => p.postId === postId)
     if (!post) return
 
-    const currentVote = votedPosts.get(postId)
+    // Fix: Use post.userVote as source of truth instead of possibly empty local map
+    const currentVote = post.userVote
     const isUpvoted = currentVote === 'upvote'
     const isDownvoted = currentVote === 'downvote'
 

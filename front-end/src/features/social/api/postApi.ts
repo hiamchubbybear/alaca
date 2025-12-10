@@ -1,5 +1,12 @@
 import { request } from '../../../shared/api/apiClient'
-import type { CreatePostRequest, CreatePostResponse, PaginatedPosts, Post } from '../types/post.types'
+import type {
+  CreatePostRequest,
+  CreatePostResponse,
+  PaginatedPosts,
+  Post,
+  UpdatePostRequest,
+  UpdatePostResponse
+} from '../types/post.types'
 
 // Re-export types for backward compatibility
 export type { CreatePostRequest, CreatePostResponse, PaginatedPosts, Post }
@@ -18,9 +25,24 @@ export async function getAllPostsByLike(pageNumber: number = 1, pageSize: number
   })
 }
 
+export async function getMyPosts() {
+  return request<never, Post[]>('/post', {
+    method: 'GET',
+    auth: true
+  })
+}
+
 export async function createPost(data: CreatePostRequest) {
   return request<CreatePostRequest, CreatePostResponse>('/post', {
     method: 'POST',
+    body: data,
+    auth: true
+  })
+}
+
+export async function updatePost(postId: string, data: UpdatePostRequest) {
+  return request<UpdatePostRequest, UpdatePostResponse>(`/post?postId=${postId}`, {
+    method: 'PUT',
     body: data,
     auth: true
   })

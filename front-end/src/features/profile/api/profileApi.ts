@@ -4,10 +4,16 @@ export type ProfileResponse = {
   id: string
   userId: string
   displayName: string
+  email?: string
   avatarUrl?: string
   birthDate?: string
   gender?: string
   bio?: string
+  socialLinks?: {
+    facebook?: string
+    instagram?: string
+    twitter?: string
+  }
 }
 
 export async function getProfile() {
@@ -24,6 +30,11 @@ export type UpdateProfileRequest = {
   birthDate: string
   gender: string
   bio: string
+  socialLinks?: {
+    facebook?: string
+    instagram?: string
+    twitter?: string
+  }
 }
 
 export async function updateProfile(body: UpdateProfileRequest) {
@@ -34,5 +45,3 @@ export async function updateProfile(body: UpdateProfileRequest) {
     auth: true
   })
 }
-
-
