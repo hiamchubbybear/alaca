@@ -315,6 +315,141 @@
                     }
                 }
             ]
+        },
+        {
+            "name": "6. Notifications (Admin)",
+            "item": [
+                {
+                    "name": "Send System Notification (Broadcast)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"System Maintenance\",\n  \"message\": \"The system will be down for maintenance at 12:00 AM.\",\n  \"type\": \"system\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/account/admin/notifications",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account",
+                                "admin",
+                                "notifications"
+                            ]
+                        },
+                        "description": "Send a notification to ALL users in the system."
+                    }
+                },
+                {
+                    "name": "Send Personal Notification",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"{{targetUserId}}\",\n  \"title\": \"Account Warning\",\n  \"message\": \"Please verify your email address.\",\n  \"type\": \"user\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/account/admin/notifications",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account",
+                                "admin",
+                                "notifications"
+                            ]
+                        },
+                        "description": "Send a notification to a specific user by userId."
+                    }
+                },
+                {
+                    "name": "Send Warning Notification",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"userId\": \"{{targetUserId}}\",\n  \"title\": \"Violation Warning\",\n  \"message\": \"You have violated our community guidelines.\",\n  \"type\": \"warning\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{baseUrl}}/account/admin/notifications",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account",
+                                "admin",
+                                "notifications"
+                            ]
+                        },
+                        "description": "Send a warning notification to a specific user."
+                    }
+                },
+                {
+                    "name": "Get Admin Notification History",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{accessToken}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{baseUrl}}/account/admin/notifications?page=1&pageSize=20",
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "path": [
+                                "account",
+                                "admin",
+                                "notifications"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        },
+                        "description": "Get history of all sent notifications (Admin only)."
+                    }
+                }
+            ]
         }
     ],
     "variable": [

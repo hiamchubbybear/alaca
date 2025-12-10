@@ -192,6 +192,50 @@ public class AccountController(ILogger<AccountController> logger, UserService us
         }
     }
 
+    [Authorize(Roles = "Admin")]
+    [HttpGet("admin/notifications")]
+    public async Task<IActionResult> GetNotificationHistory([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    {
+        try
+        {
+            var service = HttpContext.RequestServices.GetService<fitlife_planner_back_end.Api.Services.NotificationService>();
+            var (notifications, total) = await service.GetNotificationHistory(page, pageSize);
+
+            return new ApiResponse<object>(
+                success: true,
+                message: "Successfully retrieved notification history",
+                data: new { notifications, total },
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<object>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost("admin/notifications")]
+    public async Task<IActionResult> SendSystemNotification([FromBody] CreateNotificationRequestDTO dto)
+    {
+        try
+        {
+            var service = HttpContext.RequestServices.GetService<fitlife_planner_back_end.Api.Services.NotificationService>();
+            await service.CreateNotification(dto);
+
+            return new ApiResponse<bool>(
+                success: true,
+                message: "Successfully sent notification",
+                data: true,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            return new ApiResponse<bool>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+        }
+    }
+
     // ACCOUNT MANAGEMENT
     [Authorize]
     [HttpPut("")]

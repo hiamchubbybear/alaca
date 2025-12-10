@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 import { ConfirmModal } from './ConfirmModal'
-import { createFood, deleteFood as deleteFoodApi, deletePlan as deletePlanApi, getAllFoods, getMyNutritionPlans, updateFood } from './nutritionApi'
+import {
+  createFood,
+  deleteFood as deleteFoodApi,
+  deletePlan as deletePlanApi,
+  getAllFoods,
+  getMyNutritionPlans,
+  updateFood
+} from './nutritionApi'
 import './NutritionManagement.css'
 
 interface FoodItem {
@@ -129,9 +136,7 @@ export function NutritionManagement() {
   const filterFoods = () => {
     let filtered = foods
     if (foodSearchTerm) {
-      filtered = filtered.filter(food =>
-        food.name.toLowerCase().includes(foodSearchTerm.toLowerCase())
-      )
+      filtered = filtered.filter((food) => food.name.toLowerCase().includes(foodSearchTerm.toLowerCase()))
     }
     setFilteredFoods(filtered)
   }
@@ -139,12 +144,10 @@ export function NutritionManagement() {
   const filterPlans = () => {
     let filtered = plans
     if (planSearchTerm) {
-      filtered = filtered.filter(plan =>
-        plan.title.toLowerCase().includes(planSearchTerm.toLowerCase())
-      )
+      filtered = filtered.filter((plan) => plan.title.toLowerCase().includes(planSearchTerm.toLowerCase()))
     }
     if (visibilityFilter !== 'all') {
-      filtered = filtered.filter(plan => plan.visibility === visibilityFilter)
+      filtered = filtered.filter((plan) => plan.visibility === visibilityFilter)
     }
     setFilteredPlans(filtered)
   }
@@ -250,96 +253,158 @@ export function NutritionManagement() {
   }
 
   if (loading) {
-    return <div className="loading">Đang tải...</div>
+    return <div className='loading'>Đang tải...</div>
   }
 
   return (
-    <div className="nutrition-management">
-      {successMessage && (
-        <div className="success-toast">{successMessage}</div>
-      )}
+    <div className='nutrition-management'>
+      {successMessage && <div className='success-toast'>{successMessage}</div>}
 
       {/* Tabs */}
-      <div className="tab-navigation">
+      <div className='tab-navigation'>
         <button
           className={`tab-btn ${activeTab === 'foods' ? 'active' : ''}`}
-          onClick={() => { setActiveTab('foods'); setPage(1) }}
+          onClick={() => {
+            setActiveTab('foods')
+            setPage(1)
+          }}
         >
-          🍽️ Quản Lý Thực Phẩm
+          Quản Lý Thực Phẩm
         </button>
         <button
           className={`tab-btn ${activeTab === 'plans' ? 'active' : ''}`}
-          onClick={() => { setActiveTab('plans'); setPage(1) }}
+          onClick={() => {
+            setActiveTab('plans')
+            setPage(1)
+          }}
         >
-          📋 Quản Lý Kế Hoạch
+          Quản Lý Kế Hoạch
         </button>
       </div>
 
       {/* Food Tab */}
       {activeTab === 'foods' && (
         <>
-          <div className="controls-bar">
-            <div className="search-box">
+          <div className='controls-bar'>
+            <div className='search-box'>
               <input
-                type="text"
-                placeholder="Tìm kiếm món ăn..."
+                type='text'
+                placeholder='Tìm kiếm món ăn...'
                 value={foodSearchTerm}
                 onChange={(e) => setFoodSearchTerm(e.target.value)}
               />
             </div>
 
-            <div className="filter-group">
+            <div className='filter-group'>
               <label>Danh mục:</label>
               <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)}>
-                <option value="all">Tất cả</option>
-                <option value="protein">Protein</option>
-                <option value="carbs">Carbs</option>
-                <option value="vegetables">Rau củ</option>
-                <option value="fruits">Trái cây</option>
-                <option value="dairy">Sữa & Chế phẩm</option>
+                <option value='all'>Tất cả</option>
+                <option value='protein'>Protein</option>
+                <option value='carbs'>Carbs</option>
+                <option value='vegetables'>Rau củ</option>
+                <option value='fruits'>Trái cây</option>
+                <option value='dairy'>Sữa & Chế phẩm</option>
               </select>
             </div>
 
-            <button className="btn-create" onClick={() => { setIsCreating(true); resetForm() }}>
+            <button
+              className='btn-create'
+              onClick={() => {
+                setIsCreating(true)
+                resetForm()
+              }}
+            >
               + Thêm Món Ăn
             </button>
 
-            <div className="results-count">
+            <div className='results-count'>
               Hiển thị {filteredFoods.length} / {total} món
             </div>
           </div>
 
           {/* Form */}
           {(isCreating || editingItem) && (
-            <div className="create-form">
+            <div className='create-form'>
               <h3>{editingItem ? 'Sửa Món Ăn' : 'Thêm Món Ăn Mới'}</h3>
-              <div className="form-grid">
-                <input type="text" placeholder="Tên món ăn" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
-                <input type="number" placeholder="Calories (kcal)" value={formData.caloriesKcal} onChange={(e) => setFormData({...formData, caloriesKcal: e.target.value})} />
-                <input type="number" placeholder="Protein (g)" step="0.1" value={formData.proteinG} onChange={(e) => setFormData({...formData, proteinG: e.target.value})} />
-                <input type="number" placeholder="Carbs (g)" step="0.1" value={formData.carbsG} onChange={(e) => setFormData({...formData, carbsG: e.target.value})} />
-                <input type="number" placeholder="Fat (g)" step="0.1" value={formData.fatG} onChange={(e) => setFormData({...formData, fatG: e.target.value})} />
-                <input type="text" placeholder="Định lượng (vd: 100g)" value={formData.servingSize} onChange={(e) => setFormData({...formData, servingSize: e.target.value})} />
-                <input type="number" placeholder="Khối lượng" value={formData.servingAmount} onChange={(e) => setFormData({...formData, servingAmount: e.target.value})} />
-                <select value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})}>
-                  <option value="">Chọn danh mục</option>
-                  <option value="protein">Protein</option>
-                  <option value="carbs">Carbs</option>
-                  <option value="vegetables">Rau củ</option>
-                  <option value="fruits">Trái cây</option>
-                  <option value="dairy">Sữa & Chế phẩm</option>
+              <div className='form-grid'>
+                <input
+                  type='text'
+                  placeholder='Tên món ăn'
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                />
+                <input
+                  type='number'
+                  placeholder='Calories (kcal)'
+                  value={formData.caloriesKcal}
+                  onChange={(e) => setFormData({ ...formData, caloriesKcal: e.target.value })}
+                />
+                <input
+                  type='number'
+                  placeholder='Protein (g)'
+                  step='0.1'
+                  value={formData.proteinG}
+                  onChange={(e) => setFormData({ ...formData, proteinG: e.target.value })}
+                />
+                <input
+                  type='number'
+                  placeholder='Carbs (g)'
+                  step='0.1'
+                  value={formData.carbsG}
+                  onChange={(e) => setFormData({ ...formData, carbsG: e.target.value })}
+                />
+                <input
+                  type='number'
+                  placeholder='Fat (g)'
+                  step='0.1'
+                  value={formData.fatG}
+                  onChange={(e) => setFormData({ ...formData, fatG: e.target.value })}
+                />
+                <input
+                  type='text'
+                  placeholder='Định lượng (vd: 100g)'
+                  value={formData.servingSize}
+                  onChange={(e) => setFormData({ ...formData, servingSize: e.target.value })}
+                />
+                <input
+                  type='number'
+                  placeholder='Khối lượng'
+                  value={formData.servingAmount}
+                  onChange={(e) => setFormData({ ...formData, servingAmount: e.target.value })}
+                />
+                <select
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  <option value=''>Chọn danh mục</option>
+                  <option value='protein'>Protein</option>
+                  <option value='carbs'>Carbs</option>
+                  <option value='vegetables'>Rau củ</option>
+                  <option value='fruits'>Trái cây</option>
+                  <option value='dairy'>Sữa & Chế phẩm</option>
                 </select>
               </div>
-              <div className="form-actions">
-                <button className="btn-primary" onClick={handleSaveFood}>Lưu</button>
-                <button className="btn-secondary" onClick={() => { setEditingItem(null); setIsCreating(false); resetForm() }}>Hủy</button>
+              <div className='form-actions'>
+                <button className='btn-primary' onClick={handleSaveFood}>
+                  Lưu
+                </button>
+                <button
+                  className='btn-secondary'
+                  onClick={() => {
+                    setEditingItem(null)
+                    setIsCreating(false)
+                    resetForm()
+                  }}
+                >
+                  Hủy
+                </button>
               </div>
             </div>
           )}
 
           {/* Table */}
-          <div className="table-container">
-            <table className="nutrition-table">
+          <div className='table-container'>
+            <table className='nutrition-table'>
               <thead>
                 <tr>
                   <th>Tên Món Ăn</th>
@@ -362,28 +427,26 @@ export function NutritionManagement() {
                 ) : (
                   filteredFoods.map((food) => (
                     <tr key={food.id}>
-                      <td className="food-name">{food.name}</td>
+                      <td className='food-name'>{food.name}</td>
                       <td>{food.caloriesKcal} kcal</td>
                       <td>{food.proteinG}g</td>
                       <td>{food.carbsG}g</td>
                       <td>{food.fatG}g</td>
                       <td>{food.servingSize}</td>
                       <td>
-                        <span className={`category-badge ${food.category}`}>
-                          {food.category}
-                        </span>
+                        <span className={`category-badge ${food.category}`}>{food.category}</span>
                       </td>
                       <td>
                         <div
-                          className="actions-dropdown"
+                          className='actions-dropdown'
                           onMouseEnter={() => setActiveDropdown(food.id)}
                           onMouseLeave={() => setActiveDropdown(null)}
                         >
-                          <button className="actions-trigger">⋮</button>
+                          <button className='actions-trigger'>⋮</button>
                           {activeDropdown === food.id && (
-                            <div className="dropdown-menu">
+                            <div className='dropdown-menu'>
                               <button
-                                className="dropdown-item edit"
+                                className='dropdown-item edit'
                                 onClick={() => {
                                   setEditingItem(food)
                                   setFormData({
@@ -401,7 +464,7 @@ export function NutritionManagement() {
                                 Sửa
                               </button>
                               <button
-                                className="dropdown-item delete"
+                                className='dropdown-item delete'
                                 onClick={() => handleDeleteFood(food.id, food.name)}
                               >
                                 Xóa
@@ -422,51 +485,48 @@ export function NutritionManagement() {
       {/* Plans Tab */}
       {activeTab === 'plans' && (
         <>
-          <div className="controls-bar">
-            <div className="search-box">
+          <div className='controls-bar'>
+            <div className='search-box'>
               <input
-                type="text"
-                placeholder="Tìm kiếm kế hoạch..."
+                type='text'
+                placeholder='Tìm kiếm kế hoạch...'
                 value={planSearchTerm}
                 onChange={(e) => setPlanSearchTerm(e.target.value)}
               />
             </div>
 
-            <div className="filter-group">
+            <div className='filter-group'>
               <label>Trạng thái:</label>
               <select value={visibilityFilter} onChange={(e) => setVisibilityFilter(e.target.value)}>
-                <option value="all">Tất cả</option>
-                <option value="public">Công khai</option>
-                <option value="private">Riêng tư</option>
+                <option value='all'>Tất cả</option>
+                <option value='public'>Công khai</option>
+                <option value='private'>Riêng tư</option>
               </select>
             </div>
 
-            <div className="results-count">
+            <div className='results-count'>
               Hiển thị {filteredPlans.length} / {total} kế hoạch
             </div>
           </div>
 
-          <div className="plans-grid">
+          <div className='plans-grid'>
             {filteredPlans.length === 0 ? (
-              <div className="empty-state">
+              <div className='empty-state'>
                 <p>Chưa có kế hoạch dinh dưỡng nào.</p>
               </div>
             ) : (
               filteredPlans.map((plan) => (
-                <div key={plan.id} className="plan-card">
-                  <div className="plan-header">
+                <div key={plan.id} className='plan-card'>
+                  <div className='plan-header'>
                     <h4>{plan.title}</h4>
                     <span className={`visibility-badge ${plan.visibility}`}>
-                      {plan.visibility === 'public' ? '🌍 Công khai' : '🔒 Riêng tư'}
+                      {plan.visibility === 'public' ? 'Công khai' : 'Riêng tư'}
                     </span>
                   </div>
-                  <p className="plan-description">{plan.description || 'Không có mô tả'}</p>
-                  <div className="plan-actions">
-                    <button className="btn-view">Xem Chi Tiết</button>
-                    <button
-                      className="btn-delete"
-                      onClick={() => handleDeletePlan(plan.id, plan.title)}
-                    >
+                  <p className='plan-description'>{plan.description || 'Không có mô tả'}</p>
+                  <div className='plan-actions'>
+                    <button className='btn-view'>Xem Chi Tiết</button>
+                    <button className='btn-delete' onClick={() => handleDeletePlan(plan.id, plan.title)}>
                       Xóa
                     </button>
                   </div>
@@ -478,18 +538,14 @@ export function NutritionManagement() {
       )}
 
       {/* Pagination */}
-      <div className="pagination">
-        <button
-          onClick={() => setPage(p => Math.max(1, p - 1))}
-          disabled={page === 1}
-        >
+      <div className='pagination'>
+        <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
           ← Trước
         </button>
-        <span>Trang {page} / {Math.ceil(total / pageSize) || 1}</span>
-        <button
-          onClick={() => setPage(p => p + 1)}
-          disabled={page >= Math.ceil(total / pageSize)}
-        >
+        <span>
+          Trang {page} / {Math.ceil(total / pageSize) || 1}
+        </span>
+        <button onClick={() => setPage((p) => p + 1)} disabled={page >= Math.ceil(total / pageSize)}>
           Sau →
         </button>
       </div>

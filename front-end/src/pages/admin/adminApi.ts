@@ -25,3 +25,29 @@ export async function unbanUser(userId: string) {
 export async function getPlatformStats() {
   return request<never, any>('/account/admin/stats', { method: 'GET', auth: true })
 }
+
+export async function getNotificationHistory(page = 1, pageSize = 20) {
+  return request<never, { notifications: any[]; total: number }>(
+    `/account/admin/notifications?page=${page}&pageSize=${pageSize}`,
+    {
+      method: 'GET',
+      auth: true
+    }
+  )
+}
+
+export async function sendSystemNotification(data: { title: string; message: string; type: string; userId?: string }) {
+  return request<{ title: string; body: string; type: string; userId?: string }, boolean>(
+    '/account/admin/notifications',
+    {
+      method: 'POST',
+      body: {
+        title: data.title,
+        body: data.message, // Map message -> body
+        type: data.type,
+        userId: data.userId
+      },
+      auth: true
+    }
+  )
+}

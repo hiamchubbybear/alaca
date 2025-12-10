@@ -1,15 +1,6 @@
 import { useEffect, useState } from 'react'
+import { getMyNotifications, markAllAsRead, markAsRead, type Notification } from '../api/notificationApi'
 import './NotificationPage.css'
-// Mock data for staging
-type Notification = {
-  id: string
-  type: string
-  title: string
-  body: string
-  message: string
-  isRead: boolean
-  createdAt: string
-}
 
 export function NotificationPage() {
   const [notifications, setNotifications] = useState<Notification[]>([])
@@ -25,8 +16,12 @@ export function NotificationPage() {
     try {
       setLoading(true)
       setError(null)
-      // Mock data - no API calls
-      setNotifications([])
+      const res = await getMyNotifications()
+      if (res.success && res.data) {
+        setNotifications(res.data)
+      } else {
+        setNotifications([])
+      }
     } catch (err) {
       setError('Không thể tải thông báo')
       console.error(err)
@@ -37,10 +32,14 @@ export function NotificationPage() {
 
   const handleMarkAsRead = async (notificationId: string) => {
     try {
-      // Mock - just update state
-      setNotifications(prev =>
-        prev.map(n => n.id === notificationId ? { ...n, isRead: true } : n)
-      )
+      // Optimistic update
+      setNotifications((prev) => prev.map((n) => (n.id === notificationId ? { ...n, isRead: true } : n)))
+
+      const res = await markAsRead(notificationId)
+      if (!res.success) {
+        // Revert if failed (optional, but good practice)
+        console.error('Lỗi khi đánh dấu đã đọc')
+      }
     } catch (err) {
       console.error('Không thể đánh dấu đã đọc:', err)
     }
@@ -48,89 +47,85 @@ export function NotificationPage() {
 
   const handleMarkAllAsRead = async () => {
     try {
-      // Mock - just update state
-      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })))
+      await markAllAsRead()
     } catch (err) {
       console.error('Không thể đánh dấu tất cả đã đọc:', err)
     }
   }
 
-  const filteredNotifications = filter === 'all'
-    ? notifications
-    : notifications.filter(n => !n.isRead)
+  const filteredNotifications = filter === 'all' ? notifications : notifications.filter((n) => !n.isRead)
 
-  const unreadCount = notifications.filter(n => !n.isRead).length
+  const unreadCount = notifications.filter((n) => !n.isRead).length
 
   if (loading) {
     return (
-      <div className="section-page">
-        <div className="loading-state">Đang tải thông báo...</div>
+      <div className='section-page'>
+        <div className='loading-state'>Đang tải thông báo...</div>
       </div>
     )
   }
 
   if (error) {
     return (
-      <div className="section-page">
-        <div className="error-state">
+      <div className='section-page'>
+        <div className='error-state'>
           <p>{error}</p>
-          <button onClick={loadNotifications} className="btn-primary">Thử lại</button>
+          <button onClick={loadNotifications} className='btn-primary'>
+            Thử lại
+          </button>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="section-page">
-      <div className="section-header">
-        <h1 className="main-content-title">Thông Báo</h1>
+    <div className='section-page'>
+      <div className='section-header'>
+        <h1 className='main-content-title'>Thông Báo</h1>
         {unreadCount > 0 && (
-          <button className="btn-secondary" onClick={handleMarkAllAsRead}>
+          <button className='btn-secondary' onClick={handleMarkAllAsRead}>
             Đánh dấu tất cả đã đọc ({unreadCount})
           </button>
         )}
       </div>
 
-      <div className="notification-filters">
-        <button
-          className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-          onClick={() => setFilter('all')}
-        >
+      <div className='notification-filters'>
+        <button className={`filter-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => setFilter('all')}>
           Tất cả ({notifications.length})
         </button>
-        <button
-          className={`filter-btn ${filter === 'unread' ? 'active' : ''}`}
-          onClick={() => setFilter('unread')}
-        >
+        <button className={`filter-btn ${filter === 'unread' ? 'active' : ''}`} onClick={() => setFilter('unread')}>
           Chưa đọc ({unreadCount})
         </button>
       </div>
 
       {filteredNotifications.length === 0 ? (
-        <div className="empty-state">
+        <div className='empty-state'>
           <h2>{filter === 'unread' ? 'Không Có Thông Báo Chưa Đọc' : 'Không Có Thông Báo'}</h2>
           <p>Bạn đã xem hết thông báo!</p>
         </div>
       ) : (
-        <div className="notification-list-page">
-          {filteredNotifications.map(notification => (
+        <div className='notification-list-page'>
+          {filteredNotifications.map((notification) => (
             <div
               key={notification.id}
-              className={`notification-card ${notification.isRead ? 'read' : 'unread'}`}
+              className={`notification-card ${notification.isRead ? 'read' : 'unread'} ${notification.type === 'warning' ? 'warning' : ''}`}
               onClick={() => !notification.isRead && handleMarkAsRead(notification.id)}
             >
-              <div className="notification-header">
+              <div className='notification-header'>
                 <h3>{notification.title}</h3>
-                {!notification.isRead && (
-                  <span className="unread-badge">Mới</span>
-                )}
+                {!notification.isRead && <span className='unread-badge'>Mới</span>}
               </div>
-              <p className="notification-body">{notification.body}</p>
-              <div className="notification-footer">
-                <span className="notification-time">
-                  {new Date(notification.createdAt).toLocaleString('vi-VN')}
+              <p className='notification-body'>{notification.body}</p>
+              <div className='notification-footer'>
+                <span className='notification-time'>{new Date(notification.createdAt).toLocaleString('vi-VN')}</span>
+                <span className={`notification-type type-${notification.type}`}>
+                  {notification.type === 'system'
+                    ? 'Hệ thống'
+                    : notification.type === 'warning'
+                      ? 'Cảnh báo'
+                      : 'Cá nhân'}
                 </span>
-                <span className="notification-type">{notification.type}</span>
               </div>
             </div>
           ))}

@@ -10,4 +10,6 @@ public class GetNotificationResponseDTO
     public bool IsRead { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime? ReadAt { get; set; }
+    public Guid UserId { get; set; }
+    public string? Username { get; set; }
 }

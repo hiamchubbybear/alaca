@@ -376,7 +376,8 @@
 }
 
 /* Modal Styles */
-.modal-overlay {
+/* Modal Styles Scoped to User Management */
+.user-management .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -391,80 +392,44 @@
   animation: fadeIn 0.2s;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.modal-content {
+.user-management .modal-content {
   background: white;
-  border-radius: 16px;
-  max-width: 500px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
+  border-radius: 16px !important;
+  max-width: 500px !important;
+  width: 100% !important;
+  height: auto !important;
+  max-height: 80vh !important;
+  overflow-y: auto !important;
   animation: slideUp 0.3s ease-out;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: auto !important; /* specific reset */
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.modal-header {
-  padding: 24px;
+.user-management .modal-header {
+  padding: 16px 24px;
   border-bottom: 1px solid #e2e8f0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px 16px 0 0 !important;
 }
 
-.modal-header h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  color: white;
-}
-
-.close-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  font-size: 28px;
-  color: white;
-  cursor: pointer;
-  padding: 0;
-  width: 36px;
-  height: 36px;
-  line-height: 1;
-  border-radius: 8px;
-  transition: all 0.2s;
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.modal-body {
-  padding: 24px;
+.user-management .modal-body {
+  padding: 24px !important;
+  display: block !important; /* Override potential grid/flex from other pages */
+  gap: 0 !important;
 }
 
 .detail-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 16px 0;
-  border-bottom: 1px solid #e2e8f0;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 8px 0 !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+  width: 100% !important;
+  margin: 0 !important;
 }
 
 .detail-row:last-child {
@@ -513,4 +478,78 @@
   .user-table {
     min-width: 700px;
   }
+}
+
+/* Enhanced Table Elements */
+.user-info-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.user-name:hover {
+  color: #667eea;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.badges-container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-badge.active {
+  background: #e6fffa;
+  color: #2c7a7b;
+}
+
+.status-badge.banned {
+  background: #fff5f5;
+  color: #c53030;
+}
+
+.row-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #718096;
+}
+
+.icon-btn:hover {
+  background: #edf2f7;
+  color: #4a5568;
 }

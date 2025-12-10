@@ -129,11 +129,67 @@ public class UserService(
 
     public async Task<object> GetPlatformStats()
     {
+        // 1. Totals
         var totalUsers = await db.Users.CountAsync();
         var totalWorkouts = await db.Workouts.CountAsync();
         var totalChallenges = await db.Challenges.CountAsync();
         var totalPosts = await db.Posts.CountAsync();
-        return new { totalUsers, totalWorkouts, totalChallenges, totalPosts };
+        var totalNotifications = await db.Notifications.CountAsync();
+        var totalFoods = await db.FoodItems.CountAsync();
+        var totalExercises = await db.ExerciseLibrary.CountAsync();
+
+        // 2. User Growth (Last 6 Months)
+        var sixMonthsAgo = DateTime.UtcNow.AddMonths(-6);
+        var userGrowthRaw = await db.Users
+            .Where(u => u.CreatedAt >= sixMonthsAgo)
+            .OrderBy(u => u.CreatedAt)
+            .Select(u => u.CreatedAt)
+            .ToListAsync();
+
+        var userGrowth = userGrowthRaw
+            .GroupBy(d => d.ToString("MM/yyyy"))
+            .Select(g => new { month = g.Key, users = g.Count() })
+            .ToList();
+
+        // 3. Weekly Activity (Last 7 Days)
+        var sevenDaysAgo = DateTime.UtcNow.AddDays(-7).Date;
+
+        var postsRaw = await db.Posts
+            .Where(p => p.CreatedAt >= sevenDaysAgo)
+            .Select(p => p.CreatedAt)
+            .ToListAsync();
+
+        var workoutsRaw = await db.Workouts
+            .Where(w => w.CreatedAt >= sevenDaysAgo)
+            .Select(w => w.CreatedAt)
+            .ToListAsync();
+
+        // Prepare 7 days buckets
+        var weeklyStats = new List<object>();
+        for (int i = 0; i < 7; i++)
+        {
+            var date = DateTime.UtcNow.AddDays(-i).Date;
+            var dayLabel = date.ToString("dd/MM");
+
+            var postsCount = postsRaw.Count(p => p.Date == date);
+            var workoutsCount = workoutsRaw.Count(w => w.Date == date);
+
+            weeklyStats.Add(new { day = dayLabel, posts = postsCount, workouts = workoutsCount });
+        }
+        weeklyStats.Reverse(); // Show oldest to newest
+
+        return new
+        {
+            totalUsers,
+            totalWorkouts,
+            totalChallenges,
+            totalPosts,
+            totalNotifications,
+            totalFoods,
+            totalExercises,
+            userGrowth,
+            weeklyStats
+        };
     }
 
     // ACCOUNT MANAGEMENT
