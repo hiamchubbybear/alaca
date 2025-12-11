@@ -217,6 +217,15 @@ public class WorkoutScheduleController : ControllerBase
     {
         try
         {
+            _logger.LogInformation($"[CreateCustomWeeklySchedule] Received request. Week: {dto.WeekNumber}, Sessions: {dto.Sessions?.Count}");
+            if (dto.Sessions != null)
+            {
+               foreach(var s in dto.Sessions)
+               {
+                   _logger.LogInformation($" - Session {s.SessionNumber}: {s.Exercises?.Count} exercises");
+               }
+            }
+
             var result = await _scheduleService.CreateCustomWeeklySchedule(dto);
              return new ApiResponse<List<GetScheduleResponseDTO>>(success: true, message: "Successfully created custom weekly schedule", data: result, statusCode: HttpStatusCode.OK).ToActionResult();
         }
