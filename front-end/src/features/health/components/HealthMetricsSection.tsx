@@ -91,8 +91,9 @@ export function HealthMetricsSection({
         // Transform data to extract dailyCalories from goal.tdee
         const transformedData = res.data.map((record) => ({
           ...record,
-          dailyCalories: record.goal?.tdee || record.goal?.Tdee || undefined
-        }))
+          dailyCalories: record.goal?.tdee || record.goal?.Tdee || undefined,
+          measuredAt: record.RecordedAt || record.recordedAt || new Date().toISOString()
+        })) as BmiRecord[]
         setBmiHistory(transformedData)
       }
     } catch (error) {

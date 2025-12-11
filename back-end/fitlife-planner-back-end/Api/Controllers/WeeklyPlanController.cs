@@ -237,7 +237,7 @@ public class WorkoutExerciseItem
 {
     public Guid ExerciseId { get; set; }
     public int Sets { get; set; }
-    public string Reps { get; set; }  // e.g., "8-12"
+    public int Reps { get; set; }  // e.g., "8-12"
     public int RestSeconds { get; set; }
 }
 

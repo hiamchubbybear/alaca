@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { getMyBmiRecords, type BmiRecord } from '../../../shared/api/bmiApi'
+import { WorkoutPlayer } from '../../training'
 import './ProgressPage.css'
 
 type ProgressEntry = {
@@ -13,7 +14,9 @@ type ProgressEntry = {
 }
 
 export function ProgressPage() {
+  const [showWorkoutPlayer, setShowWorkoutPlayer] = useState(false)
   const [entries, setEntries] = useState<ProgressEntry[]>([])
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<string>('all')
@@ -80,11 +83,41 @@ export function ProgressPage() {
     )
   }
 
+  // Show WorkoutPlayer if toggled
+  if (showWorkoutPlayer) {
+    return (
+      <div className='section-page'>
+        <button className='btn-secondary' onClick={() => setShowWorkoutPlayer(false)} style={{ marginBottom: '1rem' }}>
+          ← Quay lại tiến độ
+        </button>
+        <WorkoutPlayer />
+      </div>
+    )
+  }
+
   return (
     <div className='section-page'>
       <div className='section-header'>
         <h1 className='main-content-title'>Tiến Độ Của Bạn</h1>
-        {/* <button className="btn-primary">Ghi Nhận Tiến Độ</button> */}
+        <button className='btn-primary' onClick={() => setShowWorkoutPlayer(true)}>
+          <svg
+            width='20'
+            height='20'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+          >
+            <path d='M14.4 14.4L9.6 9.6' />
+            <path d='M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z' />
+            <path d='M21.5 21.5l-1.4-1.4' />
+            <path d='M3.9 3.9l1.4 1.4' />
+            <circle cx='7.5' cy='7.5' r='5.5' />
+          </svg>
+          Bắt đầu tập
+        </button>
       </div>
 
       <div className='progress-filters'>
@@ -93,6 +126,9 @@ export function ProgressPage() {
         </button>
         <button className={`filter-btn ${filter === 'weight' ? 'active' : ''}`} onClick={() => setFilter('weight')}>
           Cân nặng
+        </button>
+        <button className={`filter-btn ${filter === 'height' ? 'active' : ''}`} onClick={() => setFilter('height')}>
+          Chiều cao
         </button>
         {/* <button
           className={`filter-btn ${filter === 'photo' ? 'active' : ''}`}
@@ -155,6 +191,12 @@ export function ProgressPage() {
           )}
 
           {/* Progress Photos - Hidden for now as we don't have API */}
+          {filter === 'height' && (
+            <div className='empty-state'>
+              <p>Tính năng theo dõi chiều cao đang được phát triển.</p>
+            </div>
+          )}
+
           {filter === 'photo' && (
             <div className='empty-state'>
               <p>Tính năng theo dõi hình ảnh đang được phát triển.</p>

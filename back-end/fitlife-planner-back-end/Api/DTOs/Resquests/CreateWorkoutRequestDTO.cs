@@ -12,10 +12,10 @@ public class CreateWorkoutRequestDTO
 public class WorkoutExerciseDTO
 {
     public Guid ExerciseId { get; set; }
-    public int? OrderIndex { get; set; }
-    public int? Sets { get; set; }
-    public string? Reps { get; set; }
-    public int? RestSeconds { get; set; }
+    public int OrderIndex { get; set; }
+    public int Sets { get; set; }
+    public int Reps { get; set; }
+    public int RestSeconds { get; set; }
     public string? Tempo { get; set; }
     public string? Notes { get; set; }
 }

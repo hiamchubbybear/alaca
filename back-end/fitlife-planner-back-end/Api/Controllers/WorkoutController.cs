@@ -1,5 +1,6 @@
 using System.Net;
 using APIResponseWrapper;
+using fitlife_planner_back_end.Api.DTOs.Requests;
 using fitlife_planner_back_end.Api.DTOs.Responses;
 using fitlife_planner_back_end.Api.DTOs.Resquests;
 using fitlife_planner_back_end.Api.Services;
@@ -150,18 +151,196 @@ public class WorkoutController : ControllerBase
         }
     }
 
+    // ==================== WORKOUT SCHEDULE ENDPOINTS ====================
+
     [Authorize]
-    [HttpPost("{id:guid}/duplicate")]
-    public async Task<IActionResult> DuplicateWorkout(Guid id)
+    [HttpGet("today")]
+    public async Task<IActionResult> GetTodayWorkout()
     {
         try
         {
-            var workout = await _workoutService.DuplicateWorkout(id);
-            return new ApiResponse<GetWorkoutResponseDTO>(success: true, message: "Successfully duplicated workout", data: workout, statusCode: HttpStatusCode.Created).ToActionResult();
+            var workout = await _workoutService.GetTodayWorkout();
+
+            if (workout == null)
+            {
+                return new ApiResponse<WorkoutScheduleResponseDTO>(
+                    success: false,
+                    message: "No workout scheduled for today",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
+            return new ApiResponse<WorkoutScheduleResponseDTO>(
+                success: true,
+                message: "Successfully retrieved today's workout",
+                data: workout,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
         }
         catch (Exception e)
         {
-            return new ApiResponse<GetWorkoutResponseDTO>(success: false, message: e.Message, statusCode: HttpStatusCode.BadRequest).ToActionResult();
+            _logger.LogError(e, "Error getting today's workout");
+            return new ApiResponse<WorkoutScheduleResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("latest")]
+    public async Task<IActionResult> GetLatestWorkout()
+    {
+        try
+        {
+            var workout = await _workoutService.GetLatestWorkout();
+
+            if (workout == null)
+            {
+                return new ApiResponse<WorkoutScheduleResponseDTO>(
+                    success: false,
+                    message: "No workout found",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
+            return new ApiResponse<WorkoutScheduleResponseDTO>(
+                success: true,
+                message: "Successfully retrieved latest workout",
+                data: workout,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting latest workout");
+            return new ApiResponse<WorkoutScheduleResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("schedules/{scheduleId:guid}")]
+    public async Task<IActionResult> GetWorkoutSchedule(Guid scheduleId)
+    {
+        try
+        {
+            var workout = await _workoutService.GetWorkoutSchedule(scheduleId);
+
+            if (workout == null)
+            {
+                return new ApiResponse<WorkoutScheduleResponseDTO>(
+                    success: false,
+                    message: "Workout schedule not found",
+                    statusCode: HttpStatusCode.NotFound
+                ).ToActionResult();
+            }
+
+            return new ApiResponse<WorkoutScheduleResponseDTO>(
+                success: true,
+                message: "Successfully retrieved workout schedule",
+                data: workout,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting workout schedule {ScheduleId}", scheduleId);
+            return new ApiResponse<WorkoutScheduleResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpPost("complete")]
+    public async Task<IActionResult> CompleteWorkout([FromBody] CompleteWorkoutRequestDTO request)
+    {
+        try
+        {
+            var success = await _workoutService.CompleteWorkout(request);
+
+            if (!success)
+            {
+                return new ApiResponse<object>(
+                    success: false,
+                    message: "Failed to mark workout as completed",
+                    statusCode: HttpStatusCode.BadRequest
+                ).ToActionResult();
+            }
+
+            return new ApiResponse<object>(
+                success: true,
+                message: "Workout marked as completed successfully",
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error completing workout");
+            return new ApiResponse<object>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("history")]
+    public async Task<IActionResult> GetWorkoutHistory([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        try
+        {
+            var history = await _workoutService.GetWorkoutHistory(page, pageSize);
+
+            return new ApiResponse<List<WorkoutScheduleResponseDTO>>(
+                success: true,
+                message: "Successfully retrieved workout history",
+                data: history,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting workout history");
+            return new ApiResponse<List<WorkoutScheduleResponseDTO>>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
+        }
+    }
+
+    [Authorize]
+    [HttpGet("stats")]
+    public async Task<IActionResult> GetWorkoutStats()
+    {
+        try
+        {
+            var stats = await _workoutService.GetWorkoutStats();
+
+            return new ApiResponse<WorkoutStatsResponseDTO>(
+                success: true,
+                message: "Successfully retrieved workout stats",
+                data: stats,
+                statusCode: HttpStatusCode.OK
+            ).ToActionResult();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Error getting workout stats");
+            return new ApiResponse<WorkoutStatsResponseDTO>(
+                success: false,
+                message: e.Message,
+                statusCode: HttpStatusCode.BadRequest
+            ).ToActionResult();
         }
     }
 }

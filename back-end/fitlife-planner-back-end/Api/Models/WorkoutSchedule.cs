@@ -14,11 +14,16 @@ public class WorkoutSchedule
     public string? SessionName { get; set; } // "Push Day", "Leg Day", etc.
 
     // Optional specific date/time if user wants to schedule
-    public DateTime? ScheduledDate { get; set; }
+    public DateTime ScheduledDate { get; set; }
     public TimeSpan? ScheduledTime { get; set; }
 
     public string Status { get; set; } = "planned"; // planned, completed, skipped
+
+    // Completion tracking
+    public bool IsCompleted { get; set; } = false;
     public DateTime? CompletedAt { get; set; }
+    public string? Notes { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation properties

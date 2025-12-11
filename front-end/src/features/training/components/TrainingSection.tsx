@@ -4,6 +4,8 @@ import { getExerciseRecommendations, getExercises, type Exercise } from '../../.
 import { getLatestSchedule, saveSchedule } from '../../../shared/api/workoutScheduleApi'
 import { type HealthMetrics } from '../../dashboard/types'
 import { loadHealthMetricsFromResponse } from '../../health/utils'
+import { getTodayWorkout, type WorkoutSchedule } from '../api/workoutApi'
+import './TrainingSection.css'
 
 interface TrainingSectionProps {
   healthMetrics: HealthMetrics | null
@@ -14,6 +16,10 @@ interface TrainingSectionProps {
 export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToHealth }: TrainingSectionProps) {
   const [trainingLoading, setTrainingLoading] = useState(false)
   const [trainingError, setTrainingError] = useState<string | null>(null)
+
+  // Workout Schedule State
+  const [todayWorkout, setTodayWorkout] = useState<WorkoutSchedule | null>(null)
+  const [workoutLoading, setWorkoutLoading] = useState(false)
 
   const [sessionCards, setSessionCards] = useState<number[]>([])
   const [sessionItems, setSessionItems] = useState<
@@ -33,6 +39,33 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
   const [exerciseError, setExerciseError] = useState<string | null>(null)
   const [recommendedExercises, setRecommendedExercises] = useState<Exercise[]>([])
   const [exerciseDetailModal, setExerciseDetailModal] = useState<Exercise | null>(null)
+
+  // Load today's workout on mount
+  useEffect(() => {
+    loadTodayWorkout()
+  }, [])
+
+  const loadTodayWorkout = async () => {
+    try {
+      setWorkoutLoading(true)
+      console.log("[TrainingSection] Loading today's workout...")
+
+      const response = await getTodayWorkout()
+      console.log('[TrainingSection] API Response:', response)
+
+      if (response.success && response.data) {
+        console.log('[TrainingSection] Workout data:', response.data)
+        console.log('[TrainingSection] IsCompleted:', response.data.isCompleted)
+        setTodayWorkout(response.data)
+      } else {
+        console.log('[TrainingSection] No workout data or API failed:', response)
+      }
+    } catch (err) {
+      console.error("[TrainingSection] Failed to load today's workout:", err)
+    } finally {
+      setWorkoutLoading(false)
+    }
+  }
 
   // Calculate recommended sessions based on health metrics
   const recommendedSessionCount = useMemo(() => {
@@ -127,8 +160,8 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
             schedules.forEach((s) => {
               const rowItems = s.exercises.map((ex) => ({
                 name: ex.exerciseTitle,
-                muscle: ex.primaryMuscle || '',
-                calories: ex.caloriesBurnedPerSet?.toString() || ''
+                muscle: (ex as any).primaryMuscle || '',
+                calories: (ex as any).caloriesBurnedPerSet?.toString() || ''
               }))
               next[s.sessionNumber] = rowItems
             })
@@ -328,6 +361,46 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
       {trainingError && (
         <div className='health-status error' style={{ margin: 0 }}>
           {trainingError}
+        </div>
+      )}
+
+      {/* Today's Workout Status */}
+      {!workoutLoading && todayWorkout && (
+        <div className='workout-status-card'>
+          <div className='workout-status-header'>
+            <div>
+              <h3>{todayWorkout.workoutName}</h3>
+              <p className='workout-date'>Hôm nay • {todayWorkout.exercises.length} bài tập</p>
+            </div>
+            <div className={`workout-status-badge ${todayWorkout.isCompleted ? 'completed' : 'pending'}`}>
+              {todayWorkout.isCompleted ? (
+                <>
+                  <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                    <path d='M22 11.08V12a10 10 0 1 1-5.93-9.14' />
+                    <polyline points='22 4 12 14.01 9 11.01' />
+                  </svg>
+                  Đã hoàn thành
+                </>
+              ) : (
+                <>
+                  <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                    <circle cx='12' cy='12' r='10' />
+                    <polyline points='12 6 12 12 16 14' />
+                  </svg>
+                  Chưa hoàn thành
+                </>
+              )}
+            </div>
+          </div>
+          {todayWorkout.isCompleted && todayWorkout.completedAt && (
+            <p className='workout-completed-time'>
+              Hoàn thành lúc:{' '}
+              {new Date(todayWorkout.completedAt).toLocaleTimeString('vi-VN', {
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+            </p>
+          )}
         </div>
       )}
 

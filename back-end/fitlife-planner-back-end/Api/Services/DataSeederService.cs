@@ -404,7 +404,7 @@ public class WorkoutExerciseDataItem
     public int Sets { get; set; }
 
     [System.Text.Json.Serialization.JsonPropertyName("reps")]
-    public string Reps { get; set; } = string.Empty;
+    public int Reps { get; set; } = 0;
 
     [System.Text.Json.Serialization.JsonPropertyName("restSeconds")]
     public int RestSeconds { get; set; }

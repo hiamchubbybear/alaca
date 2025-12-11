@@ -21,7 +21,7 @@ public class WorkoutExerciseDetailDTO
     public string? ExerciseVideoUrl { get; set; }
     public int? OrderIndex { get; set; }
     public int? Sets { get; set; }
-    public string? Reps { get; set; }
+    public int? Reps { get; set; }
     public int? RestSeconds { get; set; }
     public string? Tempo { get; set; }
     public string? Notes { get; set; }

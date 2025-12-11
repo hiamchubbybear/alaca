@@ -67,7 +67,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Achievements");
+                    b.ToTable("Achievements", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.BMIRecord", b =>
@@ -126,7 +126,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("BmiRecords");
+                    b.ToTable("BmiRecords", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Challenge", b =>
@@ -171,7 +171,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Challenges");
+                    b.ToTable("Challenges", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ChallengeParticipant", b =>
@@ -218,7 +218,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChallengeParticipants");
+                    b.ToTable("ChallengeParticipants", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ExerciseLibrary", b =>
@@ -289,7 +289,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ExerciseLibrary");
+                    b.ToTable("ExerciseLibrary", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ExerciseTag", b =>
@@ -310,7 +310,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.ToTable("ExerciseTags");
+                    b.ToTable("ExerciseTags", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.FoodItem", b =>
@@ -364,7 +364,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FoodItems");
+                    b.ToTable("FoodItems", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Message", b =>
@@ -397,7 +397,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Notification", b =>
@@ -439,7 +439,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.NutritionPlan", b =>
@@ -486,7 +486,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NutritionPlans");
+                    b.ToTable("NutritionPlans", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.NutritionPlanItem", b =>
@@ -528,7 +528,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("PlanId");
 
-                    b.ToTable("NutritionPlanItems");
+                    b.ToTable("NutritionPlanItems", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.PasswordResetToken", b =>
@@ -564,7 +564,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PasswordResetTokens");
+                    b.ToTable("PasswordResetTokens", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Post", b =>
@@ -627,7 +627,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.PostComment", b =>
@@ -655,7 +655,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("PostComments");
+                    b.ToTable("PostComments", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.PostLike", b =>
@@ -680,7 +680,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("PostId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("PostLikes");
+                    b.ToTable("PostLikes", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.PostVote", b =>
@@ -713,7 +713,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("PostId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("PostVotes");
+                    b.ToTable("PostVotes", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Profile", b =>
@@ -768,7 +768,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("UserId1")
                         .IsUnique();
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ProgressEntry", b =>
@@ -807,7 +807,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProgressEntries");
+                    b.ToTable("ProgressEntries", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Review", b =>
@@ -838,7 +838,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.ScheduledExercise", b =>
@@ -877,7 +877,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("ScheduledExercises");
+                    b.ToTable("ScheduledExercises", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.StatsUserWeekly", b =>
@@ -908,7 +908,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("StatsUserWeekly");
+                    b.ToTable("StatsUserWeekly", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Streak", b =>
@@ -944,7 +944,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("UserId", "Type")
                         .IsUnique();
 
-                    b.ToTable("Streaks");
+                    b.ToTable("Streaks", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Token", b =>
@@ -975,7 +975,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tokens");
+                    b.ToTable("Tokens", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.User", b =>
@@ -1033,7 +1033,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.UserAchievement", b =>
@@ -1066,7 +1066,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("UserId", "AchievementId")
                         .IsUnique();
 
-                    b.ToTable("UserAchievements");
+                    b.ToTable("UserAchievements", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.UserFollower", b =>
@@ -1093,7 +1093,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("UserId", "FollowerId")
                         .IsUnique();
 
-                    b.ToTable("UserFollowers");
+                    b.ToTable("UserFollowers", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.UserSettings", b =>
@@ -1124,7 +1124,7 @@ namespace fitlife_planner_back_end.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserSettings");
+                    b.ToTable("UserSettings", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.Workout", b =>
@@ -1165,7 +1165,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Workouts");
+                    b.ToTable("Workouts", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.WorkoutExercise", b =>
@@ -1206,7 +1206,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("WorkoutExercises");
+                    b.ToTable("WorkoutExercises", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.WorkoutSchedule", b =>
@@ -1255,7 +1255,7 @@ namespace fitlife_planner_back_end.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("WorkoutSchedules");
+                    b.ToTable("WorkoutSchedules", (string)null);
                 });
 
             modelBuilder.Entity("fitlife_planner_back_end.Api.Models.BMIRecord", b =>

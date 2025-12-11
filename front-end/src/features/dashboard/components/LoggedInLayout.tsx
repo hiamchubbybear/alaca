@@ -7,6 +7,7 @@ import { loadHealthMetricsFromResponse } from '../../health/utils'
 import { NutritionSection } from '../../nutrition/components/NutritionSection'
 import { getProfile, type ProfileResponse } from '../../profile/api/profileApi'
 import { ProfileSection } from '../../profile/components/ProfileSection'
+import { ProgressPage } from '../../progress'
 import { SocialPage } from '../../social/components/SocialPage'
 import { TrainingSection } from '../../training/components/TrainingSection'
 import { getUnreadCount } from '../api/notificationApi'
@@ -224,6 +225,8 @@ export function LoggedInLayout({
           />
         ) : activeSection === 'nutrition' ? (
           <NutritionSection />
+        ) : activeSection === 'progress' ? (
+          <ProgressPage />
         ) : activeSection === 'challenge' ? (
           <ChallengeSection />
         ) : (
