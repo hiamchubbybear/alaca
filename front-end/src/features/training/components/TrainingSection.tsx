@@ -255,14 +255,19 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
         .filter((session) => session.exercises.length > 0)
 
       if (sessions.length === 0) {
+        console.warn('handleSaveSchedule: No exercises to save, sessions empty')
         setSaveError('Vui lòng thêm ít nhất một bài tập vào lịch tập!')
         return
       }
+
+      console.log('handleSaveSchedule: Payload being sent:', JSON.stringify(sessions, null, 2))
 
       const response = await saveSchedule({
         weekNumber: 1,
         dailyPlans: sessions
       })
+
+      console.log('handleSaveSchedule: API Response:', response)
 
       if (response.success || response.data) {
         setSaveSuccess('Đã lưu lịch tập thành công!')

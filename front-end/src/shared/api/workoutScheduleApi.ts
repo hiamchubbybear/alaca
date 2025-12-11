@@ -44,16 +44,32 @@ export interface WeeklyPlan {
 }
 
 export async function saveSchedule(payload: CreateScheduleRequest): Promise<ApiResponse<WeeklyPlan>> {
-  return request<CreateScheduleRequest, WeeklyPlan>('/workout-schedules/custom-week', {
-    method: 'POST',
-    body: payload,
-    auth: true
-  })
+  console.log('[API] saveSchedule payload:', JSON.stringify(payload, null, 2))
+  try {
+    const response = await request<CreateScheduleRequest, WeeklyPlan>('/workout-schedules/custom-week', {
+      method: 'POST',
+      body: payload,
+      auth: true
+    })
+    console.log('[API] saveSchedule response:', response)
+    return response
+  } catch (error) {
+    console.error('[API] saveSchedule error:', error)
+    throw error
+  }
 }
 
 export async function getLatestSchedule(): Promise<ApiResponse<WeeklyPlan>> {
-  return request<undefined, WeeklyPlan>('/workout-schedules/me', {
-    method: 'GET',
-    auth: true
-  })
+  console.log('[API] getLatestSchedule called')
+  try {
+    const response = await request<undefined, WeeklyPlan>('/workout-schedules/me', {
+      method: 'GET',
+      auth: true
+    })
+    console.log('[API] getLatestSchedule response:', response)
+    return response
+  } catch (error) {
+    console.error('[API] getLatestSchedule error:', error)
+    throw error
+  }
 }
