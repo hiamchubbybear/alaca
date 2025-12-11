@@ -3,6 +3,7 @@ namespace fitlife_planner_back_end.Api.DTOs.Resquests;
 public class CreateCustomScheduleRequestDTO
 {
     public int WeekNumber { get; set; } = 1;
+    [System.Text.Json.Serialization.JsonPropertyName("dailyPlans")]
     public List<SessionRequestDTO> Sessions { get; set; } = new();
 }
 

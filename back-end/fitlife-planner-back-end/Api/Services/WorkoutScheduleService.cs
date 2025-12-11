@@ -209,39 +209,13 @@ public class WorkoutScheduleService
         var userId = _userContext.User.userId;
         var schedules = new List<GetScheduleResponseDTO>();
 
-        foreach (var sessionDto in dto.Sessions)
+        _logger.LogInformation($"Creating custom schedule for user {userId}. Weeks: {dto.WeekNumber}, Sessions: {dto.Sessions?.Count ?? 0}");
+
+        if (dto.Sessions == null || !dto.Sessions.Any())
         {
-            var schedule = new WorkoutSchedule
-            {
-                UserId = userId,
-                WeekNumber = dto.WeekNumber,
-                SessionNumber = sessionDto.SessionNumber,
-                SessionName = sessionDto.SessionName,
-                ScheduledDate = sessionDto.ScheduledDate.HasValue ? sessionDto.ScheduledDate.Value : DateTime.UtcNow,
-                Status = "planned",
-                ScheduledTime = new TimeSpan(0, 0, 0)
-            };
-
-            await _dbContext.WorkoutSchedules.AddAsync(schedule);
+            _logger.LogWarning("No sessions provided in payload.");
+            return schedules;
         }
-        await _dbContext.SaveChangesAsync();
-
-        foreach (var sessionDto in dto.Sessions)
-        {
-            // We need to re-find the schedule we just created?
-            // Better to do it one by one inside the loop above, but SaveChanges might be needed to get ID.
-            // Actually EF Core populates ID after AddAsync (for GUIDs it might be client side generated, but for int it is DB side).
-            // Let's assume one by one save for simplicity and correctness.
-        }
-
-        // Re-implementing logic to be simpler and correct
-        return await CreateCustomWeeklyScheduleInternal(dto);
-    }
-
-    private async Task<List<GetScheduleResponseDTO>> CreateCustomWeeklyScheduleInternal(CreateCustomScheduleRequestDTO dto)
-    {
-         var userId = _userContext.User.userId;
-        var schedules = new List<GetScheduleResponseDTO>();
 
         foreach (var sessionDto in dto.Sessions)
         {
@@ -257,9 +231,10 @@ public class WorkoutScheduleService
             };
 
             await _dbContext.WorkoutSchedules.AddAsync(schedule);
-            await _dbContext.SaveChangesAsync(); // To ensure ID is generated if needed, though for GUID it is usually fine.
+            await _dbContext.SaveChangesAsync();
 
             var scheduledExercises = new List<ScheduledExerciseDTO>();
+            int orderIndex = 0;
 
             foreach (var exerciseDto in sessionDto.Exercises)
             {
@@ -271,7 +246,7 @@ public class WorkoutScheduleService
                     Reps = exerciseDto.Reps,
                     RestSeconds = exerciseDto.RestSeconds,
                     Notes = exerciseDto.Notes,
-                    OrderIndex = 0
+                    OrderIndex = orderIndex++
                 };
 
                 await _dbContext.ScheduledExercises.AddAsync(scheduledExercise);
@@ -281,11 +256,19 @@ public class WorkoutScheduleService
                 {
                     Id = scheduledExercise.Id,
                     ExerciseId = exerciseDto.ExerciseId,
-                    ExerciseTitle = exercise?.Title ?? "",
+                    ExerciseTitle = exercise?.Title ?? "Unknown Exercise",
+                    PrimaryMuscle = exercise?.PrimaryMuscle,
+                    Difficulty = exercise?.Difficulty,
                     Sets = exerciseDto.Sets,
                     Reps = exerciseDto.Reps,
                     RestSeconds = exerciseDto.RestSeconds,
-                    Notes = exerciseDto.Notes
+                    Notes = exerciseDto.Notes,
+                    OrderIndex = scheduledExercise.OrderIndex,
+                    CaloriesBurnedPerSet = exercise?.CaloriesBurnedPerSet ?? 0,
+                    VideoUrl = exercise?.VideoUrl,
+                    Images = !string.IsNullOrEmpty(exercise?.Images) && exercise.Images != "[]"
+                             ? System.Text.Json.JsonSerializer.Deserialize<List<string>>(exercise.Images)
+                             : new List<string>()
                 });
             }
             await _dbContext.SaveChangesAsync();
@@ -297,6 +280,9 @@ public class WorkoutScheduleService
                 SessionNumber = schedule.SessionNumber,
                 SessionName = schedule.SessionName,
                 ScheduledDate = schedule.ScheduledDate,
+                ScheduledTime = schedule.ScheduledTime,
+                Status = schedule.Status,
+                CompletedAt = schedule.CompletedAt,
                 Exercises = scheduledExercises
             });
         }
