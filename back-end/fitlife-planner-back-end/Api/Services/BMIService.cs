@@ -179,17 +179,16 @@ public class BMIService
 
             _logger.LogInformation("Lấy BMI records cho người dùng ID {UserId}", userId);
 
-            // Lấy tất cả BMI records của user, sắp xếp theo thời gian mới nhất
+            // Lấy TẤT CẢ BMI records của user (bao gồm cả lịch sử), sắp xếp theo thời gian mới nhất
             var bmiRecords = await _dbContext.BmiRecords
-                .Where(b => b.ProfileId == profileId && b.IsCurrent == true && b.IsComplete == false)
+                .Where(b => b.ProfileId == profileId)
                 .OrderByDescending(b => b.CreatedAt)
                 .ToListAsync();
 
             if (bmiRecords == null || !bmiRecords.Any())
             {
                 _logger.LogWarning("Người dùng ID {UserId} chưa có BMI record nào", userId);
-                throw new KeyNotFoundException(
-                    "Bạn chưa có bản ghi BMI nào. Vui lòng nhập chiều cao và cân nặng để bắt đầu tính toán BMI.");
+                return new List<GetBmiResponseDto>(); // Trả về list rỗng thay vì throw exception
             }
 
             // Map sang DTO với đầy đủ thông tin
@@ -212,10 +211,6 @@ public class BMIService
             _logger.LogInformation("Tìm thấy {Count} BMI records cho người dùng ID {UserId}", result.Count, userId);
 
             return result;
-        }
-        catch (KeyNotFoundException)
-        {
-            throw; // Re-throw để controller có thể handle message
         }
         catch (Exception e)
         {

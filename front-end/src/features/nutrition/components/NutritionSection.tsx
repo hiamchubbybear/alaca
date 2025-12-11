@@ -139,7 +139,7 @@ export function NutritionSection() {
     console.log('📅 Initial Date State:', { today: today.toString(), initialDate })
     return initialDate
   })
-  const [showDayDetail, setShowDayDetail] = useState(false)
+  const [showDayDetail, setShowDayDetail] = useState(true) // Auto-open today's detail
   const [activeTab, setActiveTab] = useState<MealTab>('morning')
 
   // Data State
@@ -204,7 +204,24 @@ export function NutritionSection() {
   }
 
   const weekDays = getWeekDays(currentDate)
-  const currentMonth = weekDays[0].toLocaleString('default', { month: 'long' })
+
+  // Vietnamese month names
+  const monthNamesVi = [
+    'Tháng 1',
+    'Tháng 2',
+    'Tháng 3',
+    'Tháng 4',
+    'Tháng 5',
+    'Tháng 6',
+    'Tháng 7',
+    'Tháng 8',
+    'Tháng 9',
+    'Tháng 10',
+    'Tháng 11',
+    'Tháng 12'
+  ]
+
+  const currentMonth = monthNamesVi[weekDays[0].getMonth()]
   const currentYear = weekDays[0].getFullYear()
 
   // Load Initial Data
@@ -319,11 +336,8 @@ export function NutritionSection() {
     }
 
     const executeAdd = async () => {
-      // Keep native prompt for now as custom input modal requires more work
-      // If user wants full custom UI, we'd need a new Modal type 'input'
-      const qtyStr = prompt(`Nhập số lượng cho ${food.name}:`, '1')
-      if (qtyStr === null) return
-      const servingCount = parseFloat(qtyStr) || 1
+      // Default serving count to 1 (no prompt needed)
+      const servingCount = 1
 
       let targetPlanId = currentPlan?.id
 
@@ -555,7 +569,11 @@ export function NutritionSection() {
               const dStr = `${year}-${month}-${day}`
 
               const isSelected = dStr === selectedDateStr
-              const dayName = d.toLocaleDateString('en-US', { weekday: 'short' })
+
+              // Vietnamese weekday names
+              const weekdayNamesVi = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']
+              const dayName = weekdayNamesVi[d.getDay()]
+
               const dayNum = d.getDate()
               const dayStatus = getDayStatus(dStr)
 

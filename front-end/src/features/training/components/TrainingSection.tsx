@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { getMyBmiRecords } from '../../../shared/api/bmiApi'
 import { getExerciseRecommendations, getExercises, type Exercise } from '../../../shared/api/exerciseApi'
-import { getLatestSchedule, saveSchedule, type DailyPlan } from '../../../shared/api/workoutScheduleApi'
+import { getLatestSchedule, saveSchedule } from '../../../shared/api/workoutScheduleApi'
 import { type HealthMetrics } from '../../dashboard/types'
 import { loadHealthMetricsFromResponse } from '../../health/utils'
 
@@ -111,10 +111,10 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
           }
         }
 
-        // Process Schedule (defensive against missing data)
-        const schedules = Array.isArray(scheduleRes.data?.dailyPlans)
-          ? (scheduleRes.data.dailyPlans as DailyPlan[])
-          : []
+        // Process Schedule - backend returns array directly
+        const schedules = Array.isArray(scheduleRes.data) ? scheduleRes.data : []
+
+        console.log('[TrainingSection] Loaded schedules:', schedules.length)
 
         if (scheduleRes.success && schedules.length > 0) {
           const sessionNums = Array.from(new Set(schedules.map((s) => s.sessionNumber))).sort((a, b) => a - b)
@@ -127,8 +127,8 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
             schedules.forEach((s) => {
               const rowItems = s.exercises.map((ex) => ({
                 name: ex.exerciseTitle,
-                muscle: '',
-                calories: ''
+                muscle: ex.primaryMuscle || '',
+                calories: ex.caloriesBurnedPerSet?.toString() || ''
               }))
               next[s.sessionNumber] = rowItems
             })

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getMyBmiRecords } from '../../../shared/api/bmiApi'
+import { ChallengeSection } from '../../challenge/components/ChallengeSection'
 import { ChatWidget } from '../../chat/components/ChatWidget'
 import { HealthMetricsSection } from '../../health/components/HealthMetricsSection'
 import { loadHealthMetricsFromResponse } from '../../health/utils'
@@ -223,6 +224,8 @@ export function LoggedInLayout({
           />
         ) : activeSection === 'nutrition' ? (
           <NutritionSection />
+        ) : activeSection === 'challenge' ? (
+          <ChallengeSection />
         ) : (
           <>
             {activeSection === 'social' && <SocialPage />}

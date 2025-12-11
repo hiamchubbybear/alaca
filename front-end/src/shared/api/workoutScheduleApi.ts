@@ -36,12 +36,15 @@ export interface DailyPlan {
   sessionNumber: number
   sessionName: string
   scheduledDate?: string
+  scheduledTime?: string
+  status?: string
   exercises: ExerciseResponse[]
+  totalDurationMin?: number
+  estimatedCaloriesBurned?: number
 }
 
-export interface WeeklyPlan {
-  dailyPlans: DailyPlan[]
-}
+// Backend returns array directly, not wrapped in object
+export type WeeklyPlan = DailyPlan[]
 
 export async function saveSchedule(payload: CreateScheduleRequest): Promise<ApiResponse<WeeklyPlan>> {
   console.log('[API] saveSchedule payload:', JSON.stringify(payload, null, 2))
