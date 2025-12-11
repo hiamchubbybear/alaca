@@ -29,7 +29,10 @@ public class WorkoutScheduleService
                 .ThenInclude(se => se.Exercise)
             .Where(s => s.UserId == userId)
             .OrderBy(s => s.ScheduledDate)
+            .OrderBy(s => s.ScheduledDate)
             .ToListAsync();
+
+        _logger.LogInformation($"Found {schedules.Count} schedules for user {userId}");
 
         var response = new List<GetScheduleResponseDTO>();
 
