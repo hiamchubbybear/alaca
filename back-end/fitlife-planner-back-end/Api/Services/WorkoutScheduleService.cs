@@ -25,7 +25,8 @@ public class WorkoutScheduleService
         var userId = _userContext.User.userId;
         var schedules = await _dbContext.WorkoutSchedules
             .Include(s => s.Workout)
-            .Include(s => s.ScheduledExercises) // Include exercises
+            .Include(s => s.ScheduledExercises)
+                .ThenInclude(se => se.Exercise)
             .Where(s => s.UserId == userId)
             .OrderBy(s => s.ScheduledDate)
             .ToListAsync();
@@ -34,26 +35,24 @@ public class WorkoutScheduleService
 
         foreach (var s in schedules)
         {
-            var exerciseDtos = new List<ScheduledExerciseDTO>();
-
-            // Should optimize this to avoid N+1 queries, but for now this works given previous pattern
-            // To do it properly, we should include ExerciseLibrary in the query above: .Include(s => s.ScheduledExercises).ThenInclude(se => se.Exercise)
-            // But ScheduledExercise doesn't have nav prop to ExerciseLibrary yet? Let's check ScheduledExercise.cs
-
-            foreach (var se in s.ScheduledExercises)
+            var exerciseDtos = s.ScheduledExercises.Select(se => new ScheduledExerciseDTO
             {
-                 var ex = await _dbContext.ExerciseLibrary.FindAsync(se.ExerciseId);
-                 exerciseDtos.Add(new ScheduledExerciseDTO
-                 {
-                     Id = se.Id,
-                     ExerciseId = se.ExerciseId,
-                     ExerciseTitle = ex?.Title ?? "",
-                     Sets = se.Sets,
-                     Reps = se.Reps,
-                     RestSeconds = se.RestSeconds,
-                     Notes = se.Notes
-                 });
-            }
+                 Id = se.Id,
+                 ExerciseId = se.ExerciseId,
+                 ExerciseTitle = se.Exercise?.Title ?? "Unknown Exercise",
+                 PrimaryMuscle = se.Exercise?.PrimaryMuscle,
+                 Difficulty = se.Exercise?.Difficulty,
+                 OrderIndex = se.OrderIndex,
+                 Sets = se.Sets,
+                 Reps = se.Reps,
+                 RestSeconds = se.RestSeconds,
+                 Notes = se.Notes,
+                 VideoUrl = se.Exercise?.VideoUrl,
+                 Images = !string.IsNullOrEmpty(se.Exercise?.Images) && se.Exercise.Images != "[]"
+                          ? System.Text.Json.JsonSerializer.Deserialize<List<string>>(se.Exercise.Images)
+                          : new List<string>(),
+                 CaloriesBurnedPerSet = se.Exercise?.CaloriesBurnedPerSet ?? 0
+            }).OrderBy(e => e.OrderIndex).ToList();
 
             response.Add(new GetScheduleResponseDTO
             {
