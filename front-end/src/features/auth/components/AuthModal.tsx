@@ -91,7 +91,7 @@ export function AuthModal({
         }}
       >
         <div className="auth-modal-header">
-          <h2>{mode === 'login' ? 'Chào mừng trở lại' : 'Tạo tài khoản'}</h2>
+          <h2>{mode === 'login' ? 'Đăng Nhập' : 'Tạo tài khoản'}</h2>
           <button type="button" className="auth-modal-close" onClick={onClose}>
             ×
           </button>

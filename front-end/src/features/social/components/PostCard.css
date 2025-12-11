@@ -17,8 +17,9 @@
 
 .post-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center; /* Center vertically */
+  gap: 0.75rem;
   margin-bottom: 0.75rem;
 }
 
@@ -58,7 +59,7 @@
   gap: 0.15rem;
   flex: 1;
   min-width: 0;
-  padding-top: 2px; /* Slight padding to align with avatar */
+  padding-top: 0; /* align vertically with avatar */
 }
 
 .post-author-name {
@@ -75,6 +76,11 @@
 }
 
 /* Post Menu */
+.post-menu-container {
+  margin-left: auto;
+  position: relative;
+}
+
 .post-menu-trigger-btn {
   background: none;
   border: none;
@@ -179,13 +185,13 @@
   overflow: hidden;
   background: #f0f2f5;
   position: relative;
+  aspect-ratio: 16 / 9;
 }
 
 .post-media img {
   width: 100%;
-  max-height: 600px;
-  min-height: 300px;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
   display: block;
   transition: transform 0.3s ease;
   background: #f0f2f5;

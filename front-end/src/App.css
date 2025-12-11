@@ -646,7 +646,7 @@
 
 /* Image Tabs Section */
 .tabs-section {
-  padding: 6rem 2rem;
+  padding: 4rem 1rem;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
   position: relative;
   overflow: hidden;
@@ -670,6 +670,7 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  padding: 0 1rem;
 }
 
 .section-title {
@@ -701,7 +702,7 @@
 .tabs-wrapper {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2.5rem;
+  gap: 1.5rem;
 }
 
 .tab-item {
@@ -1033,7 +1034,8 @@
 }
 
 .email-input {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   padding: 1.25rem 1.5rem;
   border: none;
   border-radius: 12px;
@@ -1041,6 +1043,7 @@
   background: transparent;
   color: #1a202c;
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .email-input::placeholder {
@@ -1057,19 +1060,23 @@
 }
 
 .submit-btn {
-  padding: 1.25rem 2.5rem;
+  flex: 0 0 auto;
+  flex-shrink: 0;
+  padding: 1.25rem 1.25rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 12px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.875rem;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
   position: relative;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  width: auto;
+  max-width: 140px;
 }
 
 .submit-btn::before {
@@ -2863,6 +2870,20 @@
   gap: 20px;
 }
 
+.training-page.sidebar-open {
+  padding-right: min(420px, 90vw);
+  transition: padding-right 0.2s ease;
+}
+
+.training-page.sidebar-open .workout-grid {
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.training-page.sidebar-open .workout-card {
+  min-height: auto;
+}
+
 .training-header {
   display: flex;
   justify-content: space-between;
@@ -3048,23 +3069,26 @@
   margin-top: 8px;
   padding: 8px 0;
   border-top: 1px dashed #e5e7eb;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .btn-add-exercise {
-  width: 100%;
-  padding: 10px 16px;
+  width: fit-content;
+  max-width: 220px;
+  padding: 8px 12px;
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
   color: white;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .btn-add-exercise:hover {
@@ -3132,6 +3156,52 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+}
+
+.workout-row .row-actions {
+  justify-content: flex-start;
+}
+
+@media (max-width: 960px) {
+  .workout-row {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) auto;
+  }
+
+  .workout-row.header {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr) auto;
+  }
+
+  .btn-add-exercise {
+    max-width: 200px;
+  }
+
+  .training-page.sidebar-open {
+    padding-right: min(360px, 80vw);
+  }
+}
+
+@media (max-width: 640px) {
+  .workout-row {
+    grid-template-columns: 1fr;
+    row-gap: 6px;
+  }
+
+  .workout-row .row-actions {
+    grid-column: 1 / -1;
+  }
+
+  .workout-row span {
+    font-size: 13px;
+  }
+
+  .btn-add-exercise {
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .training-page.sidebar-open {
+    padding-right: 0;
+  }
 }
 
 .btn-save-schedule:hover {

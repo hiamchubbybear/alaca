@@ -111,10 +111,12 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
           }
         }
 
-        // Process Schedule
-        if (scheduleRes.success && scheduleRes.data) {
-          const schedules = scheduleRes.data.dailyPlans as DailyPlan[]
+        // Process Schedule (defensive against missing data)
+        const schedules = Array.isArray(scheduleRes.data?.dailyPlans)
+          ? (scheduleRes.data.dailyPlans as DailyPlan[])
+          : []
 
+        if (scheduleRes.success && schedules.length > 0) {
           const sessionNums = Array.from(new Set(schedules.map((s) => s.sessionNumber))).sort((a, b) => a - b)
           if (sessionNums.length > 0) {
             setSessionCards(sessionNums)
@@ -132,6 +134,8 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
             })
             return next
           })
+        } else if (!scheduleRes.success) {
+          setTrainingError('Không thể tải lịch tập')
         }
       } catch (error) {
         console.error('Failed to load training data', error)
@@ -293,8 +297,10 @@ export function TrainingSection({ healthMetrics, setHealthMetrics, onNavigateToH
     )
   }
 
+  const trainingPageClass = sidebarOpen ? 'training-page sidebar-open' : 'training-page'
+
   return (
-    <div className='training-page'>
+    <div className={trainingPageClass}>
       <div className='training-header'>
         <div>
           <h1 className='main-content-title'>Luyện Tập</h1>
