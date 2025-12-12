@@ -17,7 +17,7 @@ interface Post {
   createdAt: string
   updatedAt: string
   isHidden?: boolean
-  status?: string  // Accept, Pending, Reject
+  status?: string // Accept, Pending, Reject
 }
 
 interface ConfirmState {
@@ -77,21 +77,22 @@ export function PostManagement() {
 
     // Search filter
     if (searchTerm) {
-      filtered = filtered.filter(post =>
-        post.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.title?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (post) =>
+          post.content?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.username?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          post.title?.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
 
     // Status filter
     if (statusFilter !== 'all') {
       if (statusFilter === 'hidden') {
-        filtered = filtered.filter(post => post.isHidden === true)
+        filtered = filtered.filter((post) => post.isHidden === true)
       } else if (statusFilter === 'visible') {
-        filtered = filtered.filter(post => !post.isHidden)
+        filtered = filtered.filter((post) => !post.isHidden)
       } else {
-        filtered = filtered.filter(post => post.status === statusFilter)
+        filtered = filtered.filter((post) => post.status === statusFilter)
       }
     }
 
@@ -151,115 +152,140 @@ export function PostManagement() {
   }
 
   if (loading) {
-    return <div className="loading">Đang tải...</div>
+    return <div className='loading'>Đang tải...</div>
   }
 
   return (
-    <div className="post-management">
-      {successMessage && (
-        <div className="success-toast">{successMessage}</div>
-      )}
+    <div className='post-management'>
+      {successMessage && <div className='success-toast'>{successMessage}</div>}
 
       {/* Header Stats */}
-      <div className="stats-bar">
-        <div className="stat-item">
-          <div className="stat-value">{total}</div>
-          <div className="stat-label">Tổng bài viết</div>
+      <div className='stats-bar'>
+        <div className='stat-item'>
+          <div className='stat-value'>{total}</div>
+          <div className='stat-label'>Tổng bài viết</div>
         </div>
-        <div className="stat-item">
-          <div className="stat-value">{posts.filter(p => p.isHidden).length}</div>
-          <div className="stat-label">Đã ẩn</div>
+        <div className='stat-item'>
+          <div className='stat-value'>{posts.filter((p) => p.isHidden).length}</div>
+          <div className='stat-label'>Đã ẩn</div>
         </div>
-        <div className="stat-item">
-          <div className="stat-value">{posts.reduce((sum, p) => sum + (p.upvoteCount || 0), 0)}</div>
-          <div className="stat-label">Tổng upvotes</div>
+        <div className='stat-item'>
+          <div className='stat-value'>{posts.reduce((sum, p) => sum + (p.upvoteCount || 0), 0)}</div>
+          <div className='stat-label'>Tổng upvotes</div>
         </div>
-        <div className="stat-item">
-          <div className="stat-value">{posts.reduce((sum, p) => sum + (p.downvoteCount || 0), 0)}</div>
-          <div className="stat-label">Tổng downvotes</div>
+        <div className='stat-item'>
+          <div className='stat-value'>{posts.reduce((sum, p) => sum + (p.downvoteCount || 0), 0)}</div>
+          <div className='stat-label'>Tổng downvotes</div>
         </div>
-        <div className="stat-item">
-          <div className="stat-value">{posts.filter(p => p.media).length}</div>
-          <div className="stat-label">Có hình ảnh</div>
+        <div className='stat-item'>
+          <div className='stat-value'>{posts.filter((p) => p.media).length}</div>
+          <div className='stat-label'>Có hình ảnh</div>
         </div>
       </div>
 
       {/* Controls */}
-      <div className="controls-bar">
-        <div className="search-box">
+      <div className='controls-bar'>
+        <div className='search-box'>
           <input
-            type="text"
-            placeholder="Tìm kiếm bài viết..."
+            type='text'
+            placeholder='Tìm kiếm bài viết...'
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
 
-        <div className="filter-group">
+        <div className='filter-group'>
           <label>Trạng thái:</label>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-            <option value="all">Tất cả</option>
-            <option value="visible">Đang hiển thị</option>
-            <option value="hidden">Đã ẩn</option>
-            <option value="Accept">Đã duyệt</option>
-            <option value="Pending">Chờ duyệt</option>
-            <option value="Reject">Đã từ chối</option>
+            <option value='all'>Tất cả</option>
+            <option value='visible'>Đang hiển thị</option>
+            <option value='hidden'>Đã ẩn</option>
+            <option value='Accept'>Đã duyệt</option>
+            <option value='Pending'>Chờ duyệt</option>
+            <option value='Reject'>Đã từ chối</option>
           </select>
         </div>
 
-        <div className="results-count">
+        <div className='results-count'>
           Hiển thị {filteredPosts.length} / {total} bài viết
         </div>
       </div>
 
       {/* Posts Grid */}
-      <div className="posts-grid">
+      <div className='posts-grid'>
         {filteredPosts.length === 0 ? (
-          <div className="empty-state">
+          <div className='empty-state'>
             <p>Chưa có bài viết nào.</p>
           </div>
         ) : (
           filteredPosts.map((post) => (
-            <div key={post.postId} className="post-card">
-              <div className="post-header">
-                <div className="post-author">
+            <div key={post.postId} className='post-card'>
+              <div className='post-header'>
+                <div className='post-author'>
                   <strong>{post.username || 'Unknown'}</strong>
-                  <span className="post-date">
-                    {new Date(post.createdAt).toLocaleDateString('vi-VN')}
-                  </span>
+                  <span className='post-date'>{new Date(post.createdAt).toLocaleDateString('vi-VN')}</span>
                 </div>
-                {post.isHidden && <span className="badge-hidden">Đã ẩn</span>}
+                {post.isHidden && <span className='badge-hidden'>Đã ẩn</span>}
               </div>
 
-              <div className="post-content">
+              <div className='post-content'>
                 {post.title && <h4>{post.title}</h4>}
-                <p>{post.content.substring(0, 150)}{post.content.length > 150 ? '...' : ''}</p>
+                <p>
+                  {post.content.substring(0, 150)}
+                  {post.content.length > 150 ? '...' : ''}
+                </p>
                 {post.media && (
-                  <div className="post-image-container">
-                    <img src={post.media} alt="Post" className="post-image" />
+                  <div className='post-image-container'>
+                    <img src={post.media} alt='Post' className='post-image' />
                   </div>
                 )}
               </div>
 
-              <div className="post-stats">
-                <span>👍 {post.upvoteCount || 0}</span>
-                <span>👎 {post.downvoteCount || 0}</span>
+              <div className='post-stats'>
+                <span>
+                  <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                    <path d='M18 15l-6-6-6 6' />
+                  </svg>
+                  {post.upvoteCount || 0}
+                </span>
+                <span>
+                  <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                    <path d='M6 9l6 6 6-6' />
+                  </svg>
+                  {post.downvoteCount || 0}
+                </span>
               </div>
 
-              <div className="post-actions">
-                <button className="btn-view" onClick={() => setViewingPost(post)}>
+              <div className='post-actions'>
+                <button className='btn-view' onClick={() => setViewingPost(post)}>
+                  <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                    <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' />
+                    <circle cx='12' cy='12' r='3' />
+                  </svg>
                   Xem
                 </button>
                 {post.isHidden ? (
-                  <button className="btn-success" onClick={() => handleShow(post.postId)}>
+                  <button className='btn-success' onClick={() => handleShow(post.postId)}>
+                    <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                      <path d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z' />
+                      <circle cx='12' cy='12' r='3' />
+                    </svg>
                     Hiện
                   </button>
                 ) : (
-                  <button className="btn-warning" onClick={() => handleHide(post.postId)}>
+                  <button className='btn-warning' onClick={() => handleHide(post.postId)}>
+                    <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                      <path d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24' />
+                      <line x1='1' y1='1' x2='23' y2='23' />
+                    </svg>
                     Ẩn
                   </button>
                 )}
-                <button className="btn-delete" onClick={() => handleDelete(post.postId)}>
+                <button className='btn-delete' onClick={() => handleDelete(post.postId)}>
+                  <svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                    <polyline points='3 6 5 6 21 6' />
+                    <path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2' />
+                  </svg>
                   Xóa
                 </button>
               </div>
@@ -269,38 +295,64 @@ export function PostManagement() {
       </div>
 
       {/* Pagination */}
-      <div className="pagination">
-        <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>
+      <div className='pagination'>
+        <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
           ← Trước
         </button>
-        <span>Trang {page} / {Math.ceil(total / pageSize) || 1}</span>
-        <button onClick={() => setPage(p => p + 1)} disabled={page >= Math.ceil(total / pageSize)}>
+        <span>
+          Trang {page} / {Math.ceil(total / pageSize) || 1}
+        </span>
+        <button onClick={() => setPage((p) => p + 1)} disabled={page >= Math.ceil(total / pageSize)}>
           Sau →
         </button>
       </div>
 
       {/* View Post Modal */}
       {viewingPost && (
-        <div className="modal-overlay" onClick={() => setViewingPost(null)}>
-          <div className="modal-content post-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div className='modal-overlay' onClick={() => setViewingPost(null)}>
+          <div className='modal-content post-modal' onClick={(e) => e.stopPropagation()}>
+            <div className='modal-header'>
               <h3>Chi Tiết Bài Viết</h3>
-              <button className="close-btn" onClick={() => setViewingPost(null)}>×</button>
+              <button className='close-btn' onClick={() => setViewingPost(null)}>
+                ×
+              </button>
             </div>
-            <div className="modal-body">
-              <div className="post-detail">
-                <p><strong>Người đăng:</strong> {viewingPost.username}</p>
-                <p><strong>Ngày đăng:</strong> {new Date(viewingPost.createdAt).toLocaleString('vi-VN')}</p>
-                {viewingPost.title && <p><strong>Tiêu đề:</strong> {viewingPost.title}</p>}
-                {viewingPost.isHidden && <p><strong>Trạng thái:</strong> <span className="badge-hidden">Đã ẩn</span></p>}
-                <p><strong>Nội dung:</strong></p>
-                <p className="post-full-content">{viewingPost.content}</p>
-                {viewingPost.media && (
-                  <img src={viewingPost.media} alt="Post" className="post-full-image" />
+            <div className='modal-body'>
+              <div className='post-detail'>
+                <p>
+                  <strong>Người đăng:</strong> {viewingPost.username}
+                </p>
+                <p>
+                  <strong>Ngày đăng:</strong> {new Date(viewingPost.createdAt).toLocaleString('vi-VN')}
+                </p>
+                {viewingPost.title && (
+                  <p>
+                    <strong>Tiêu đề:</strong> {viewingPost.title}
+                  </p>
                 )}
-                <div className="post-stats">
-                  <span>👍 {viewingPost.upvoteCount || 0} upvotes</span>
-                  <span>👎 {viewingPost.downvoteCount || 0} downvotes</span>
+                {viewingPost.isHidden && (
+                  <p>
+                    <strong>Trạng thái:</strong> <span className='badge-hidden'>Đã ẩn</span>
+                  </p>
+                )}
+                <p>
+                  <strong>Nội dung:</strong>
+                </p>
+                <p className='post-full-content'>{viewingPost.content}</p>
+                {viewingPost.media && <img src={viewingPost.media} alt='Post' className='post-full-image' />}
+                <div className='post-stats'>
+                  <span>
+                    <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                      <path d='M18 15l-6-6-6 6' />
+                    </svg>
+                    {viewingPost.upvoteCount || 0} upvotes
+                  </span>
+                  <span>
+                    <svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                      <path d='M6 9l6 6 6-6' />
+                    </svg>
+                    {viewingPost.downvoteCount || 0} downvotes
+                  </span>
                 </div>
               </div>
             </div>

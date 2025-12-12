@@ -10,17 +10,54 @@
 .admin-auth-container {
   background: white;
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
   max-width: 440px;
   width: 100%;
   overflow: hidden;
+  animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .admin-auth-header {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 40px 30px;
   text-align: center;
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-auth-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
 }
 
 .admin-auth-header h1 {
@@ -28,35 +65,16 @@
   font-weight: 700;
   margin: 0 0 8px 0;
   letter-spacing: 2px;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-auth-header p {
   font-size: 14px;
   opacity: 0.9;
   margin: 0;
-}
-
-.admin-auth-tabs {
-  display: flex;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.admin-auth-tabs button {
-  flex: 1;
-  padding: 16px;
-  background: none;
-  border: none;
-  font-size: 15px;
-  font-weight: 600;
-  color: #718096;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-bottom: 3px solid transparent;
-}
-
-.admin-auth-tabs button.active {
-  color: #ff6b6b;
-  border-bottom-color: #ff6b6b;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-auth-form {
@@ -86,8 +104,8 @@
 
 .form-field input:focus {
   outline: none;
-  border-color: #ff6b6b;
-  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-field input:disabled {
@@ -108,19 +126,24 @@
 .submit-btn {
   width: 100%;
   padding: 14px 24px;
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .submit-btn:disabled {
@@ -141,10 +164,13 @@
   text-decoration: none;
   font-size: 14px;
   transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .admin-auth-footer a:hover {
-  color: #2d3748;
+  color: #667eea;
 }
 
 @media (max-width: 480px) {

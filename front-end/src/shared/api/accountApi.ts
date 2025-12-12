@@ -6,9 +6,10 @@ export type ChangePasswordRequest = {
 }
 
 export const changePassword = async (data: ChangePasswordRequest): Promise<void> => {
-  await request<string, boolean>('/account/password', {
+  await request<ChangePasswordRequest, boolean>('/account/password', {
     method: 'PUT',
-    body: JSON.stringify(data)
+    body: data,
+    auth: true
   })
 }
 
@@ -17,9 +18,9 @@ export type ForgotPasswordRequest = {
 }
 
 export const forgotPassword = async (email: string): Promise<void> => {
-  await request<string, object>('/auth/forgot-password', {
+  await request<ForgotPasswordRequest, object>('/auth/forgot-password', {
     method: 'POST',
-    body: JSON.stringify({ Email: email })
+    body: { email }
   })
 }
 
@@ -29,11 +30,11 @@ export type ResetPasswordRequest = {
 }
 
 export const resetPassword = async (data: ResetPasswordRequest): Promise<void> => {
-  await request<string, object>('/auth/reset-password', {
+  await request<{ Token: string; NewPassword: string }, object>('/auth/reset-password', {
     method: 'POST',
-    body: JSON.stringify({
+    body: {
       Token: data.token,
       NewPassword: data.newPassword
-    })
+    }
   })
 }

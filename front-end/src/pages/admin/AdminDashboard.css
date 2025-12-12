@@ -65,15 +65,31 @@
   cursor: pointer;
   margin-bottom: 8px;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-nav button svg {
+  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 .admin-nav button:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.admin-nav button:hover svg {
+  opacity: 1;
+}
+
 .admin-nav button.active {
   background: rgba(255, 255, 255, 0.3);
   font-weight: 600;
+}
+
+.admin-nav button.active svg {
+  opacity: 1;
 }
 
 .logout-btn {
@@ -107,6 +123,7 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  justify-content: space-between;
 }
 
 .menu-toggle {
@@ -123,6 +140,23 @@
   font-size: 24px;
   font-weight: 700;
   color: #2d3748;
+  flex: 1;
+}
+
+.admin-welcome {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.admin-welcome svg {
+  flex-shrink: 0;
 }
 
 .admin-content {
