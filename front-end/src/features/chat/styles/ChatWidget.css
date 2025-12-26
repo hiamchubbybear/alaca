@@ -168,6 +168,30 @@
   text-align: center;
 }
 
+/* Typing Message with Cursor */
+.typing-message {
+  position: relative;
+}
+
+.typing-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  color: #667eea;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.1%,
+  100% {
+    opacity: 0;
+  }
+}
+
 /* Input Area */
 .chat-input-area {
   padding: 1rem;

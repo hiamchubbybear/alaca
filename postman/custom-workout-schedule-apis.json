@@ -1,0 +1,404 @@
+{
+    "info": {
+        "name": "FitLife Planner - Custom Workout Schedule APIs",
+        "description": "APIs for custom weekly workout scheduling with full exercise control",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Recommendations",
+            "item": [
+                {
+                    "name": "Get Workout Recommendations (Auto BMI)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/recommendations/workouts",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "recommendations",
+                                "workouts"
+                            ],
+                            "query": [
+                                {
+                                    "key": "goal",
+                                    "value": "muscle_gain",
+                                    "description": "Optional: weight_loss, muscle_gain, maintenance",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "days",
+                                    "value": "4",
+                                    "description": "Optional: number of days per week",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Auto-detects goal and days from user's BMI record. Parameters are optional overrides."
+                    }
+                },
+                {
+                    "name": "Get Exercise Recommendations (Auto BMI)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/recommendations/exercises",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "recommendations",
+                                "exercises"
+                            ],
+                            "query": [
+                                {
+                                    "key": "muscle",
+                                    "value": "chest",
+                                    "description": "Optional: chest, back, legs, shoulders, etc.",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "goal",
+                                    "value": "muscle_gain",
+                                    "description": "Optional: auto-detected from BMI",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Auto-detects goal and difficulty from BMI. Returns exercises filtered by muscle group."
+                    }
+                },
+                {
+                    "name": "Get Meal Plan (Auto BMI)",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/recommendations/meal-plan",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "recommendations",
+                                "meal-plan"
+                            ],
+                            "query": [
+                                {
+                                    "key": "targetCalories",
+                                    "value": "2000",
+                                    "description": "Optional: auto-calculated from BMI",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "goal",
+                                    "value": "weight_loss",
+                                    "description": "Optional: auto-detected from BMI",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "Auto-calculates calories and goal from BMI record. Returns full meal plan."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Workout Schedule",
+            "item": [
+                {
+                    "name": "Create Custom Weekly Schedule",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"weekNumber\": 1,\n  \"sessions\": [\n    {\n      \"sessionNumber\": 1,\n      \"sessionName\": \"Push Day\",\n      \"scheduledDate\": \"2024-12-10\",\n      \"exercises\": [\n        {\n          \"exerciseId\": \"{{bench_press_id}}\",\n          \"sets\": 4,\n          \"reps\": 8,\n          \"restSeconds\": 90,\n          \"notes\": \"Focus on form\"\n        },\n        {\n          \"exerciseId\": \"{{shoulder_press_id}}\",\n          \"sets\": 3,\n          \"reps\": 10,\n          \"restSeconds\": 60\n        },\n        {\n          \"exerciseId\": \"{{tricep_dips_id}}\",\n          \"sets\": 3,\n          \"reps\": 12,\n          \"restSeconds\": 45\n        }\n      ]\n    },\n    {\n      \"sessionNumber\": 2,\n      \"sessionName\": \"Pull Day\",\n      \"scheduledDate\": \"2024-12-12\",\n      \"exercises\": [\n        {\n          \"exerciseId\": \"{{deadlift_id}}\",\n          \"sets\": 5,\n          \"reps\": 5,\n          \"restSeconds\": 120\n        },\n        {\n          \"exerciseId\": \"{{bent_over_row_id}}\",\n          \"sets\": 4,\n          \"reps\": 8,\n          \"restSeconds\": 90\n        },\n        {\n          \"exerciseId\": \"{{bicep_curls_id}}\",\n          \"sets\": 3,\n          \"reps\": 10,\n          \"restSeconds\": 60\n        }\n      ]\n    },\n    {\n      \"sessionNumber\": 3,\n      \"sessionName\": \"Leg Day\",\n      \"scheduledDate\": \"2024-12-14\",\n      \"exercises\": [\n        {\n          \"exerciseId\": \"{{squat_id}}\",\n          \"sets\": 4,\n          \"reps\": 10,\n          \"restSeconds\": 120\n        },\n        {\n          \"exerciseId\": \"{{leg_press_id}}\",\n          \"sets\": 3,\n          \"reps\": 12,\n          \"restSeconds\": 90\n        },\n        {\n          \"exerciseId\": \"{{calf_raises_id}}\",\n          \"sets\": 4,\n          \"reps\": 15,\n          \"restSeconds\": 45\n        }\n      ]\n    }\n  ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/workout-schedules/custom-week",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                "custom-week"
+                            ]
+                        },
+                        "description": "Creates a fully customizable weekly workout schedule. Each session can have multiple exercises with custom sets/reps/rest."
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "originalRequest": {
+                                "method": "POST",
+                                "header": [],
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": ""
+                                },
+                                "url": {
+                                    "raw": "{{base_url}}/workout-schedules/custom-week",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "workout-schedules",
+                                        "custom-week"
+                                    ]
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "_postman_previewlanguage": "json",
+                            "header": [],
+                            "cookie": [],
+                            "body": "{\n  \"success\": true,\n  \"message\": \"Successfully created weekly schedule\",\n  \"data\": {\n    \"weekNumber\": 1,\n    \"totalSessions\": 3,\n    \"sessions\": [\n      {\n        \"scheduleId\": \"uuid-here\",\n        \"weekNumber\": 1,\n        \"sessionNumber\": 1,\n        \"sessionName\": \"Push Day\",\n        \"scheduledDate\": \"2024-12-10T00:00:00\",\n        \"status\": \"planned\",\n        \"exercises\": [\n          {\n            \"id\": \"uuid\",\n            \"exerciseId\": \"uuid\",\n            \"exerciseTitle\": \"Bench Press\",\n            \"primaryMuscle\": \"Chest\",\n            \"difficulty\": \"intermediate\",\n            \"orderIndex\": 1,\n            \"sets\": 4,\n            \"reps\": 8,\n            \"restSeconds\": 90,\n            \"notes\": \"Focus on form\",\n            \"videoUrl\": \"https://...\",\n            \"caloriesBurnedPerSet\": 30\n          }\n        ],\n        \"totalDurationMin\": 45,\n        \"estimatedCaloriesBurned\": 360\n      }\n    ]\n  }\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get Week Schedule with Exercises",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/workout-schedules/week/:weekNumber",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                "week",
+                                ":weekNumber"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "weekNumber",
+                                    "value": "1",
+                                    "description": "Week number (1, 2, 3, etc.)"
+                                }
+                            ]
+                        },
+                        "description": "Gets all sessions for a specific week with full exercise details."
+                    },
+                    "response": [
+                        {
+                            "name": "Success Response",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [],
+                                "url": {
+                                    "raw": "{{base_url}}/workout-schedules/week/1",
+                                    "host": [
+                                        "{{base_url}}"
+                                    ],
+                                    "path": [
+                                        "workout-schedules",
+                                        "week",
+                                        "1"
+                                    ]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [],
+                            "cookie": [],
+                            "body": "{\n  \"success\": true,\n  \"message\": \"Successfully retrieved week schedule\",\n  \"data\": [\n    {\n      \"scheduleId\": \"uuid\",\n      \"weekNumber\": 1,\n      \"sessionNumber\": 1,\n      \"sessionName\": \"Push Day\",\n      \"scheduledDate\": \"2024-12-10T00:00:00\",\n      \"scheduledTime\": null,\n      \"status\": \"planned\",\n      \"completedAt\": null,\n      \"exercises\": [\n        {\n          \"id\": \"uuid\",\n          \"exerciseId\": \"uuid\",\n          \"exerciseTitle\": \"Bench Press\",\n          \"primaryMuscle\": \"Chest\",\n          \"difficulty\": \"intermediate\",\n          \"orderIndex\": 1,\n          \"sets\": 4,\n          \"reps\": 8,\n          \"restSeconds\": 90,\n          \"notes\": \"Focus on form\",\n          \"videoUrl\": \"https://...\",\n          \"images\": [\"image1.jpg\", \"image2.jpg\"],\n          \"caloriesBurnedPerSet\": 30\n        }\n      ],\n      \"totalDurationMin\": 45,\n      \"estimatedCaloriesBurned\": 360\n    }\n  ]\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "Get My Schedules",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/workout-schedules/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                "me"
+                            ]
+                        },
+                        "description": "Gets all workout schedules for the authenticated user."
+                    }
+                },
+                {
+                    "name": "Complete Workout Session",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/workout-schedules/:scheduleId/complete",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                ":scheduleId",
+                                "complete"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "scheduleId",
+                                    "value": "{{schedule_id}}",
+                                    "description": "Schedule ID to complete"
+                                }
+                            ]
+                        },
+                        "description": "Marks a workout session as completed."
+                    }
+                },
+                {
+                    "name": "Skip Workout Session",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/workout-schedules/:scheduleId/skip",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                ":scheduleId",
+                                "skip"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "scheduleId",
+                                    "value": "{{schedule_id}}",
+                                    "description": "Schedule ID to skip"
+                                }
+                            ]
+                        },
+                        "description": "Marks a workout session as skipped."
+                    }
+                },
+                {
+                    "name": "Delete Schedule",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/workout-schedules/:scheduleId",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "workout-schedules",
+                                ":scheduleId"
+                            ],
+                            "variable": [
+                                {
+                                    "key": "scheduleId",
+                                    "value": "{{schedule_id}}",
+                                    "description": "Schedule ID to delete"
+                                }
+                            ]
+                        },
+                        "description": "Deletes a workout schedule."
+                    }
+                }
+            ]
+        }
+    ],
+    "event": [
+        {
+            "listen": "prerequest",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        },
+        {
+            "listen": "test",
+            "script": {
+                "type": "text/javascript",
+                "exec": [
+                    ""
+                ]
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:5000",
+            "type": "string"
+        },
+        {
+            "key": "access_token",
+            "value": "your-jwt-token-here",
+            "type": "string"
+        }
+    ]
+}

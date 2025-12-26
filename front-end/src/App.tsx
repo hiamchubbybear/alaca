@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 // import { AdminLogin } from "./features/admin/pages/AdminLogin"
 // import { AdminDashboard } from "./features/admin/pages/AdminDashboard"
+import Snowfall from 'react-snowfall'
 import { AuthModal, type AuthMode } from './features/auth/components/AuthModal'
 import { LoggedInLayout } from './features/dashboard/components/LoggedInLayout'
 import { WeekStreak } from './features/dashboard/components/WeekStreak'
@@ -107,6 +108,13 @@ function App() {
   return (
     <div className='app'>
       <ProgressBar />
+      <Snowfall
+        color='#d0e2f5ff' // xanh nhạt / trắng xanh (dịu mắt)
+        snowflakeCount={800} // số lượng bông tuyết
+        radius={[1.5, 2.5]} // kích thước bông tuyết (rất nhỏ)
+        speed={[0.5, 1.2]} // tốc độ rơi chậm
+        wind={[-0.2, 0.2]} // gió nhẹ, tự nhiên
+      />
 
       {!isLoggedIn && (
         <nav className='navbar'>

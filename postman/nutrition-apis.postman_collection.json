@@ -1,0 +1,519 @@
+{
+    "info": {
+        "name": "FitLife Nutrition APIs",
+        "description": "Complete Nutrition Management APIs including auto meal generation and weekly plans",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Nutrition Plans",
+            "item": [
+                {
+                    "name": "Get My Plans",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/me?page=1&pageSize=20",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "me"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Create Weekly Plan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"weekStartDate\": \"2025-12-10T00:00:00Z\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/weekly",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "weekly"
+                            ]
+                        },
+                        "description": "🆕 Auto-creates weekly nutrition plan (Monday-Sunday) with calories target from BMI record (default 2000 kcal). Returns existing plan if already created for that week."
+                    }
+                },
+                {
+                    "name": "Create Plan (Manual)",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Custom Plan\",\n  \"description\": \"Balanced nutrition plan\",\n  \"startDate\": \"2025-12-10\",\n  \"endDate\": \"2025-12-16\",\n  \"visibility\": \"private\",\n  \"caloriesTargetKcal\": 2500\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Plan by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Update Plan",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"title\": \"Updated Plan Name\",\n  \"caloriesTargetKcal\": 2200\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Plan",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🤖 Auto Meal Generation",
+            "item": [
+                {
+                    "name": "Generate Daily Meal Plan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"date\": \"2025-12-10T00:00:00Z\",\n  \"caloriesTarget\": 2500\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}/generate-daily",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}",
+                                "generate-daily"
+                            ]
+                        },
+                        "description": "Auto-generates balanced meals for a specific date:\n- Breakfast: 30% calories\n- Lunch: 35% calories\n- Dinner: 30% calories\n- Snack: 5% calories\n\nEnsures meals reach 80-90% of target without exceeding 110%"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Meal Items",
+            "item": [
+                {
+                    "name": "Add Item to Plan",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"foodItemId\": \"{{food_item_id}}\",\n  \"servingCount\": 1.5,\n  \"mealTime\": \"Breakfast\",\n  \"notes\": \"Extra protein\",\n  \"date\": \"2025-12-10T00:00:00Z\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}/items",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}",
+                                "items"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Replace Food Item",
+                    "request": {
+                        "method": "PUT",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"newFoodItemId\": \"{{new_food_item_id}}\",\n  \"servingCount\": 2.0,\n  \"notes\": \"Replaced with healthier option\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}/items/{{item_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}",
+                                "items",
+                                "{{item_id}}"
+                            ]
+                        },
+                        "description": "🆕 Replace existing food item with a new one. Cannot update items from past dates."
+                    }
+                },
+                {
+                    "name": "Delete Item",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}/items/{{item_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}",
+                                "items",
+                                "{{item_id}}"
+                            ]
+                        },
+                        "description": "⚠️ Cannot delete items from past dates"
+                    }
+                },
+                {
+                    "name": "Mark Item Completed",
+                    "request": {
+                        "method": "PATCH",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"isCompleted\": true\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}/items/{{item_id}}/complete",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}",
+                                "items",
+                                "{{item_id}}",
+                                "complete"
+                            ]
+                        },
+                        "description": "Mark a meal item as completed (eaten) or uncompleted"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Food Items",
+            "item": [
+                {
+                    "name": "Get All Food Items",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/food-items?page=1&pageSize=50",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-items"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "50"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Search Food Items",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/food-items/search?query=chicken&page=1&pageSize=20",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "food-items",
+                                "search"
+                            ],
+                            "query": [
+                                {
+                                    "key": "query",
+                                    "value": "chicken"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "pageSize",
+                                    "value": "20"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Summary",
+            "item": [
+                {
+                    "name": "Get Nutrition Summary",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/nutrition-plans/{{plan_id}}/summary",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "nutrition-plans",
+                                "{{plan_id}}",
+                                "summary"
+                            ]
+                        },
+                        "description": "Get total calories, protein, carbs, fat for a plan"
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:5000",
+            "type": "string"
+        },
+        {
+            "key": "access_token",
+            "value": "your_jwt_token_here",
+            "type": "string"
+        },
+        {
+            "key": "plan_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "item_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "food_item_id",
+            "value": "",
+            "type": "string"
+        },
+        {
+            "key": "new_food_item_id",
+            "value": "",
+            "type": "string"
+        }
+    ]
+}
